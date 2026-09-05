@@ -1,0 +1,38 @@
+{
+  "periodo_limpio_desde": "2024-02-01",
+  "renuncias_voluntarias_anuales": 55,
+  "costo_salida": {
+    "conservador": 2836933,
+    "central": 6044356,
+    "agresivo": 8896808
+  },
+  "supuestos": {
+    "conservador": {
+      "f_vacancia": 0.5,
+      "meses_rampa": 2,
+      "rendimiento_rampa": 0.7,
+      "razon": "el equipo absorbe parte del trabajo; el ingresante rinde 70% desde el mes 1"
+    },
+    "central": {
+      "f_vacancia": 1.0,
+      "meses_rampa": 3,
+      "rendimiento_rampa": 0.5,
+      "razon": "el puesto queda descubierto; el ingresante rinde 50% durante 3 meses"
+    },
+    "agresivo": {
+      "f_vacancia": 1.0,
+      "meses_rampa": 6,
+      "rendimiento_rampa": 0.5,
+      "razon": "puesto descubierto y rampa larga, tipica de perfiles tecnicos"
+    }
+  },
+  "ahorro_anual": {
+    "piso": 23298312,
+    "central": 82732125,
+    "techo": 194840088,
+    "piso_solo_dato_duro": 1642500
+  },
+  "areas_que_se_distinguen": [
+    "Mantenimiento Eléctrico"
+  ]
+}
