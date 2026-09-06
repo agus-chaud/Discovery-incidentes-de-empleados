@@ -5,7 +5,7 @@ MEJORA 2 — margen de error en toda comparacion entre areas.
 """
 import pandas as pd, numpy as np
 from pathlib import Path
-import json
+import json, math
 D = Path(r"C:\Users\Dell\Agus\Nivii AI\06_resultados\Discovery\datos_transformados")
 T = Path(r"C:\Users\Dell\Agus\Nivii AI\06_resultados\Discovery\tablas_soporte")
 panel = pd.read_parquet(D / "panel_mensual_limpio.parquet")
@@ -118,20 +118,34 @@ for area, sub in ult2.groupby("area"):
     p = k / n
     lo, hi = wilson(k, n)
     z = (p - base) / np.sqrt(base * (1 - base) / n)
+    p_valor = math.erfc(abs(z) / math.sqrt(2))  # p bilateral, sin corregir
     filas.append({"area": area, "personas": n, "salidas": k,
                   "rotacion_%": round(p * 100, 1),
                   "IC95_%": f"{lo*100:.1f} – {hi*100:.1f}",
                   "z": round(z, 2),
+                  "p_valor": round(p_valor, 5),
                   "veredicto": "PEOR que el promedio" if z > 1.96 else
                                ("MEJOR que el promedio" if z < -1.96 else "sin diferencia")})
 r = pd.DataFrame(filas).sort_values("rotacion_%", ascending=False)
+
+# DEC-019b — correccion de Bonferroni: testeamos r.shape[0] areas contra el
+# promedio de la empresa, asi que el umbral de significancia individual baja
+# de 0.05 a 0.05/n_areas para mantener el 5% de falsa alarma GLOBAL.
+n_areas = len(r)
+alpha_bonferroni = 0.05 / n_areas
+r["sig_bonferroni"] = np.where(r.p_valor < alpha_bonferroni, "Se sostiene", "No sobrevive")
+r.loc[r.veredicto == "sin diferencia", "sig_bonferroni"] = "no aplica"  # "n/a" colisiona con los NA por defecto de pandas al releer el CSV
+
 print(r.to_string(index=False))
 r.to_csv(T / "P5_rotacion_por_area_con_IC.csv", index=False, encoding="utf-8-sig")
 distintas = r[r.veredicto != "sin diferencia"]
-print(f"\n  >> Areas que se distinguen del promedio: {len(distintas)} de {len(r)}")
+print(f"\n  >> Areas que se distinguen del promedio (sin corregir): {len(distintas)} de {len(r)}")
 for _, x in distintas.iterrows():
-    print(f"     {x.area}: {x['rotacion_%']}% (rango real {x['IC95_%']}%) — {x.veredicto}")
+    print(f"     {x.area}: {x['rotacion_%']}% (rango real {x['IC95_%']}%) — {x.veredicto}, "
+          f"p={x.p_valor:.5f} vs umbral Bonferroni {alpha_bonferroni:.4f} -> {x.sig_bonferroni}")
 print("  >> El resto NO se puede afirmar que rote distinto del promedio.")
+print(f"  >> Umbral Bonferroni ({n_areas} areas testeadas, alpha global 5%): "
+      f"alpha individual = {alpha_bonferroni:.4f}")
 
 print("\n  Lo mismo para TOP PERFORMERS:")
 for etiqueta, sub in [("Top performers", ult2[ult2.es_top_performer]),

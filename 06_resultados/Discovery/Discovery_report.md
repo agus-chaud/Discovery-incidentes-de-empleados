@@ -270,6 +270,8 @@ Esta pregunta no estaba en la lista de Martina. **Es la más cara de todas.**
 
 > **Por qué importa el rango.** Una versión anterior de este informe marcaba también a Estampado como área problemática por su 20,0%. Su rango real va de 14,9% a 26,3% y **contiene al promedio**: con los datos disponibles no se puede afirmar que Estampado rote distinto del resto de la empresa. Dirigir recursos ahí no tendría sustento.
 
+> **El hallazgo sobrevive incluso corrigiendo por haber testeado diez áreas.** Testear diez áreas contra el promedio de la empresa acumula la probabilidad de una falsa alarma: con el umbral habitual del 5%, alguna de las diez puede salir "significativa" por puro azar. La corrección de Bonferroni baja ese umbral a 0,5% (0,05 ÷ 10) para compensarlo. Mantenimiento Eléctrico lo pasa con margen: p = 0,00105 contra un umbral de 0,0050. Es la diferencia entre "la única área que se distingue, aunque no corregimos por múltiples pruebas" y "se distingue incluso corrigiendo por haber testeado las diez" — ver `tablas_soporte/P5_rotacion_por_area_con_IC.csv`, columnas `p_valor` y `sig_bonferroni`.
+
 **2. Se van cuando ya están formados. Esto también se sostiene.**
 La antigüedad mediana al salir es **5,2 años**. No es rotación temprana de gente que no encajó: es fuga de personal con conocimiento acumulado, justo cuando la inversión en formación empezaba a rendir.
 

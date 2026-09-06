@@ -305,3 +305,20 @@ Esto además corrigió una segunda afirmación equivocada. Con enero incluido, l
 **Bug evitado:** Que el directorio viera dos tasas de rotación de la misma empresa en la misma slide y descartara el informe completo por esa sola inconsistencia.
 
 **Código afectado:** `06_resultados/Discovery/conclusiones_ejecutivas_technostamp.md`, `06_resultados/Discovery/Discovery_report.md`, `04_scripts/16_rotacion_temporal.py`.
+
+---
+
+## DEC-020: Corregir por comparaciones múltiples (Bonferroni) sobre las diez áreas testeadas
+
+**Área:** eda | **Fase:** Auditoría de calidad | **Fecha:** 2026-09-06 | **Estado:** Vigente
+
+**Decisión:** `P5_rotacion_por_area_con_IC.csv` ahora incluye `p_valor` (bilateral, sobre el mismo z que ya se calculaba) y `sig_bonferroni`, que compara ese p contra 0,05 ÷ 10 áreas = 0,005. Mantenimiento Eléctrico tiene p = 0,00105: **sobrevive** la corrección con margen.
+
+**Alternativa descartada:** Dejarlo como estaba — reportar el hallazgo con el z sin corregir (3,28) y declarar en el `ESTUDIO` que faltaba correr Bonferroni, sin correrlo.
+
+**Por qué la descartamos:** El proyecto testea diez áreas contra el promedio de la empresa. Al umbral habitual del 5% por prueba, la chance de que **alguna** de las diez salga "significativa" por puro azar ronda el 40% — no el 5%. Bonferroni corrige eso bajando el umbral individual a 0,05 ÷ 10. No correrlo no invalidaba el hallazgo, pero lo dejaba con un asterisco implícito ("probablemente real") que un directorio no puede evaluar por su cuenta. Correrlo no pedía ningún dato nuevo — se calcula sobre el mismo z que ya existía en la tabla.
+
+**Conclusión:** Cuando se testean más de dos grupos contra un mismo promedio, correr la corrección por comparaciones múltiples es tan barato como declarar que falta correrla. Si el hallazgo la sobrevive, queda más fuerte que antes; si no la sobrevive, es mejor saberlo antes de presentarlo. Nunca dejar un hallazgo con múltiples pruebas sin corregir solo porque "probablemente" alcanza.
+
+**Código afectado:** `04_scripts/17_business_case_v2.py`, `06_resultados/Discovery/tablas_soporte/P5_rotacion_por_area_con_IC.csv`, `06_resultados/Discovery/Discovery_report.md`, `ESTUDIO_conceptos_technostamp.md`.
+
