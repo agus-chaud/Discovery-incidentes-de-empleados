@@ -16,7 +16,7 @@ Analizamos tres fuentes (panel mensual de empleados, eventos de RRHH y capacitac
 | P2 | ¿Hay desbalance de género? | **Sí en representación, no en salario** | Reputacional / pipeline |
 | P3 | ¿Hay equipos sobrecargados con horas extra? | **Sí, pero sustituirlas destruye valor** | $988M en HE — sin ahorro capturable |
 | P4 | ¿Cómo mejorar la prevención de accidentes? | **Turno noche: 5,4x el riesgo** | ~14 incidentes/año evitables |
-| P5 | *(fuera del radar)* ¿Qué nos cuesta la rotación? | **15,0% anual, plana, 55 renuncias/año** | **$23M – $195M/año** (central: $83M) |
+| P5 | *(fuera del radar)* ¿Qué nos cuesta la rotación? | **16,7% en el período limpio, plana, 55 renuncias/año** | **$23M – $195M/año** (central: $83M) |
 
 **La conclusión de una línea:** TechnoStamp no tiene un problema de jubilaciones ni de equidad salarial. Tiene un problema de **retención** que cuesta un orden de magnitud más que los accidentes, y un problema de **gobierno del dato** que impide gestionar la seguridad.
 
@@ -249,7 +249,7 @@ Esta pregunta no estaba en la lista de Martina. **Es la más cara de todas.**
 
 **Antes de los números, una corrección del período.** El archivo arranca en enero de 2024 y ese primer mes registra 19 salidas, el triple de un mes normal. Los 19 aparecen **una sola vez** en el panel, contra 9,5 meses del resto: son personas que ya estaban saliendo cuando se hizo el corte del archivo. No son rotación generada en el período — son arrastre. Se excluyen.
 
-- **113 salidas** en 16 meses (febrero 2024 – mayo 2025) = **15,0% anualizado**, no 16,5%.
+- **113 salidas** sobre 675 personas expuestas en 16 meses (febrero 2024 – mayo 2025) = **16,7% acumulado del período**, no 19,0% (la cifra con el arrastre de enero incluido).
 - **65% son renuncias voluntarias** (73 de 113) — la porción sobre la que se puede actuar.
 - Renuncias voluntarias anualizadas: **55 por año**.
 - **La rotación no sube ni baja.** La tendencia del período limpio es de +0,05 puntos por año (t = 0,08): es una línea plana con ruido, no una curva. No es un incendio que se agrava, pero tampoco cede solo.
@@ -374,7 +374,7 @@ Con eso, la vacancia y la rampa se calculan en vez de suponerse, y el rango de 8
 
 - **Problema:** 55 renuncias voluntarias por año, con un costo estimado entre $23M y $195M anuales. Concentradas en Mantenimiento Eléctrico, la única área que se distingue estadísticamente del promedio.
 - **Decisión a automatizar:** identificar mensualmente qué empleados tienen alto riesgo de renuncia y alto valor, para intervención proactiva del manager.
-- **Palanca / KPI / baseline:** costo de rotación · % rotación anual · **15,0%**, plana durante los 16 meses limpios.
+- **Palanca / KPI / baseline:** costo de rotación · % rotación (acumulada del período) · **16,7%**, plana durante los 16 meses limpios.
 - **Datos disponibles:** panel mensual completo con performance, salario, antigüedad, aumentos, ausentismo y horas extra.
 - **Brechas:** tres, en orden de urgencia. (1) **El costo por salida es 97% supuesto** — faltan la producción de un operario formado y los meses de rampa. (2) No hay entrevistas de salida ni encuestas de clima: se sabe *quién* se va, no *por qué*. (3) El campo `meses_desde_ultimo_aumento` tiene un comportamiento anómalo en las bajas que hay que auditar.
 - **Plan de remediación:** instrumentar entrevistas de salida estructuradas (3 meses) antes de invertir en modelos predictivos.

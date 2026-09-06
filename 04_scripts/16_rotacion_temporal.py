@@ -39,7 +39,19 @@ print("=" * 88)
 CORTE = INICIO + pd.DateOffset(months=1)
 hc = panel[panel.activo].groupby("mes_snapshot").empleado_id.nunique()
 
-def tasa(desde):
+def tasa_acumulada(desde):
+    # Definicion OFICIAL (DEC-019): salidas / personas expuestas en el universo del periodo.
+    # Es la misma formula que ya usan las 10 areas de P5_rotacion_por_area_con_IC.csv,
+    # los IC95 de Wilson y el grafico G9 — se unifica el titular contra esa base.
+    if desde == INICIO:
+        return len(sal), len(ult)
+    s = sal[sal.mes_salida >= desde]
+    s = s[~s.empleado_id.isin(arrastre)]
+    universo = len(ult) - len(arrastre)
+    return len(s), universo
+
+def tasa_anualizada(desde):
+    # Definicion informativa (NO usar como titular): anualizada sobre dotacion activa promedio.
     s = sal[sal.mes_salida >= desde]
     meses = int(panel[panel.mes_snapshot >= desde].mes_snapshot.nunique())
     h = hc[hc.index >= desde].mean()
@@ -47,13 +59,17 @@ def tasa(desde):
 
 for etiqueta, desde in [("Todo el periodo (con enero 2024)", INICIO),
                         ("Periodo limpio (desde feb 2024)", CORTE)]:
-    n, m, h, t = tasa(desde)
-    print(f"  {etiqueta:36s} {n:3d} salidas / {m:2d} meses / {h:.0f} activos -> {t:5.1f}% anual")
+    n, u = tasa_acumulada(desde)
+    print(f"  {etiqueta:36s} {n:3d} salidas / {u:3d} personas expuestas -> {n/u*100:5.1f}% acumulado")
 
-n_all, _, _, t_all = tasa(INICIO)
-n_cl, m_cl, h_cl, t_cl = tasa(CORTE)
-print(f"\n  >> La tasa publicada ({t_all:.1f}%) estaba inflada por el arrastre.")
-print(f"  >> Tasa corregida: {t_cl:.1f}% anual  (diferencia: {t_all-t_cl:+.1f} puntos)")
+n_all, u_all = tasa_acumulada(INICIO)
+n_cl, u_cl = tasa_acumulada(CORTE)
+t_all, t_cl = n_all / u_all * 100, n_cl / u_cl * 100
+print(f"\n  >> La tasa acumulada con el arrastre incluido: {t_all:.1f}%.")
+print(f"  >> Tasa corregida (definicion oficial, DEC-019): {t_cl:.1f}% acumulado del periodo  (diferencia: {t_all-t_cl:+.1f} puntos)")
+
+_, m_cl, h_cl, t_cl_anual = tasa_anualizada(CORTE)
+print(f"  Informativa, NO usar como titular (anualizada sobre dotacion activa): {t_cl_anual:.1f}% anual")
 
 print("\n" + "=" * 88)
 print("EVOLUCION MENSUAL (periodo limpio)")

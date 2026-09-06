@@ -13,7 +13,7 @@ conclusión (regla a futuro). Las decisiones superadas NO se borran.
 | — | Confirmar con el cliente si la dotación informada (450) excluye contratistas o una planta — los datos muestran 562 activos | calidad-datos | Abierta |
 | — | Auditar con RRHH el comportamiento de `meses_desde_ultimo_aumento` en las bajas (1,0 mes en renuncias vs 4,5 en activos) | calidad-datos | Abierta |
 | — | Definir si el índice de criticidad de DEC-006 se adopta como reemplazo formal de `es_posicion_critica` en el sistema origen | feature-engineering | Abierta |
-| — | Fijar UNA definición única de tasa de rotación anual para todo el material (hoy conviven 15,0% sobre dotación activa promedio y 16,7% acumulada del período limpio) | comunicacion | Abierta — auditoría 2026-09-05 |
+| — | ~~Fijar UNA definición única de tasa de rotación anual~~ | comunicacion | **Resuelta — ver DEC-019** |
 | — | Decidir si el insight ejecutivo de sucesión se reformula sobre el caso unipersonal observable (Supervisor de Logística) en vez de sobre `es_posicion_critica`, que DEC-006 declaró no utilizable como insumo analítico | comunicacion | Abierta — auditoría 2026-09-05 |
 | — | Confirmar el retiro de `tablas_soporte/BC_resumen_oportunidades.csv`, salida superada de `09_business_case.py` que contradice el rango vigente de `17_business_case_v2.py` | trazabilidad | Abierta — auditoría 2026-09-05 |
 
@@ -270,6 +270,8 @@ Esto además corrigió una segunda afirmación equivocada. Con enero incluido, l
 
 **Conclusión:** En cualquier panel con fecha de corte, revisar siempre el primer y el último mes por separado antes de calcular tasas. Si los casos del primer mes aparecen una sola vez, son arrastre del corte y no pertenecen al período. Nunca leer una tendencia sin antes limpiar los bordes: un pico artificial en un extremo inventa pendientes que no están en los datos.
 
+**Actualización (2026-09-06):** el "15,0% anual" de esta entrada usaba la tasa anualizada sobre dotación activa promedio (definición B). DEC-019 unificó el reporte de rotación en la tasa acumulada del período (definición A): con ese criterio, la corrección de esta decisión pasa a leerse **19,0% → 16,7%**, no 16,5% → 15,0%. La decisión de excluir el arrastre de enero no cambia; solo cambia la fórmula con la que se expresa el resultado. Ver DEC-019.
+
 ---
 
 ## DEC-018: Comunicar hallazgos ejecutivos como riesgos focalizados y verificables
@@ -285,3 +287,21 @@ Esto además corrigió una segunda afirmación equivocada. Con enero incluido, l
 **Conclusi?n:** Siempre presentar a C-level un insight como conclusi?n + impacto + evidencia + acci?n focalizada. Nunca usar un gr?fico como conclusi?n ni afirmar causalidad, ahorro garantizado o prioridad generalizada cuando los datos solo sostienen una se?al acotada.
 
 **C?digo afectado:** `06_resultados/Discovery/conclusiones_ejecutivas_technostamp.md`, `06_resultados/Discovery/visualizaciones/`.
+
+---
+
+## DEC-019: Unificar la rotación en la tasa acumulada del período (16,7%)
+
+**Área:** comunicación | **Fase:** Auditoría de calidad | **Fecha:** 2026-09-06 | **Estado:** Vigente
+
+**Decisión:** Toda cifra de rotación anual de la compañía se reporta con una sola fórmula: **salidas del período limpio ÷ personas expuestas en ese período** (113 / 675 = **16,7%**). Es la misma fórmula que ya usaban las diez áreas individuales en `P5_rotacion_por_area_con_IC.csv` — incluido el 34,8% de Mantenimiento Eléctrico — y la que alimenta los intervalos de confianza de Wilson y el gráfico G9.
+
+**Alternativa descartada:** Reportar la rotación anualizada sobre dotación activa promedio (113 salidas ÷ 16 meses × 12 ÷ 563 activos promedio = 15,0%), que es lo que usaba el titular del insight ejecutivo 1 y la Ficha A del informe técnico.
+
+**Por qué la descartamos:** Con los mismos 113 casos convivían tres tasas defendibles (15,0% / 16,7% / 12,6%, según denominador y si se anualiza). El documento ejecutivo publicaba dos sin distinguirlas: el titular decía 15,0% y, dos párrafos abajo, la propia tabla de evidencia comparaba 16,7% contra el 34,8% de Mantenimiento Eléctrico. Como ese 34,8% ya estaba calculado con la fórmula acumulada (16/46), compararlo contra el titular de 15,0% inflaba la brecha de 2,08x a 2,32x. Además, la fórmula acumulada era la que de hecho sostenía todo el trabajo fino del proyecto — las diez áreas, los IC95, G9 — mientras que la anualizada se calculaba una sola vez, aparte, solo para el titular. Adoptarla como oficial significaba recalcular diez áreas para que coincidieran con el titular, en vez de corregir un solo titular para que coincida con el resto del análisis.
+
+**Conclusión:** Cuando una tasa se reporta con más de una fórmula posible, adoptar la que ya sostiene el resto del análisis (comparaciones entre grupos, intervalos de confianza), no la que resulte más habitual para comunicar hacia afuera. Si en el futuro RR.HH. necesita una cifra anualizada para comparar contra un benchmark de industria, calcularla aparte y etiquetarla explícitamente como proyección — nunca reemplazar con ella la base de comparación entre áreas.
+
+**Bug evitado:** Que el directorio viera dos tasas de rotación de la misma empresa en la misma slide y descartara el informe completo por esa sola inconsistencia.
+
+**Código afectado:** `06_resultados/Discovery/conclusiones_ejecutivas_technostamp.md`, `06_resultados/Discovery/Discovery_report.md`, `04_scripts/16_rotacion_temporal.py`.

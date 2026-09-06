@@ -15,7 +15,7 @@
 ## 1. La rotación requiere una intervención focalizada en Mantenimiento Eléctrico
 
 ### Gran conclusión
-La rotación anual corregida de TechnoStamp es **15,0%**. Mantenimiento Eléctrico llega a **34,8%**: es la única área cuya rotación se distingue estadísticamente del promedio disponible. No hay evidencia suficiente para afirmar que las demás áreas roten distinto del promedio.
+La rotación de TechnoStamp en el período corregido (febrero 2024 – mayo 2025) es **16,7%**. Mantenimiento Eléctrico llega a **34,8%**: es la única área cuya rotación se distingue estadísticamente del promedio disponible. No hay evidencia suficiente para afirmar que las demás áreas roten distinto del promedio.
 
 ### Cómo afecta al negocio
 La salida de personal técnico deja capacidad sin cubrir y prolonga la vacancia: el tiempo medio de cobertura es de **47 días** y el percentil 90 es de **92 días**. En un área de 46 personas, perder 16 durante el período pone presión sobre la continuidad operativa y obliga a reemplazos reactivos.
