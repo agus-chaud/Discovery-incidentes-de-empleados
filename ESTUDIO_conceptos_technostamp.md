@@ -7,7 +7,6 @@ Aca se explica el por que de cada elección,  para que lo puedas defender en una
 Te dan tres CSV crudos y una lista de preocupaciones de una gerenta de RRHH. 
 Un modelo se justifica cuando la decisión que alimenta pasa muchas veces, rápido, y a una escala que una persona no puede revisar caso por caso: scorear millones de transacciones por fraude, decidir en milisegundos si mostrar un anuncio. Acá las decisiones son otra cosa — "¿invertimos en retención?", "¿Mantenimiento Eléctrico realmente está peor que el resto?" — decisiones que un directorio toma un par de veces al año, donde el cuello de botella no es la velocidad de scorear . Eso es inferencia: estimar con incertidumbre , darle al negocio la respuesta que necesitaba de por qué una sola área pierde el doble de gente que el resto.
 
-**Practicá esto (respondé antes de destapar):** ¿por qué este proyecto no construyó ningún modelo, si había datos de sobra para intentarlo?
 
 ## 2. Una fila no es una persona
 
@@ -75,11 +74,11 @@ El costo por salida de este proyecto dio $5,88M. De eso, solo $200.000 — reclu
 
 Para el detalle completo de cada decisión, con las cifras exactas y las alternativas descartadas, `decisions.md` es la fuente. Este archivo es para tenerlo en la cabeza antes de entrar a la sala.
 
-## 9. Un gr?fico no es un insight: la unidad de una presentaci?n ejecutiva es una decisi?n
+## 9. Un grafico no es un insight: la unidad de una presentacion ejecutiva es una decision
 
-Un directorio no necesita recorrer todas las columnas ni aprender la metodolog?a antes de entender qu? est? en juego. Necesita poder responder cuatro preguntas: **qu? est? pasando, cu?nto afecta al negocio, qu? dato lo sostiene y qu? conviene corregir**. Si una slide no responde esas cuatro cosas, probablemente es exploraci?n, no comunicaci?n ejecutiva.
+Un directorio no necesita recorrer todas las columnas ni aprender la metodologia antes de entender que esta en juego. Necesita poder responder cuatro preguntas: **que esta pasando, cuanto afecta al negocio, que dato lo sostiene y que conviene corregir**. Si una slide no responde esas cuatro cosas, probablemente es exploracion, no comunicacion ejecutiva.
 
-Por eso la s?ntesis de TechnoStamp no se ordena por archivos ni por m?tricas de RR.HH.; se ordena por riesgos que cambian una conversaci?n de negocio. Mantenimiento El?ctrico merece prioridad porque su 34,8% de rotaci?n es la ?nica diferencia por ?rea que se sostiene frente al promedio. El turno noche merece una intervenci?n de seguridad porque concentra 25 de los 45 incidentes auditables y los casos graves explican 109 de 138 d?as perdidos. La sucesi?n debe hacerse visible porque existe un puesto de Supervisor de Log?stica ocupado por una sola persona que se jubila en seis meses.
+Por eso la sintesis de TechnoStamp no se ordena por archivos ni por metricas de RR.HH.; se ordena por riesgos que cambian una conversacion de negocio. Mantenimiento Electrico merece prioridad porque su 34,8% de rotacion es la ?nica diferencia por ?rea que se sostiene frente al promedio. El turno noche merece una intervenci?n de seguridad porque concentra 25 de los 45 incidentes auditables y los casos graves explican 109 de 138 d?as perdidos. La sucesi?n debe hacerse visible porque existe un puesto de Supervisor de Log?stica ocupado por una sola persona que se jubila en seis meses.
 
 La palabra importante es **focalizado**. No hay evidencia para decir ?toda la empresa rota mal?, ?las horas extra causan accidentes? o ?la capacitaci?n resolver? la seguridad?. Las horas extra s? son estructurales ?8,3% de la n?mina base y 61 personas con sobrecarga cr?nica?, pero eso sostiene una revisi?n de capacidad y cobertura, no un ahorro prometido. De la misma forma, el business case de retenci?n es una oportunidad en rango, no un n?mero garantizado: depende en gran medida de supuestos de vacancia y rampa que el cliente todav?a no mide.
 
