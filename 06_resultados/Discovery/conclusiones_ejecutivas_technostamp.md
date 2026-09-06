@@ -56,7 +56,7 @@ La empresa financia parte de su capacidad operativa con un mecanismo más caro y
 | Horas extra promedio, mayo 2025 | 10,21 h/empleado/mes |
 | Personas con sobrecarga crónica | **61** |
 
-**Visual de soporte:** `visualizaciones/G10_distribucion_horas_extra_area.png`. Destacar Estampado, Ensamble y Mantenimiento Eléctrico por volumen/costo, sin convertir diferencias pequeñas en conclusiones causales.
+**Visual de soporte:** `visualizaciones/G10_distribucion_horas_extra_area.png`. Muestra las 11 áreas ordenadas por horas extra, con las dos en los extremos etiquetadas (Pintura y Ingeniería); no convertir diferencias chicas entre las seis áreas del cluster alto en conclusiones causales.
 
 ### Acción correctiva concreta
 - Separar en cada área prioritaria las horas extra asociadas a demanda real de las asociadas a vacantes, ausencias o mala programación.

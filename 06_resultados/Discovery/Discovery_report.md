@@ -190,6 +190,8 @@ Se testeó. Los sobrecargados crónicos:
 | Mañana | 2.254 | 5 | 2,2 |
 | Tarde | 2.256 | 5 | 2,2 |
 
+*Tabla persistida en `tablas_soporte/P4_incidentes_por_turno.csv` y graficada en `visualizaciones/G11_incidentes_por_turno.png` (DEC-021).*
+
 **El turno noche concentra el 56% de los incidentes y el 74% de los días perdidos, con 5,4x la tasa de mañana o tarde.** Este hallazgo es robusto: aparece en ambas fuentes de datos. Si la noche igualara la tasa diurna, se evitarían **~14 incidentes por año** (45% del total).
 
 ### Hallazgo contra-intuitivo: el riesgo sube con la experiencia
@@ -448,18 +450,20 @@ Tres afirmaciones de versiones anteriores no sobrevivieron a un control más est
 | Artefacto | Ubicación |
 |---|---|
 | Datos crudos (inmutables) | `02_datos/01_Originales/` |
-| Scripts del pipeline | `04_scripts/01_perfilado.py` … `14_eda_sistematico.py` |
+| Scripts del pipeline | `04_scripts/` (18 scripts; `01`…`18`, ver orden de ejecución abajo) |
 | Datos transformados | `06_resultados/Discovery/datos_transformados/` |
 | **Receta de limpieza reejecutable** | `datos_transformados/transformaciones.json` (31 pasos) |
 | **Política de vacíos por columna** | `datos_transformados/politica_vacios.csv` (13 columnas) |
 | **Revisión sistemática de variables** | `06_resultados/EDA/EDA_report.md` (54 alertas) |
-| Visualizaciones | `06_resultados/Discovery/visualizaciones/` (G1–G7) |
-| Tablas de soporte | `06_resultados/Discovery/tablas_soporte/` (12 CSV) |
-| Registro de decisiones | `decisions.md` |
+| Visualizaciones | `06_resultados/Discovery/visualizaciones/` (14 PNG: G1–G14) |
+| Tablas de soporte | `06_resultados/Discovery/tablas_soporte/` (17 CSV + `BC_supuestos.json`) |
+| Registro de decisiones | `decisions.md` (DEC-001 a DEC-021) |
 | Entorno | conda `nivii_ai` (Python 3.12) |
 
-**Orden de ejecución.** La limpieza vigente es `13_limpieza_v2`, que reemplaza a `03_limpieza`:
+**Orden de ejecución real.** Dos scripts quedaron superados y no se ejecutan: `03_limpieza.py` (reemplazado por `13_limpieza_v2.py`) y `09_business_case.py` (reemplazado por `17_business_case_v2.py`). El orden vigente, tal como corre el notebook orquestador:
 
-`01_perfilado` → `02_calidad` → **`13_limpieza_v2`** → **`14_eda_sistematico`** → `04_p1_p2` → `06_p3_p4_p5` → `07_verif_incidentes_p5` → `08_visualizaciones` → `09_business_case` → `10_sensibilidad_he` → `11_verif_cronicos_seguridad`
+`01_perfilado` → `02_calidad` → **`13_limpieza_v2`** → `04_p1_p2` → `05_verif_critica` → `06_p3_p4_p5` → `07_verif_incidentes_p5` → `08_visualizaciones` → `10_sensibilidad_he` → `11_verif_cronicos_seguridad` → `12_diagnostico_gaps` → `14_eda_sistematico` → `15_diagnostico_fragilidad` → `16_rotacion_temporal` → **`17_business_case_v2`** → `18_visualizaciones_decision`
+
+> **Nota de trazabilidad (2026-09-06).** `tablas_soporte/BC_resumen_oportunidades.csv`, salida del script superado `09_business_case.py`, sigue en la carpeta y contradice el rango vigente de `BC_rango_retencion.csv` (`17_business_case_v2.py`). Su retiro está pendiente como decisión abierta en `decisions.md`.
 
 **Cómo reprocesar datos nuevos.** Cuando TechnoStamp envíe los próximos meses, `transformaciones.json` contiene los 31 pasos de limpieza con sus parámetros ya calculados — renombres, conversiones de tipo, unificación de categorías, política de vacíos y reglas de coherencia. Se reaplican en orden para obtener exactamente el mismo tratamiento, sin depender de que alguien recuerde qué se hizo.
