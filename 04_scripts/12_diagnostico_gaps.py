@@ -22,12 +22,12 @@ print("\n  >> En el informe compare scrap accidentados (3,23) vs no accidentados
 ult["tuvo_inc"] = ult.incidentes_total > 0
 chk = ult.groupby("tuvo_inc").agg(
     n=("empleado_id", "size"),
-    n_con_scrap=("scrap_prom", lambda s: s.notna().sum()),
-    pct_perdido=("scrap_prom", lambda s: round(s.isna().mean() * 100, 1)),
-    scrap=("scrap_prom", "mean")).round(2)
+    n_con_scrap=("scrap_prom_produccion", lambda s: s.notna().sum()),
+    pct_perdido=("scrap_prom_produccion", lambda s: round(s.isna().mean() * 100, 1)),
+    scrap=("scrap_prom_produccion", "mean")).round(2)
 print(chk.to_string())
 print("  >> La media se calculo sobre subconjuntos distintos. Es comparable?")
-b = ult.groupby(["tuvo_inc", "categoria_collar"]).scrap_prom.apply(lambda s: s.notna().mean() * 100).round(1)
+b = ult.groupby(["tuvo_inc", "categoria_collar"]).scrap_prom_produccion.apply(lambda s: s.notna().mean() * 100).round(1)
 print("\n  Cobertura de scrap por grupo y collar (%):")
 print(b.to_string())
 
