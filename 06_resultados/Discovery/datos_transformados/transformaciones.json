@@ -1,5 +1,5 @@
 {
-  "generado": "2026-09-05T12:09:53",
+  "generado": "2026-09-06T10:33:36",
   "script": "04_scripts/13_limpieza_v2.py",
   "origen": "02_datos/01_Originales/{empleados_mensual,eventos_rrhh,capacitaciones}.csv",
   "codificacion": "utf-8",
