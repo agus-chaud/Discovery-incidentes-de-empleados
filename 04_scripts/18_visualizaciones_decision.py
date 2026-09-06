@@ -50,7 +50,7 @@ fig, ax = plt.subplots(figsize=(11, 4.5))
 ax.plot(tasa_original.index, tasa_original, "o-", color=GRIS, label="Serie original", lw=2)
 ax.plot(tasa_limpia.index, tasa_limpia, "o-", color=AZUL, label="Periodo limpio", lw=2.4)
 ax.axvspan(inicio, corte, color=ROJO, alpha=.10, label="Mes de arrastre excluido")
-ax.set(title="Rotacion mensual: original versus periodo limpio", xlabel="Mes de salida", ylabel="Rotacion mensual (%)")
+ax.set(title="La rotación es plana, no descendente\n(corregido el arrastre de enero — DEC-017)", xlabel="Mes de salida", ylabel="Rotación mensual (%)")
 ax.tick_params(axis="x", rotation=45); ax.legend(frameon=False, ncol=3)
 save(fig, "G8_rotacion_original_vs_limpia.png")
 
@@ -66,7 +66,7 @@ fig, ax = plt.subplots(figsize=(10, 5.5))
 ax.barh(y, rot.tasa, color=np.where(destaca, ROJO, GRIS))
 ax.errorbar(rot.tasa, y, xerr=[rot.tasa - rot.lo, rot.hi - rot.tasa], fmt="none", ecolor="#2c3e50", capsize=4)
 ax.axvline(base, color=AZUL, ls="--", label=f"Promedio limpio: {base:.1f}%")
-ax.set_yticks(y, rot.index); ax.set(xlabel="Rotacion (%) con IC 95%", title="Rotacion por area: diferencias con margen de error")
+ax.set_yticks(y, rot.index); ax.set(xlabel="Rotación (%) con IC 95%", title="Mantenimiento Eléctrico rota peor que el promedio\n(34,8% vs 16,7% — única diferencia que se sostiene)")
 ax.legend(frameon=False); save(fig, "G9_rotacion_area_ic95.png")
 
 # G10: Distribucion de horas extra por area.
@@ -76,7 +76,7 @@ fig, ax = plt.subplots(figsize=(11, 5.5))
 bp = ax.boxplot(datos, tick_labels=orden, vert=False, patch_artist=True, showfliers=False)
 for box in bp["boxes"]: box.set(facecolor=AZUL, alpha=.65)
 for median in bp["medians"]: median.set(color=ROJO, linewidth=2)
-ax.set(xlabel="Horas extra por empleado-mes", title="Distribucion de horas extra por area")
+ax.set(xlabel="Horas extra por empleado-mes", title="Producción duplica a soporte en horas extra\n(11–12 h/mes vs 4–6 h/mes por empleado)")
 save(fig, "G10_distribucion_horas_extra_area.png")
 
 # G11: Incidentes por area y severidad.
@@ -87,7 +87,7 @@ inc_area = inc_area.loc[inc_area.sum(axis=1).sort_values().index]
 fig, ax = plt.subplots(figsize=(10, 5.5)); left = np.zeros(len(inc_area))
 for severidad, color in zip(severidades, [VERDE, NARANJA, ROJO]):
     valores = inc_area[severidad].values; ax.barh(inc_area.index, valores, left=left, label=severidad, color=color); left += valores
-ax.set(xlabel="Cantidad de incidentes", title="Incidentes por area y severidad")
+ax.set(xlabel="Cantidad de incidentes", title="Ensamble y Estampado concentran más incidentes\n(conteo bruto, no ajustado por exposición — ver tasa por turno)")
 ax.legend(frameon=False, title="Severidad"); save(fig, "G11_incidentes_area_severidad.png")
 
 # G12: Capacitacion de seguridad versus incidentes.
@@ -100,7 +100,7 @@ training["incidentes_x100"] = training.incidentes / training.empleados * 100
 fig, ax = plt.subplots(figsize=(8.5, 6))
 ax.scatter(training.horas_por_empleado, training.incidentes_x100, s=110, color=AZUL, alpha=.8)
 for area, row in training.iterrows(): ax.annotate(area, (row.horas_por_empleado, row.incidentes_x100), xytext=(6, 5), textcoords="offset points", fontsize=8)
-ax.set(xlabel="Horas de capacitacion en seguridad por empleado", ylabel="Incidentes por 100 empleados", title="Capacitacion en seguridad versus incidentes")
+ax.set(xlabel="Horas de capacitación en seguridad por empleado", ylabel="Incidentes por 100 empleados", title="Más capacitación coincide con más incidentes\n(se entrena después del accidente, no antes)")
 ax.text(.01, .01, "Comparacion descriptiva: no prueba causalidad.", transform=ax.transAxes, fontsize=8, color=GRIS)
 save(fig, "G12_capacitacion_seguridad_vs_incidentes.png")
 
@@ -113,7 +113,7 @@ sucesion = sucesion.sort_values(["pct_riesgo", "en_riesgo"], ascending=False).he
 fig, ax = plt.subplots(figsize=(10, 6.5))
 scatter = ax.scatter(sucesion.dotacion, sucesion.pct_riesgo, s=150 + sucesion.antiguedad.fillna(0) * 70, c=sucesion.en_riesgo, cmap="Reds", alpha=.75, edgecolors="#7f1d1d")
 for _, row in sucesion.iterrows(): ax.annotate(f"{row['puesto']}\n({row['area']})", (row.dotacion, row.pct_riesgo), xytext=(6, 5), textcoords="offset points", fontsize=7)
-ax.set(xlabel="Dotacion del puesto", ylabel="Personal critico en riesgo a 24 meses (%)", title="Riesgo de sucesion por puesto")
+ax.set(xlabel="Dotación del puesto", ylabel="Personal crítico en riesgo a 24 meses (%)", title="Supervisor de Logística: único en el puesto\n(100% en riesgo, se jubila en 6 meses)")
 fig.colorbar(scatter, ax=ax, label="Personas criticas en riesgo"); save(fig, "G13_riesgo_sucesion_por_puesto.png")
 
 # G14: Business case por escenario.
@@ -124,7 +124,7 @@ fig, ax = plt.subplots(figsize=(10, 5.5))
 for i, (_, fila) in enumerate(bc.iterrows()):
     valores = [fila[col] for col in columnas]; barras = ax.bar(x + (i - 1) * width, valores, width, label=fila.escenario.capitalize())
     ax.bar_label(barras, labels=[f"${v:,.0f}" for v in valores], padding=3, fontsize=7, rotation=90)
-ax.set_xticks(x, etiquetas); ax.set(ylabel="Ahorro anual estimado", title="Business case por escenario y reduccion de rotacion")
+ax.set_xticks(x, etiquetas); ax.set(ylabel="Ahorro anual estimado", title="El ahorro va de \\$23M a \\$195M según el escenario\n(no es una cifra única — ver los supuestos)")
 ax.legend(frameon=False, title="Escenario"); ax.yaxis.set_major_formatter(FuncFormatter(lambda value, _: f"${value / 1_000_000:.0f}M"))
 save(fig, "G14_business_case_escenarios.png")
 
