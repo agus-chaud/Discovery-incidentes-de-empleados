@@ -76,7 +76,7 @@ fig, ax = plt.subplots(figsize=(11, 5.5))
 bp = ax.boxplot(datos, tick_labels=orden, vert=False, patch_artist=True, showfliers=False)
 for box in bp["boxes"]: box.set(facecolor=AZUL, alpha=.65)
 for median in bp["medians"]: median.set(color=ROJO, linewidth=2)
-ax.set(xlabel="Horas extra por empleado-mes", title="Producción duplica a soporte en horas extra\n(11–12 h/mes vs 4–6 h/mes por empleado)")
+ax.set(xlabel="Horas extra por empleado-mes", title="Seis áreas superan las 11 h extra/mes; las otras cinco no llegan a 6\n(Pintura: 12,2 h · Ingeniería: 3,5 h)")
 save(fig, "G10_distribucion_horas_extra_area.png")
 
 # G11: Incidentes por area y severidad.
