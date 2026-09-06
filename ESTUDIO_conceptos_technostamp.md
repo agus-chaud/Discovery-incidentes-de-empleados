@@ -72,3 +72,47 @@ El costo por salida de este proyecto dio $5,88M. De eso, solo $200.000 — reclu
 | Rango vs punto único | El business case entre $23M y $195M | "¿Por qué no me dan un solo número de ahorro esperado?" |
 
 Para el detalle completo de cada decisión, con las cifras exactas y las alternativas descartadas, `decisions.md` es la fuente. Este archivo es para tenerlo en la cabeza antes de entrar a la sala.
+
+## 9. Un gr?fico no es un insight: la unidad de una presentaci?n ejecutiva es una decisi?n
+
+Un directorio no necesita recorrer todas las columnas ni aprender la metodolog?a antes de entender qu? est? en juego. Necesita poder responder cuatro preguntas: **qu? est? pasando, cu?nto afecta al negocio, qu? dato lo sostiene y qu? conviene corregir**. Si una slide no responde esas cuatro cosas, probablemente es exploraci?n, no comunicaci?n ejecutiva.
+
+Por eso la s?ntesis de TechnoStamp no se ordena por archivos ni por m?tricas de RR.HH.; se ordena por riesgos que cambian una conversaci?n de negocio. Mantenimiento El?ctrico merece prioridad porque su 34,8% de rotaci?n es la ?nica diferencia por ?rea que se sostiene frente al promedio. El turno noche merece una intervenci?n de seguridad porque concentra 25 de los 45 incidentes auditables y los casos graves explican 109 de 138 d?as perdidos. La sucesi?n debe hacerse visible porque existe un puesto de Supervisor de Log?stica ocupado por una sola persona que se jubila en seis meses.
+
+La palabra importante es **focalizado**. No hay evidencia para decir ?toda la empresa rota mal?, ?las horas extra causan accidentes? o ?la capacitaci?n resolver? la seguridad?. Las horas extra s? son estructurales ?8,3% de la n?mina base y 61 personas con sobrecarga cr?nica?, pero eso sostiene una revisi?n de capacidad y cobertura, no un ahorro prometido. De la misma forma, el business case de retenci?n es una oportunidad en rango, no un n?mero garantizado: depende en gran medida de supuestos de vacancia y rampa que el cliente todav?a no mide.
+
+La forma correcta de presentar cada hallazgo es:
+
+1. **Titular:** una conclusi?n que se pueda leer sin explicaci?n adicional.
+2. **Impacto:** costo, continuidad, productividad o riesgo que convierte el dato en problema de negocio.
+3. **Evidencia:** un gr?fico o tabla con pocos elementos, universo y per?odo visibles, y un ?nico dato destacado.
+4. **Acci?n correctiva:** una intervenci?n concreta y proporcional al hallazgo; no un plan gen?rico ni una promesa de resultado.
+
+Ejemplo: ?La rotaci?n requiere una intervenci?n focalizada en Mantenimiento El?ctrico? funciona porque no repite el n?mero como titular, explica qu? debe hacer el negocio y conserva el 34,8% junto con su intervalo de confianza como evidencia. ?Rotaci?n por ?rea? solo describe un gr?fico; obliga a la audiencia a hacer el trabajo de inferir la conclusi?n.
+
+El resultado ejecutivo completo est? en `06_resultados/Discovery/conclusiones_ejecutivas_technostamp.md`. Ese documento propone los cuatro insights y conecta cada uno con los visuales de decisi?n G9, G10, G11, G13 y G14.
+
+
+## 10. Lo que enseñó auditar el propio proyecto
+
+Auditar un trabajo terminado enseña cosas distintas que hacerlo. Estas cinco son las que valen para defender el proyecto — o cualquier otro — en una sala.
+
+**Un pipeline tiene contratos, y una migración los rompe en silencio.** La limpieza v2 renombró una columna. Un script escrito contra la v1 siguió pidiéndola por el nombre viejo y el notebook entero se corta en la etapa 11 de 16. Nadie escribió mal ese script: lo que cambió fue el contrato, y no había nada que lo verificara. Cuando reemplaces una etapa por una versión mejorada, el trabajo no termina en la etapa nueva: termina cuando revisaste quién consumía la vieja.
+
+**La misma tasa admite varios denominadores, y todos son “correctos”.** Con 113 salidas salen tres tasas de rotación anual defendibles: 15,0% (anualizada sobre dotación activa promedio), 16,7% (acumulada del período) y 12,6% (la del período anualizada). Ninguna está mal calculada. El error no es de aritmética: es publicar dos sin decir cuál es cuál, y comparar contra ellas indistintamente. Antes de publicar cualquier tasa, escribí su denominador y su período al lado, una vez, y usá el mismo en toda comparación entre grupos.
+
+**Corregir por comparaciones múltiples no siempre debilita un hallazgo: a veces lo blinda.** El proyecto declaró como debilidad no haber corrido Bonferroni sobre las diez áreas testeadas. Al correrlo, Mantenimiento Eléctrico sobrevive con holgura (p = 0,00104 contra un umbral de 0,005). La corrección que se evitaba por miedo a perder el hallazgo era la que lo volvía inatacable. Si un efecto es grande y el z es cómodo, correr la corrección es barato y convierte una afirmación con asterisco en una sin él.
+
+**Un artefacto de linaje desactualizado es peor que no tener linaje.** El archivo que registra el origen de los datos apuntaba al script superado, con fecha anterior a los datos que decía describir. Su contenido no era falso; su procedencia sí. Sin linaje, un auditor pregunta. Con linaje contradictorio, deja de creerle al resto. Todo artefacto de trazabilidad se regenera cuando se regenera el dato, o se borra.
+
+**La evidencia tiene que probar el titular que ilustra, y una tasa nunca es un conteo.** Un gráfico citado para sostener “el turno noche concentra el riesgo” mostraba área y severidad — no turno. Y lo mostraba en conteos absolutos, que es justo lo que el propio proyecto había decidido no hacer: Ensamble 14 contra Calidad 3 parece 4,7 veces peor, y normalizado por exposición la brecha real es del 26%. El gráfico dibujaba la conclusión que el análisis había descartado. Antes de mandar un visual a una slide, preguntate dos cosas: ¿muestra la variable de la que habla el título?, ¿y está normalizado por la exposición de cada grupo?
+
+| Concepto | Dónde apareció | Te pueden preguntar |
+|---|---|---|
+| Contratos entre etapas de un pipeline | Una columna renombrada en la limpieza v2 corta el notebook | ¿Cómo garantizás que una mejora de una etapa no rompe las de abajo? |
+| Denominador y unidad de exposición | Tres tasas de rotación anual defendibles | ¿Ese 15% de rotación sobre qué base está calculado? |
+| Comparaciones múltiples | Bonferroni sobre diez áreas | ¿Por qué corriste la corrección si ya tenías el hallazgo? |
+| Trazabilidad de procedencia | Linaje que apuntaba al script superado | ¿Cómo sé con qué código se generó este dataset? |
+| La evidencia debe probar el titular | Gráfico de área citado para un hallazgo de turno | ¿Este gráfico prueba lo que dice el título? |
+
+> **Nota de estado.** La sección 9 de este archivo tiene los acentos degradados por una escritura con codificación incorrecta (48 tokens con `?` literal). Está registrado como ítem 4 del backlog en `06_resultados/Discovery/auditoria_mejoras_technostamp/06_backlog_priorizado.md`. La auditoría completa está en `06_resultados/Discovery/auditoria_mejoras_technostamp.md`.

@@ -13,6 +13,9 @@ conclusión (regla a futuro). Las decisiones superadas NO se borran.
 | — | Confirmar con el cliente si la dotación informada (450) excluye contratistas o una planta — los datos muestran 562 activos | calidad-datos | Abierta |
 | — | Auditar con RRHH el comportamiento de `meses_desde_ultimo_aumento` en las bajas (1,0 mes en renuncias vs 4,5 en activos) | calidad-datos | Abierta |
 | — | Definir si el índice de criticidad de DEC-006 se adopta como reemplazo formal de `es_posicion_critica` en el sistema origen | feature-engineering | Abierta |
+| — | Fijar UNA definición única de tasa de rotación anual para todo el material (hoy conviven 15,0% sobre dotación activa promedio y 16,7% acumulada del período limpio) | comunicacion | Abierta — auditoría 2026-09-05 |
+| — | Decidir si el insight ejecutivo de sucesión se reformula sobre el caso unipersonal observable (Supervisor de Logística) en vez de sobre `es_posicion_critica`, que DEC-006 declaró no utilizable como insumo analítico | comunicacion | Abierta — auditoría 2026-09-05 |
+| — | Confirmar el retiro de `tablas_soporte/BC_resumen_oportunidades.csv`, salida superada de `09_business_case.py` que contradice el rango vigente de `17_business_case_v2.py` | trazabilidad | Abierta — auditoría 2026-09-05 |
 
 ---
 
@@ -266,3 +269,19 @@ Mantenimiento Eléctrico, en cambio, aguantó: su rango va de 22,7% a 49,2%, y h
 Esto además corrigió una segunda afirmación equivocada. Con enero incluido, la rotación parecía estar bajando — y así se había interpretado. Sacando el arrastre, la tendencia es de +0,05 puntos por año, que es ruido, no tendencia. La rotación es plana. Las 19 salidas artificiales al principio del período dibujaban una caída que no existe.
 
 **Conclusión:** En cualquier panel con fecha de corte, revisar siempre el primer y el último mes por separado antes de calcular tasas. Si los casos del primer mes aparecen una sola vez, son arrastre del corte y no pertenecen al período. Nunca leer una tendencia sin antes limpiar los bordes: un pico artificial en un extremo inventa pendientes que no están en los datos.
+
+---
+
+## DEC-018: Comunicar hallazgos ejecutivos como riesgos focalizados y verificables
+
+**?rea:** transversal | **Fase:** Comunicaci?n ejecutiva | **Fecha:** 2026-09-05 | **Estado:** Vigente
+
+**Decisi?n:** La s?ntesis para Martina Rosales, CEO y directorio se estructura en cuatro riesgos focalizados: rotaci?n en Mantenimiento El?ctrico, horas extra estructurales, seguridad nocturna y sucesi?n cr?tica. Cada insight debe incluir una conclusi?n titular, impacto de negocio, una evidencia visual simple y una o dos acciones correctivas concretas.
+
+**Alternativa descartada:** Presentar el an?lisis como una secuencia de m?tricas de RR.HH., gr?ficos exploratorios o un pedido de aprobaci?n de un plan gen?rico de 90 d?as.
+
+**Por qu? la descartamos:** La audiencia necesita entender qu? decisi?n merece atenci?n, no reconstruir el an?lisis desde la planilla. La evidencia disponible permite priorizar sin sobreactuar: Mantenimiento El?ctrico es la ?nica ?rea cuya rotaci?n se distingue del promedio; seguridad se sostiene en eventos auditables; las horas extra son un costo estructural, pero no un ahorro autom?ticamente capturable; y los puestos cr?ticos pr?ximos a jubilarse exponen continuidad operativa. Pedir aprobaciones o responsables sin cerrar el diagn?stico desplaza la conversaci?n desde la evidencia hacia burocracia.
+
+**Conclusi?n:** Siempre presentar a C-level un insight como conclusi?n + impacto + evidencia + acci?n focalizada. Nunca usar un gr?fico como conclusi?n ni afirmar causalidad, ahorro garantizado o prioridad generalizada cuando los datos solo sostienen una se?al acotada.
+
+**C?digo afectado:** `06_resultados/Discovery/conclusiones_ejecutivas_technostamp.md`, `06_resultados/Discovery/visualizaciones/`.
