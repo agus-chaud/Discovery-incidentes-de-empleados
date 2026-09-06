@@ -30,3 +30,7 @@ reports/
 nivii_decision_science_assignment.zip
 .github/copilot-instructions.md
 Decision Science Assignment TechnoStamp.pdf
+# Visualizaciones: regenerables por el pipeline (04_scripts/08 y 18),
+# no se versionan para no ensuciar el historial con diffs binarios
+# de cada re-ejecucion.
+06_resultados/Discovery/visualizaciones/*.png
