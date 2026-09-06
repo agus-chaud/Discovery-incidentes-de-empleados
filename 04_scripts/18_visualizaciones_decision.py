@@ -79,18 +79,24 @@ for median in bp["medians"]: median.set(color=ROJO, linewidth=2)
 ax.set(xlabel="Horas extra por empleado-mes", title="Seis áreas superan las 11 h extra/mes; las otras cinco no llegan a 6\n(Pintura: 12,2 h · Ingeniería: 3,5 h)")
 save(fig, "G10_distribucion_horas_extra_area.png")
 
-# G11: Incidentes por area y severidad.
-inc = evt[evt.tipo_evento == "incidente_seguridad"].copy()
-severidades = ["Leve", "Moderado", "Grave"]
-inc_area = pd.crosstab(inc.area_empleado, inc.severidad).reindex(columns=severidades, fill_value=0)
-inc_area = inc_area.loc[inc_area.sum(axis=1).sort_values().index]
-fig, ax = plt.subplots(figsize=(10, 5.5)); left = np.zeros(len(inc_area))
-for severidad, color in zip(severidades, [VERDE, NARANJA, ROJO]):
-    valores = inc_area[severidad].values; ax.barh(inc_area.index, valores, left=left, label=severidad, color=color); left += valores
-ax.set(xlabel="Cantidad de incidentes", title="Ensamble y Estampado concentran más incidentes\n(conteo bruto, no ajustado por exposición — ver tasa por turno)")
-ax.legend(frameon=False, title="Severidad"); save(fig, "G11_incidentes_area_severidad.png")
+# G11: Incidentes por turno, en tasa por exposicion (DEC-007 / DEC-021).
+# Antes mostraba area y severidad en conteo bruto: violaba DEC-007 (nunca comparar
+# conteos entre grupos de tamano distinto) y no probaba el hallazgo de turno noche
+# que sostiene el insight ejecutivo 3. Ahora lee la tabla persistida por
+# 07_verif_incidentes_p5.py (P4_incidentes_por_turno.csv).
+tt = pd.read_csv(T / "P4_incidentes_por_turno.csv").sort_values("tasa_x1000")
+tasa_prom = tt.incidentes.sum() / tt.emp_meses.sum() * 1000
+fig, ax = plt.subplots(figsize=(9.5, 5))
+colores = np.where(tt.turno_trabajo == "Noche", ROJO, GRIS)
+ax.barh(tt.turno_trabajo, tt.tasa_x1000, color=colores)
+for y, tasa in enumerate(tt.tasa_x1000):
+    ax.text(tasa + .2, y, f"{tasa:.1f}", va="center", fontsize=9)
+ax.axvline(tasa_prom, color=AZUL, ls="--", label=f"Promedio: {tasa_prom:.1f} ×1.000 empleado-mes")
+ax.set(xlabel="Incidentes cada 1.000 empleado-mes", title="El turno noche tiene 5,4x la tasa de mañana o tarde\n(56% de los incidentes y 74% de los días perdidos, sobre 45 casos)")
+ax.legend(frameon=False); save(fig, "G11_incidentes_por_turno.png")
 
 # G12: Capacitacion de seguridad versus incidentes.
+inc = evt[evt.tipo_evento == "incidente_seguridad"].copy()
 seg = cap[cap.categoria_training == "Seguridad"].groupby("area_empleado").agg(horas=("duracion_horas", "sum"))
 dotacion = ult.groupby("area").empleado_id.size().rename("empleados")
 incidentes = inc.groupby("area_empleado").size().rename("incidentes")

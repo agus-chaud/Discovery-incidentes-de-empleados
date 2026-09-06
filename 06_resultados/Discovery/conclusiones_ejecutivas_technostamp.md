@@ -82,7 +82,7 @@ Cada incidente grave interrumpe la disponibilidad de personal, aumenta costos y 
 | Días perdidos por incidentes graves | **109 (79%)** |
 | Subtipos con más días perdidos | Caídas: 51; Sobreesfuerzo: 36 |
 
-**Visual de soporte:** `visualizaciones/G11_incidentes_area_severidad.png`. Complementar con una tabla breve de turno y severidad; no usar el conteo del panel mensual porque discrepa de la fuente de eventos.
+**Visual de soporte:** `visualizaciones/G11_incidentes_por_turno.png`. Muestra la tasa por 1.000 empleado-mes de cada turno, no el conteo bruto; no usar el conteo del panel mensual porque discrepa de la fuente de eventos.
 
 ### Acción correctiva concreta
 - Realizar observaciones de tarea y chequeos de inicio de turno específicamente en noche, priorizando prevención de caídas y sobreesfuerzos.

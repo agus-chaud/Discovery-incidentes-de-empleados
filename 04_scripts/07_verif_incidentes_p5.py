@@ -37,10 +37,13 @@ print("\n### RECALCULO DE SEGURIDAD USANDO SOLO eventos_rrhh (fuente auditable)"
 inc2 = inc.merge(panel[["k", "turno_trabajo", "antiguedad_meses", "horas_extra", "area"]], on="k", how="left")
 expo_t = pa.groupby("turno_trabajo").size().rename("emp_meses")
 i_t = inc2.groupby("turno_trabajo").size().rename("incidentes")
-tt = pd.concat([expo_t, i_t], axis=1).fillna(0)
+dias_t = inc2.groupby("turno_trabajo").dias_perdidos.sum().rename("dias_perdidos")
+tt = pd.concat([expo_t, i_t, dias_t], axis=1).fillna(0)
 tt["tasa_x1000"] = (tt.incidentes / tt.emp_meses * 1000).round(1)
+tt = tt.sort_values("tasa_x1000", ascending=False)
 print("\n  Por TURNO (turno del empleado en ese mes):")
-print(tt.sort_values("tasa_x1000", ascending=False).to_string())
+print(tt.to_string())
+tt.to_csv(T / "P4_incidentes_por_turno.csv", encoding="utf-8-sig")  # hallazgo mas robusto del proyecto: ahora tiene tabla de soporte (DEC-021)
 
 bins = [-1, 6, 12, 24, 60, 120, 999]
 labs = ["0-6m", "6-12m", "1-2a", "2-5a", "5-10a", "10a+"]

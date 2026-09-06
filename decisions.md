@@ -322,3 +322,20 @@ Esto además corrigió una segunda afirmación equivocada. Con enero incluido, l
 
 **Código afectado:** `04_scripts/17_business_case_v2.py`, `06_resultados/Discovery/tablas_soporte/P5_rotacion_por_area_con_IC.csv`, `06_resultados/Discovery/Discovery_report.md`, `ESTUDIO_conceptos_technostamp.md`.
 
+---
+
+## DEC-021: Rehacer G11 por turno y tasa, no por area y conteo
+
+**Área:** eda | **Fase:** Auditoría de calidad | **Fecha:** 2026-09-06 | **Estado:** Vigente
+
+**Decisión:** El gráfico G11 pasa de mostrar incidentes por área y severidad (conteo bruto) a mostrar la **tasa de incidentes cada 1.000 empleado-mes por turno**, con el turno noche destacado. Se persiste `tablas_soporte/P4_incidentes_por_turno.csv` (emp_meses, incidentes, días perdidos, tasa) generado por `07_verif_incidentes_p5.py`, que ya calculaba esta tasa para el cuerpo del informe pero nunca la guardaba en un archivo.
+
+**Alternativa descartada:** Mantener G11 como estaba (área y severidad en conteo) y agregar una tabla aparte con la tasa por turno, como sugería una nota previa del propio informe.
+
+**Por qué la descartamos:** El insight ejecutivo 3 titula sobre el turno noche, y G11 era el "visual de soporte" citado para ese insight — pero mostraba área, no turno, y en conteo bruto. Dos problemas, no uno: (1) el gráfico no probaba el titular que ilustraba; (2) el conteo bruto viola DEC-007 ("nunca comparar conteos de eventos entre grupos de tamaño distinto") — Ensamble mostraba 14 incidentes contra 3 de Calidad, sugiriendo 4,7x, cuando la tasa real es 26% de diferencia. Agregar una tabla aparte dejaba el gráfico principal sosteniendo un titular que no le corresponde; reemplazarlo resuelve las dos cosas con un solo cambio.
+
+**Conclusión:** Cuando un gráfico se cita como evidencia de un hallazgo, verificar que la variable que titula sea la variable que el gráfico grafica. Si no lo es, no alcanza con agregar una aclaración al pie: hay que reemplazar el gráfico. El cálculo correcto ya existía en el proyecto (impreso por consola desde el discovery original) — el error no era de análisis, era de qué cálculo se convirtió en visual y cuál se quedó en el stdout.
+
+**Código afectado:** `04_scripts/07_verif_incidentes_p5.py` (persiste `P4_incidentes_por_turno.csv`), `04_scripts/18_visualizaciones_decision.py` (rehace G11, ahora `G11_incidentes_por_turno.png`), `06_resultados/Discovery/conclusiones_ejecutivas_technostamp.md`.
+
+
