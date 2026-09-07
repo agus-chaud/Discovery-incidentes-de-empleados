@@ -16,7 +16,7 @@ Entregables previstos, en carpeta `06_resultados/Discovery/business_case/`:
 |---|---|---|
 | 0 | `ESTADO_business_case.md` | **Hecho** |
 | 1 | `01_matriz_evidencia.md` | **Hecho** |
-| 2-4 | `02_guion_ejecutivo.md` (bloque operativo + diagnóstico + anexo financiero) | Pendiente |
+| 2-4 | `02_guion_ejecutivo.md` (bloque operativo + diagnóstico + anexo financiero) | **Bloque A hecho**; faltan B y C |
 | 5 | `03_insights_nuevos.md` | Pendiente |
 | 6+ | `04_puente_discovery_automation.md` | Pendiente |
 
@@ -144,20 +144,40 @@ y ningún dato disponible que explique por qué. Eso es precisamente lo que se v
       También verificado: el costo anual total de horas extra suma **$987,6M**, consistente con
       los "$988M" de DEC-009.
 
+- [x] **2 — Guion ejecutivo, bloque operativo (A)** → `02_guion_ejecutivo.md`, secciones A.1 a A.7.
+      Titular, impacto en días de operación, evidencia G11, límite de la evidencia declarado en la
+      slide, auditoría de 90 días sobre seis ejes, cinco hipótesis con criterio de confirmación y
+      descarte, y métricas de resultado y de proceso con línea de base.
+      Cifras nuevas verificadas al escribirlo:
+      · dotación nocturna ~125 personas/mes, **151 distintas** en el período (Estampado 51,
+        Ensamble 40, Pintura 24, Mant. Mecánico 12, Logística 11, Mant. Eléctrico 9, Calidad 4);
+      · los 5 graves nocturnos explican **84 de los 102 días** perdidos de ese turno;
+      · subtipos noche vs resto: quemadura **5 vs 1**, caída 5 vs 3, corte 4 vs 2, atrapamiento
+        2 vs 5. La noche está peor en casi toda la tabla → no es una máquina ni una tarea única;
+      · antigüedad del accidentado más nuevo: **14 meses**; mediana **79 meses**. Ningún incidente
+        en el primer año de nadie;
+      · costo registrado de los 45 incidentes: **$975.000** total. No usar como impacto: cubre la
+        atención del hecho, no los 138 días de producción;
+      · tasa promedio de compañía: **4,7** ×1.000 empleado-mes (45 / 9.601). La noche está 2,5x
+        por encima del promedio y 5,4x por encima de mañana o tarde.
+
 ---
 
 ## 7. Próximo subentregable
 
-**Subentregable 2 — Guion ejecutivo, bloque operativo** → `02_guion_ejecutivo.md`
+**Subentregable 3 — Guion ejecutivo, diagnóstico organizacional** → agregar bloque B a
+`02_guion_ejecutivo.md`.
 
-Primera parte del documento para PowerPoint: (1) problema operativo prioritario, seguridad
-nocturna; (2) evidencia G11; (3) recomendación de auditoría operativa de 90 días; (4) métricas de
-seguimiento antes/después; (5) hipótesis a investigar, nunca presentadas como causas probadas.
+Cuatro apartados, cada uno con: pregunta · evidencia · decisión habilitada · límite de la
+evidencia · métrica de seguimiento.
 
-Cifras a usar, ya verificadas: 11,8 vs 2,2 cada 1.000 empleado-mes (5,4x) · 25 de 45 incidentes ·
-102 de 138 días perdidos · 5 de 6 graves · exposición 2.124 empleado-mes. Límite obligatorio a
-declarar: `hora_evento` va de 6 a 22 h, así que el hallazgo describe a la **población asignada** al
-turno, no al horario del hecho.
+- **G8** — enero es arrastre del corte, no una crisis del período. La rotación es plana.
+- **G9** — Mantenimiento Eléctrico es la única diferencia de rotación que se sostiene (Bonferroni).
+- **G10** — horas extra como capacidad concentrada, no problema homogéneo. Resolver antes la
+  contradicción C5 (11,9 media vs 12,2 mediana en Pintura): citar una sola, con su definición.
+- **G13 → tarjeta de alerta de sucesión**, no scatter, porque el output persistido tiene un solo
+  caso (Supervisor de Logística). Resolver C1: no repetir "4 de 5 posiciones críticas", que se
+  apoya en el flag descartado por DEC-006.
 
 ---
 
