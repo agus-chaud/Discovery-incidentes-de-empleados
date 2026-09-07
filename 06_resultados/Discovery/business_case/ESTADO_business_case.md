@@ -17,7 +17,7 @@ Entregables previstos, en carpeta `06_resultados/Discovery/business_case/`:
 | 0 | `ESTADO_business_case.md` | **Hecho** |
 | 1 | `01_matriz_evidencia.md` | **Hecho** |
 | 2-4 | `02_guion_ejecutivo.md` (bloques A, B y C) | **Hecho — completo** |
-| 5 | `03_insights_nuevos.md` | Pendiente |
+| 5 | `03_insights_nuevos.md` | **Hecho** |
 | 6+ | `04_puente_discovery_automation.md` | Pendiente |
 
 ---
@@ -202,46 +202,54 @@ y ningún dato disponible que explique por qué. Eso es precisamente lo que se v
       · Amplitud del rango: 194.840.088 / 23.298.312 = **8,4x**.
       · Renuncias voluntarias anualizadas exactas: **54,75** (se cita como ≈55).
 
+- [x] **5 — Lista formal de insights nuevos** → `03_insights_nuevos.md`. Tres secciones:
+      preguntas iniciales respondidas (P1–P5) · **doce insights nuevos** con las nueve columnas
+      pedidas · seis brechas de medición priorizadas.
+      Insights numerados I1 a I12, todos con fuente verificable. Además:
+      · Se documenta el candidato **verificado y descartado** (sobrecarga crónica por turno,
+        z = 1,48) para que no reaparezca como hallazgo.
+      · Se documentan las **dos debilidades que el proyecto declara sobre sí mismo**: censura por
+        la derecha sin tratar, y costo real del accidente no medido.
+      · Se desarma el "~14 incidentes/año evitables" del informe técnico: es aritmética de brecha
+        contra la tasa de mañana/tarde (14,3/año); contra el promedio de compañía da **10,6/año**.
+        Ninguna es una promesa; si se usa, va etiquetada como brecha.
+      **Veredicto preliminar de los doce: ninguno justifica Automation hoy.** El desarrollo del
+      porqué, insight por insight, va en el subentregable 6+.
+
 ---
 
 ## 7. Próximo subentregable
 
-**Subentregable 5 — Lista formal de insights nuevos** → `03_insights_nuevos.md`
+**Subentregable 6 — Puente Discovery → Automation** → `04_puente_discovery_automation.md`
 
-Tres secciones separadas:
+Trabajar **uno o dos insights por subentregable**. Para cada uno, cuatro apartados:
 
-1. **Preguntas iniciales respondidas** — lo que Martina trajo y qué contestó el análisis.
-2. **Insights nuevos** — "cosas que el negocio no sabe que no sabe".
-3. **Brechas de medición y próximos datos a pedir.**
+1. **Tipo de proyecto posible** — una sola opción: `supervisado` · `no supervisado` ·
+   `ninguno — sigue siendo Discovery`. Si supervisado: variable objetivo y anticipación necesaria.
+   Si no supervisado: patrón buscado y decisión que habilitaría.
+2. **Datos faltantes** — conectados únicamente con brechas reales ya identificadas (N1–N6, o las
+   verificadas en el preflight). No inventar.
+3. **Veredicto explícito** aplicando `ESTUDIO_conceptos_technostamp.md` §1: frecuencia de decisión,
+   escala, y si el cuello de botella es velocidad de scoring o calidad de inferencia. Concluir sin
+   ambigüedad: `sí justifica Automation` o `ninguno — sigue siendo Discovery recurrente`.
+4. **Mapa ds-*** solo si se justifica (`ds-06-transformar-datos`, `ds-07-seleccionar-variables`,
+   `ds-08-balancear-clases` si corresponde, `ds-09-modelizar`). Si no, escribir textualmente:
+   *"No pasar a ds-06 todavía; sostener como análisis recurrente de Discovery y mejorar la captura
+   de datos."*
 
-Cada insight nuevo va con nueve columnas: Insight · Fuente/evidencia · Decisión habilitada · Qué
-hoy no puede afirmarse · Brecha de datos real · Proyecto derivado · Variable objetivo o patrón ·
-Veredicto Discovery → Automation · Etapas ds-* futuras (solo si aplica).
+**Orden sugerido de tratamiento** (los más discutibles primero, porque son donde la tentación de
+modelar es mayor):
 
-Candidatos ya verificados y con ancla en fuente, listos para incluir:
+| Entrega | Insights | Por qué juntos |
+|---|---|---|
+| 6 | **I2** (rotación en Mant. Eléctrico) + **I10** (costo de la rotación) | Es el candidato obvio a "modelo de churn". Hay que responderlo bien y de frente |
+| 7 | **I4** (seguridad nocturna) + **I6** (concentración de la gravedad) | El segundo candidato a modelo predictivo. n=45 y n=6 son la respuesta |
+| 8 | **I12** (señal de fuga temprana) + **I8** (eficacia preventiva de capacitación) | Los dos casos donde el dato existe pero no se sabe qué significa |
+| 9 | **I3** (horas extra), **I11** (cola larga) y **I5/I7/I9/I1** | Cierre: los que son decisiones de gestión o arreglos de captura |
 
-| Candidato | Ancla verificada |
-|---|---|
-| Enero 2024 era arrastre del corte | DEC-017; las 19 salidas con 1 mes observado |
-| Mantenimiento Eléctrico concentra la única diferencia de rotación sostenida | `P5_rotacion_por_area_con_IC.csv`, p=0,00105 vs Bonferroni 0,005 |
-| Horas extra concentradas por área | `P3_horas_extra_por_area.csv`; corte limpio 11,2 vs 6,1 h (mediana) |
-| Seguridad nocturna concentrada | `P4_incidentes_por_turno.csv`; 11,8 vs 2,2 ×1.000 |
-| Falta de medición de eficacia preventiva de capacitación | r=0,394 p=0,260; 30 de 45 sin acción correctiva; 15 con la misma frase |
-| Sucesión puntual y concentrada | `P1_riesgo_sucesion_por_puesto.csv`, una sola fila |
-| Brecha para medir costo real de vacancia y rampa | `BC_supuestos.json`; el dato duro es el 3,3% del costo por salida |
-
-Candidatos adicionales que surgieron del preflight y también tienen ancla:
-
-| Candidato | Ancla verificada |
-|---|---|
-| El turno registrado en el incidente es el turno **asignado**, no el del hecho | `turno_evento` = `turno_trabajo` en 45/45; `hora_evento` va de 6 a 22 h |
-| El riesgo severo está concentrado en muy pocos casos | 6 graves explican 109 de 138 días perdidos (79% del daño en el 13% de los casos) |
-| No hay accidentes de ingresantes | Antigüedad mínima del accidentado: 14 meses; mediana 79 |
-| Mantenimiento Eléctrico tiene cola larga de horas extra | Única área donde la media (12,1) supera a la mediana (11,3) |
-| Señal de fuga temprana sin validar | `meses_desde_ultimo_aumento` 1,0 en renuncias vs 4,5 en activos |
-
-**No incluir** (verificado y descartado, para que no reaparezca): sobrecarga crónica por turno,
-z = 1,48, no se distingue del azar.
+**Escribir además el umbral, no solo el "no".** Para cada veredicto negativo, dejar dicho qué
+tendría que cambiar —volumen, frecuencia de decisión, o naturaleza del cuello de botella— para que
+la respuesta pasara a ser sí. Un "no" sin umbral no es un veredicto, es una opinión.
 
 ---
 
