@@ -39,7 +39,7 @@ caso se presenta en días de operación, que sí están medidos.
 
 ## A.3 — Evidencia (visual G11)
 
-**`visualizaciones/G11_incidentes_por_turno.png`** — incidentes cada 1.000 empleado-mes por turno,
+**`visualizaciones/G11_incidentes_por_turno.png`**: incidentes cada 1.000 empleado-mes por turno,
 con el turno noche destacado.
 
 | Turno | Empleado-mes | Incidentes | Días perdidos | **Tasa ×1.000** |
@@ -91,7 +91,7 @@ Es información para la auditoría, no una conclusión para la slide.
 **El conteo de casos graves nocturnos es real; el patrón no está demostrado.** Cinco de los seis casos graves del período ocurrieron en turno noche, y eso se puede decir como lo que es: un conteo.
 Pero afirmar que *la gravedad se concentra en la noche* es otra cosa, y con seis casos no se sostiene: la diferencia no se distingue del azar (Fisher exacto bilateral, **p = 0,205**). Lo mismo para los incidentes con días perdidos: 10 de noche contra 5 del resto, **p = 0,352**.
 
-De hecho, los incidentes leves se reparten **15 y 15**, exactamente iguales. Todo el exceso nocturno del conteo está en los casos con días perdidos — que son pocos.
+De hecho, los incidentes leves se reparten **15 y 15**, exactamente iguales. Todo el exceso nocturno del conteo está en los casos con días perdidos, que son pocos.
 
 En la slide, el hallazgo que aguanta es la **tasa de incidentes**: 5,4x sobre 45 casos y con exposición comparable. Los días perdidos y los casos graves se presentan como el
 **impacto observado** de ese hallazgo, no como un segundo hallazgo con entidad propia. Un conteo se
@@ -192,7 +192,7 @@ Cada apartado cierra con el límite de esa evidencia: es lo que impide que una d
 > **La rotación es plana. La caída que se veía era un artefacto del corte del archivo.**
 
 ### Evidencia
-`visualizaciones/G8_rotacion_original_vs_limpia.png` — serie mensual original contra período limpio.
+`visualizaciones/G8_rotacion_original_vs_limpia.png`: serie mensual original contra período limpio.
 
 Enero de 2024, primer mes del archivo, registra **19 salidas**: el triple de un mes normal. La
 prueba de que no pertenecen al período es cuántas veces aparece cada persona antes de irse:
@@ -205,7 +205,7 @@ prueba de que no pertenecen al período es cuántas veces aparece cada persona a
 Son personas que ya estaban saliendo cuando se hizo el corte del archivo. No es rotación generada
 en el período: es **arrastre**.
 
-Con enero adentro, la serie arranca alta y baja — y así se había leído. Sacando el arrastre, la
+Con enero adentro, la serie arranca alta y baja, y así se había leído. Sacando el arrastre, la
 pendiente es de **+0,05 puntos por año**: ruido, no tendencia. La serie limpia se mueve entre 0,5%
 y 3,0% mensual sin dirección, con picos aislados en marzo 2024 (17 salidas), diciembre 2024 (14) y
 abril 2025 (15).
@@ -238,7 +238,7 @@ anualizada: son fórmulas distintas sobre los mismos 113 casos.
 > **Una sola de las diez áreas rota distinto del promedio, y rota al doble.**
 
 ### Evidencia
-`visualizaciones/G9_rotacion_area_ic95.png` — rotación por área con intervalo de confianza del 95%.
+`visualizaciones/G9_rotacion_area_ic95.png`: rotación por área con intervalo de confianza del 95%.
 
 | Área | Personas | Salidas | Rotación | IC 95% | Veredicto |
 |---|---:|---:|---:|---|---|
@@ -299,7 +299,7 @@ Línea de base: 0%.**
 > a seis. En esas cinco no hay nada que recortar.**
 
 ### Evidencia
-`visualizaciones/G10_distribucion_horas_extra_area.png` — distribución de horas extra por empleado-mes, por área.
+`visualizaciones/G10_distribucion_horas_extra_area.png`: distribución de horas extra por empleado-mes, por área.
 
 **El gráfico es un boxplot, así que muestra medianas.** Para que la slide y la tabla digan lo
 mismo, todo este apartado cita **mediana de horas extra por empleado-mes**. La media está en
@@ -324,7 +324,7 @@ mismo, todo este apartado cita **mediana de horas extra por empleado-mes**. La m
 horas extra: **$987,6M**.
 
 Mantenimiento Eléctrico tiene la mayor brecha entre media (12,06) y
-mediana (11,30) de las once áreas: **+0,76 h**. Eso indica una cola larga — algunas personas del
+mediana (11,30) de las once áreas: **+0,76 h**. Eso indica una cola larga: algunas personas del
 área acumulan bastante más que sus propios compañeros. Es la única del grupo de seis áreas cargadas
 en esa situación; Calidad (+0,53) e Ingeniería (+0,06) también tienen media por encima de la
 mediana, pero pertenecen al grupo liviano.
@@ -362,7 +362,7 @@ Mediana de horas extra por empleado-mes en las seis áreas cargadas, mensual. **
 ### Por qué esto no es un gráfico
 El scatter anterior (`G13_riesgo_sucesion_por_puesto.png`) graficaba un fenómeno que tiene **un solo caso verificable**. Un gráfico de dispersión con un punto no comunica: sugiere una distribución que no existe y obliga a la audiencia a buscar un patrón donde hay un hecho puntual. Se reemplazó por una tarjeta.
 
-**Visual vigente: `visualizaciones/G13_alerta_sucesion.png`** — generado por `04_scripts/18_visualizaciones_decision.py`, que ahora renderiza la tarjeta directamente desde el índice propio de criticidad.
+**Visual vigente: `visualizaciones/G13_alerta_sucesion.png`**. Lo genera `04_scripts/18_visualizaciones_decision.py`, que ahora renderiza la tarjeta directamente desde el índice propio de criticidad.
 
 > ### ⚠ Punto de falla unipersonal — Supervisor de Logística
 >
@@ -467,9 +467,9 @@ Base: **≈55 renuncias voluntarias anualizadas** en el período limpio.
 | Central | $6.044.356 | $49.639.275 | **$82.732.125** | $132.371.400 |
 | Agresivo | $8.896.808 | $73.065.033 | $121.775.055 | **$194.840.088** |
 
-- **Piso del rango:** $23,3M/año — conservador, reducción del 15%
-- **Punto central:** $82,7M/año — escenario central, reducción del 25%
-- **Techo del rango:** $194,8M/año — agresivo, reducción del 40%
+- **Piso del rango:** $23,3M/año (conservador, reducción del 15%)
+- **Punto central:** $82,7M/año (escenario central, reducción del 25%)
+- **Techo del rango:** $194,8M/año (agresivo, reducción del 40%)
 - **Amplitud: 8,4 veces**
 
 ### El piso verificable: $1,64M/año
@@ -603,7 +603,7 @@ descrita en B.4. Ya está generada por `04_scripts/18_visualizaciones_decision.p
 El scatter dibuja una distribución que no existe: el único output persistido de riesgo de sucesión
 tiene **una sola fila** —y la vista por jubilación a 12 meses, tres—. Un scatter obliga a buscar un
 patrón donde hay un hecho puntual, y lo peor es que invita a llenar el vacío con la tabla de "4 de
-5 posiciones críticas" — que está construida sobre `es_posicion_critica`, el flag que DEC-006
+5 posiciones críticas", que está construida sobre `es_posicion_critica`, el flag que DEC-006
 descartó por marcar solo el 1,4% del universo y no actualizarse en 17 meses.
 
 Una tarjeta con cuatro números —dotación 1, en riesgo 1, sucesores 0, cobertura ninguna— comunica
@@ -638,5 +638,5 @@ puede tomarse.
 
 ---
 
-**Siguiente:** Subentregable 5 — lista formal de insights nuevos (`03_insights_nuevos.md`).
+**Siguiente:** subentregable 5, la lista formal de insights nuevos (`03_insights_nuevos.md`).
 
