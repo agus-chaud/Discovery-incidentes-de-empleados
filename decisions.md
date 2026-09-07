@@ -11,11 +11,12 @@ conclusión (regla a futuro). Las decisiones superadas NO se borran.
 | ID | Decisión | Área | Estado |
 |----|----------|------|--------|
 | — | Confirmar con el cliente si la dotación informada (450) excluye contratistas o una planta — los datos muestran 562 activos | calidad-datos | Abierta |
-| — | Auditar con RRHH el comportamiento de `meses_desde_ultimo_aumento` en las bajas (1,0 mes en renuncias vs 4,5 en activos) | calidad-datos | Abierta |
+| — | ~~Auditar con RRHH el comportamiento de `meses_desde_ultimo_aumento` en las bajas~~ | calidad-datos | **Resuelta — ver DEC-023.** El patrón es un artefacto de registro, verificado sin salir de los datos. Queda pendiente la auditoría de *proceso* del sistema origen, que ya no bloquea ningún análisis |
 | — | Definir si el índice de criticidad de DEC-006 se adopta como reemplazo formal de `es_posicion_critica` en el sistema origen | feature-engineering | Abierta |
 | — | ~~Fijar UNA definición única de tasa de rotación anual~~ | comunicacion | **Resuelta — ver DEC-019** |
-| — | Decidir si el insight ejecutivo de sucesión se reformula sobre el caso unipersonal observable (Supervisor de Logística) en vez de sobre `es_posicion_critica`, que DEC-006 declaró no utilizable como insumo analítico | comunicacion | Abierta — auditoría 2026-09-05 |
-| — | Confirmar el retiro de `tablas_soporte/BC_resumen_oportunidades.csv`, salida superada de `09_business_case.py` que contradice el rango vigente de `17_business_case_v2.py` | trazabilidad | Abierta — auditoría 2026-09-05 |
+| — | ~~Decidir si el insight ejecutivo de sucesión se reformula sobre el caso unipersonal observable~~ | comunicacion | **Resuelta — ver DEC-025.** Se reformula sobre jubilación a 12 meses (dato observable), conservando los tres puestos y retirando el rótulo "posiciones críticas" |
+| — | Confirmar el retiro de `tablas_soporte/BC_resumen_oportunidades.csv`, salida superada de `09_business_case.py` que contradice el rango vigente de `17_business_case_v2.py` | trazabilidad | Abierta — auditoría 2026-09-05. El business case ya lo declara superado en el guion §C.2; falta la decisión de borrarlo |
+| — | **Escribir DEC-002, que falta.** DEC-001 lo cita textualmente ("ver DEC-002") para el cambio de encoding de `latin-1` a `utf-8`, pero la entrada no existe en este archivo. Es una referencia colgada en el registro de trazabilidad | trazabilidad | Abierta — detectada 2026-09-07 |
 
 ---
 
@@ -338,4 +339,120 @@ Esto además corrigió una segunda afirmación equivocada. Con enero incluido, l
 
 **Código afectado:** `04_scripts/07_verif_incidentes_p5.py` (persiste `P4_incidentes_por_turno.csv`), `04_scripts/18_visualizaciones_decision.py` (rehace G11, ahora `G11_incidentes_por_turno.png`), `06_resultados/Discovery/conclusiones_ejecutivas_technostamp.md`.
 
+---
 
+## DEC-022: Declarar los dos límites del hallazgo de seguridad nocturna en la propia slide
+
+**Área:** comunicación | **Fase:** Business case | **Fecha:** 2026-09-07 | **Estado:** Vigente
+
+**Decisión:** El hallazgo del turno noche se presenta como **tasa de incidentes** (11,8 vs 2,2 cada 1.000 empleado-mes, 5,4x, sobre exposiciones comparables), con dos límites declarados en la misma slide y no en un apéndice: (1) el turno registrado es el **asignado a la persona**, no el del hecho; (2) la concentración de casos graves en la noche es un **conteo**, no un patrón demostrado. Los días perdidos y los casos graves se presentan como **impacto observado** del hallazgo, no como un segundo hallazgo con entidad propia.
+
+**Alternativa descartada:** Presentar "el turno noche concentra el riesgo severo" como una conclusión con entidad propia, apoyada en que 5 de los 6 casos graves y 102 de los 138 días perdidos son nocturnos.
+
+**Por qué la descartamos:** Al ir a verificar el dato antes de ponerlo en una slide aparecieron dos cosas. **Primera:** `turno_evento` coincide con `turno_trabajo` del panel en **45 de 45 casos** —coincidencia perfecta, así que es el turno asignado, no un dato levantado del accidente— y `hora_evento` de los 25 incidentes rotulados "Noche" va de las **06:53 a las 22:00**: en todo el dataset no hay un solo incidente entre las 23:00 y las 06:00. **Segunda:** la concentración de gravedad no se distingue del azar. Fisher exacto bilateral sobre graves (5 vs 1) da **p = 0,205**, y sobre incidentes con días perdidos (10 vs 5) da **p = 0,352**. Los incidentes leves se reparten **15 y 15**, exactamente iguales.
+
+Nada de esto toca el hallazgo principal, que está calculado sobre 45 casos con exposición comparable y sigue en pie. Pero afirmar que los accidentes ocurren de madrugada, o que la gravedad se concentra en la noche, son dos generalizaciones que un directorio desarma con una pregunta — y que además llevarían la auditoría hacia la hipótesis equivocada.
+
+**Conclusión:** Antes de convertir un hallazgo en slide, verificar **qué mide exactamente cada campo que lo sostiene**, no solo que el cálculo esté bien. Un campo que coincide al 100% con otro no es una medición independiente. Y distinguir siempre **reportar un conteo observado** de **afirmar un patrón**: lo primero necesita que el número esté bien; lo segundo necesita que sobreviva a un test. Declarar el límite primero es lo que vuelve creíble el resto, y acá además refuerza el pedido: hay una diferencia grande, real y medida, y ningún dato disponible que la explique.
+
+**Código afectado:** `06_resultados/Discovery/business_case/02_guion_ejecutivo.md` (§A.2, A.4, A.7), `01_matriz_evidencia.md`, `06_resultados/Discovery/Discovery_report.md`, `06_resultados/Discovery/conclusiones_ejecutivas_technostamp.md`.
+
+---
+
+## DEC-023: Retirar `meses_desde_ultimo_aumento` como variable de cualquier análisis de rotación
+
+**Área:** calidad-datos | **Fase:** Business case | **Fecha:** 2026-09-07 | **Estado:** Vigente
+
+**Decisión:** El campo `meses_desde_ultimo_aumento` **no se usa** como variable en ningún análisis de rotación ni como feature en ningún modelo futuro. El patrón que mostraba —1,0 mes en renuncias voluntarias contra 4,5 en activos— es un **artefacto de registro**, no una señal de comportamiento.
+
+**Alternativa descartada:** Tratarlo como la señal de fuga temprana más discriminante del dataset y construir sobre él un tablero de retención, previa auditoría con RR.HH.
+
+**Por qué la descartamos:** Abriendo el campo por motivo de salida, el patrón se repite en los cinco motivos: renuncia voluntaria 1,03 · despido 0,96 · **jubilación 1,43** · reestructuración 1,40 · fin de contrato 0,50. Y el número que cierra la discusión: **ninguna de las 132 bajas supera el valor 3**, mientras que **183 de 562 activos sí** lo superan (activos: media 4,53, mediana 2,0, máximo 17 — que es exactamente el largo del panel).
+
+Si el aumento reciente fuera un predictor de renuncia, el patrón sería específico de las renuncias voluntarias. No lo es. **Nadie se jubila porque le dieron un aumento hace un mes**, y sin embargo los siete jubilados del período muestran el mismo perfil que los 89 renunciantes. El campo se reescribe o se trunca en el momento de registrar la baja, para todas las bajas por igual.
+
+**Conclusión:** **Cuando una variable separa demasiado bien, la primera pregunta no es "qué buen predictor" sino "¿cuándo se escribe este dato?".** Un campo cuyo contenido depende del acto administrativo de registrar el desenlace está prediciendo el registro, no el fenómeno — es fuga de la variable objetivo disfrazada de hallazgo de negocio. La prueba diagnóstica es barata: abrir la variable por categorías del desenlace que *no* deberían compartir el patrón. Si lo comparten, es artefacto.
+
+**Bug evitado:** Entrenar un modelo de retención que hubiera parecido excelente en validación y no habría predicho nada, porque su mejor variable era un subproducto de dar de baja.
+
+**Código afectado:** `06_resultados/Discovery/business_case/03_insights_nuevos.md` (I12), `04_puente_discovery_automation.md` (entregas 6 y 8).
+
+---
+
+## DEC-024: Rehacer G12 sobre el cruce temporal y la cobertura, no sobre correlación por área
+
+**Área:** eda | **Fase:** Business case | **Fecha:** 2026-09-07 | **Estado:** Vigente
+
+**Decisión:** G12 pasa de un scatter de horas de capacitación contra incidentes por área —titulado "más capacitación coincide con más incidentes (se entrena después del accidente, no antes)"— a dos paneles: el **cruce temporal** sobre los 45 incidentes y la **cobertura** de capacitación entre accidentados y no accidentados. Nuevo archivo: `G12_cobertura_capacitacion_seguridad.png`.
+
+**Alternativa descartada:** Conservar el scatter agregándole una etiqueta al pie que aclarara que no prueba causalidad.
+
+**Por qué la descartamos:** El título afirmaba dos cosas y ninguna se sostiene. **Una:** la correlación área a área entre horas de capacitación por empleado y tasa de incidentes es **r = 0,394 con p = 0,260** sobre 10 áreas — no se distingue de cero (sin Logística, que con 35,2 h por empleado es un caso aparte, baja a r = 0,279). **Dos:** la temporalidad nunca se había calculado. El código agregaba totales de todo el período por área; **no comparaba una sola fecha**.
+
+Corrido el cruce con los archivos que ya existían —`capacitaciones_limpio.parquet` tiene `fecha_inicio` y `fecha_fin`; `eventos_limpio.parquet` tiene `fecha_evento`—: de los 45 incidentes, **5 tenían capacitación previa, 4 posterior y 36 (80%) ninguna**. "Se entrena después del accidente" describe **4 casos de 45**, y esos cuatro recibieron el curso a una mediana de **108 días** del hecho (máximo 344): es el calendario normal, no una reacción. A nivel persona, los accidentados tienen capacitación en el **22,0%** de los casos contra **19,1%** de los no accidentados (Fisher, **p = 0,683**), que es la proporción de toda la empresa (**19,3%**).
+
+Una etiqueta al pie no arregla un título que afirma lo contrario de lo que muestran los datos. El hallazgo que sí se sostiene —**la capacitación de seguridad cubre al 19,3% de la gente y se asigna sin ninguna relación con quién se lastima**— es más fuerte y más accionable que la brecha de medición que se había publicado.
+
+**Conclusión:** Un gráfico que se cita como evidencia debe graficar la variable de la que habla su título (DEC-021), y su título no debe afirmar una relación temporal que el código no calculó. Antes de escribir "después" o "antes" en un titular, verificar que exista una comparación de fechas en el código. Y **antes de declarar una brecha de datos, agotar los archivos que ya están en la mesa**: este cruce no necesitaba ningún dato nuevo.
+
+**Código afectado:** `04_scripts/18_visualizaciones_decision.py`, `06_resultados/Discovery/Discovery_report.md`, `06_resultados/Discovery/business_case/` (guion §C.3, matriz, insights I8).
+
+---
+
+## DEC-025: Presentar la sucesión sobre jubilación a 12 meses, sin el rótulo "posiciones críticas"
+
+**Área:** comunicación | **Fase:** Business case | **Fecha:** 2026-09-07 | **Estado:** Vigente
+
+**Decisión:** El insight de sucesión se presenta sobre **jubilación a 12 meses en la dotación activa** — cuatro personas, tres puestos — conservando la tabla de cobertura por puesto y **retirando el rótulo "posiciones críticas"**. El visual pasa de un scatter a **tarjetas de alerta** (`G13_alerta_sucesion.png`) que muestran dotación, personas que se jubilan y sucesores potenciales de cada puesto.
+
+**Alternativa descartada, en dos pasos.** Primero: la versión previa, "cuatro de las cinco **posiciones críticas** activas se jubilan en 12 meses o menos". Segundo, y este fue un error propio del business case: reemplazar toda esa sección por el único caso del Supervisor de Logística, descartando la tabla de tres puestos por considerarla apoyada en el flag.
+
+**Por qué la descartamos:** El rótulo estaba mal, pero **la tabla estaba bien**, y hubo que corregir la corrección. Las cuatro personas que se jubilan a 12 meses y los tres puestos que ocupan están verificados sobre `meses_hasta_jubilacion` en los 562 activos. Lo que no corresponde es llamarlas "posiciones críticas": ese rótulo importa `es_posicion_critica`, que DEC-006 descartó por marcar 10 de 694 (1,4%) y no cambiar en 17 meses.
+
+La confusión de fondo era que dos análisis distintos daban números distintos y se los estaba tratando como si respondieran lo mismo. `P1_riesgo_sucesion_por_puesto.csv` cruza el índice propio de criticidad con jubilación a **24** meses y devuelve **un** puesto; la pregunta de Martina era a **12** meses y sin filtro de criticidad, y devuelve **tres**. Las dos son correctas. Mezclarlas fue lo que produjo primero una afirmación inflada y después una recortada de más.
+
+**Conclusión:** Cuando dos cálculos sobre el mismo tema devuelven números distintos, la respuesta casi nunca es elegir uno: es escribir al lado de cada uno **qué pregunta contesta**, con su filtro y su horizonte. Y al corregir una afirmación, separar el **rótulo** del **cálculo**: retirar una etiqueta mal puesta no es motivo para descartar la tabla que la acompañaba. La criticidad defendible acá es la observable —cuánta gente ocupa el puesto y cuántos quedan si esa persona se va—, no un flag sin mantener.
+
+**Código afectado:** `04_scripts/18_visualizaciones_decision.py` (G13 sobre base de jubilación a 12 meses), `06_resultados/Discovery/conclusiones_ejecutivas_technostamp.md` (§4), `06_resultados/Discovery/business_case/` (guion §B.4, matriz, insights I9).
+
+---
+
+## DEC-026: Retirar el gradiente de riesgo de accidente por antigüedad
+
+**Área:** eda | **Fase:** Business case | **Fecha:** 2026-09-07 | **Estado:** Vigente
+
+**Decisión:** Se retira la afirmación "el riesgo de accidente sube con la experiencia" y su explicación por **complacencia del personal experimentado**. El hallazgo se reformula en su valor real, que es **negativo**: refuta que los ingresantes sean el problema de seguridad, sin establecer ningún gradiente.
+
+**Alternativa descartada:** Mantener la lectura de la tabla de tasas por banda de antigüedad (0,0 · 0,0 · 5,2 · 3,7 · 5,1 · 7,0 cada 1.000 empleado-mes) como evidencia de que el riesgo crece con los años.
+
+**Por qué la descartamos:** La tabla está bien construida —normalizada por exposición, como manda DEC-007—, pero el gradiente que se le leyó no está. Un chi-cuadrado de homogeneidad sobre las seis bandas da **5,68 con 5 grados de libertad, p = 0,339**: las tasas no se distinguen entre sí. Y la serie ni siquiera es monótona, cae de 5,2 a 3,7 antes de volver a subir. Los ceros de las dos primeras bandas tampoco prueban nada: con 449 y 188 empleado-mes de exposición, lo esperable bajo tasa pareja son ~2 y ~1 incidentes, así que observar cero es compatible con el azar.
+
+Es el mismo error que DEC-016 corrigió para Estampado y para los top performers: ordenar por valor y leer una tendencia sin calcular el margen. Con 45 eventos repartidos en seis bandas, ninguna comparación por antigüedad va a distinguirse de nada.
+
+**Conclusión:** Una tabla correctamente normalizada no vuelve correcta cualquier lectura de esa tabla. Antes de afirmar una tendencia sobre categorías ordenadas, correr un test de homogeneidad — y desconfiar especialmente cuando la serie no es monótona, que es la señal más barata de que se está leyendo ruido. Y cuidado con la explicación causal que viene pegada: "complacencia del personal experimentado" era una historia atractiva sobre un efecto que no existía.
+
+**Lo que sí conserva valor:** el accidentado más nuevo tenía 14 meses de antigüedad y la mediana de los accidentados es de 79 meses. Eso alcanza para **no** invertir en inducción como respuesta al problema de seguridad, que era la conclusión a la que llevaba la columna del panel mensual (con esa fuente los ingresantes parecían accidentarse a 10 veces el promedio — ver DEC-004). Un hallazgo negativo bien establecido vale tanto como uno positivo.
+
+**Código afectado:** `06_resultados/Discovery/Discovery_report.md` (§6), `06_resultados/Discovery/business_case/03_insights_nuevos.md` (I7), `04_puente_discovery_automation.md` (entrega 9).
+
+---
+
+## DEC-027: Ningún insight del proyecto justifica pasar a Automation
+
+**Área:** transversal | **Fase:** Business case | **Fecha:** 2026-09-07 | **Estado:** Vigente
+
+**Decisión:** Los doce insights del Discovery se evaluaron uno por uno contra el criterio de `ESTUDIO_conceptos_technostamp.md` §1 —frecuencia de decisión, escala, y si el cuello de botella es velocidad de scoring o calidad de inferencia—. **Los doce dan `ninguno — sigue siendo Discovery`. Cero etapas `ds-*` habilitadas.** Cada veredicto negativo se publica con su **umbral**: qué tendría que cambiar para revisarlo.
+
+**Alternativa descartada:** Derivar al menos un proyecto supervisado de los dos candidatos obvios — un modelo de riesgo de fuga sobre la rotación, o uno de riesgo de accidente sobre seguridad.
+
+**Por qué la descartamos:** Ninguno de los dos sobrevive a los números. **Rotación:** la clase positiva real —renuncias voluntarias, que es lo único que una acción de retención puede evitar— son **89 casos en toda la empresa** y **11** en Mantenimiento Eléctrico, contra **60 columnas candidatas** en el panel; y la etiqueta está mal definida por censura a derecha, porque un activo no es un "no se va" sino un "todavía no se fue". **Seguridad:** 45 incidentes en 9.601 empleado-mes (tasa base 0,47%), repartidos en **41 personas distintas con solo 3 reincidentes** — no hay señal individual persistente que aprender.
+
+Pero el motivo de fondo no es el tamaño de muestra: en los cuatro casos principales **falta el dato que explicaría el fenómeno, no el algoritmo que lo predeciría**. No hay entrevistas de salida (no se sabe *por qué* se van) ni ficha de causa raíz (no se sabe *por qué* pasan los accidentes). Un modelo entrenado sobre lo que hay automatizaría una decisión que todavía nadie sabe tomar.
+
+Y hay una razón que no es estadística: en seguridad **la acción correctiva no es individual**. Lo que se recomienda —revisar dotación, supervisión, tareas, mantenimiento y relevo del turno noche— se ejecuta sobre el turno. Un score de riesgo por operario no cambiaría ninguna de esas decisiones, y pondría un número de "probabilidad de accidentarse" al lado del nombre de un trabajador cuando lo que falla es la configuración del turno.
+
+**Conclusión:** No recomendar ML porque sea técnicamente posible. Evaluar las tres condiciones por separado y ser explícito sobre cuál falla, porque cada una se destraba distinto: el volumen solo con más años u otra escala; la falta del dato explicativo con control de proceso en el sistema origen, que no es analítica; y un problema que en realidad es de medición o de gestión, midiendo o decidiendo. **Y publicar siempre el umbral: un "no" sin umbral es una opinión, no un veredicto.**
+
+**El próximo paso de TechnoStamp no es un modelo:** es un formulario de incidentes que pida la causa y una entrevista de salida que pida el motivo.
+
+**Código afectado:** `06_resultados/Discovery/business_case/04_puente_discovery_automation.md` (entregas 6 a 9 y cierre), `03_insights_nuevos.md`.
