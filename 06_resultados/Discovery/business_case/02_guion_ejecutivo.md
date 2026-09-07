@@ -8,8 +8,8 @@ Regla que gobierna todo el documento: **el titular es una conclusión, no la des
 gráfico**. Si una slide no responde qué está pasando, cuánto afecta, qué dato lo sostiene y qué
 conviene corregir, es exploración, no comunicación ejecutiva.
 
-Estado: bloque operativo (subentregable 2). El diagnóstico organizacional y el anexo financiero
-se agregan en los subentregables 3 y 4.
+Estado: bloques **A** (problema operativo prioritario) y **B** (diagnóstico organizacional).
+El anexo financiero y la selección visual se agregan en el subentregable 4.
 
 ---
 
@@ -194,4 +194,248 @@ cuantificación económica de seguridad queda como brecha declarada, no como nú
 
 ---
 
-**Siguiente:** Subentregable 3 — diagnóstico organizacional (G8, G9, G10 y la tarjeta de sucesión).
+# BLOQUE B · Diagnóstico organizacional
+
+Cuatro preguntas que el negocio trajo, respondidas con lo que la evidencia sostiene y nada más.
+Cada apartado cierra con el límite de esa evidencia: es lo que impide que una decisión correcta se
+tome por el motivo equivocado.
+
+---
+
+## B.1 — La rotación no está bajando. Nunca subió. (visual G8)
+
+### Pregunta
+¿La rotación de TechnoStamp está mejorando?
+
+### Titular
+> **La rotación es plana. La caída que se veía era un artefacto del corte del archivo.**
+
+### Evidencia
+`visualizaciones/G8_rotacion_original_vs_limpia.png` — serie mensual original contra período limpio.
+
+Enero de 2024, primer mes del archivo, registra **19 salidas**: el triple de un mes normal. La
+prueba de que no pertenecen al período es cuántas veces aparece cada persona antes de irse:
+
+| Grupo | Meses observados antes de la salida |
+|---|---:|
+| Las 19 salidas de enero 2024 | **1, las 19 sin excepción** |
+| Todas las demás salidas | 9,5 en promedio |
+
+Son personas que ya estaban saliendo cuando se hizo el corte del archivo. No es rotación generada
+en el período: es **arrastre**.
+
+Con enero adentro, la serie arranca alta y baja — y así se había leído. Sacando el arrastre, la
+pendiente es de **+0,05 puntos por año**: ruido, no tendencia. La serie limpia se mueve entre 0,5%
+y 3,0% mensual sin dirección, con picos aislados en marzo 2024 (17 salidas), diciembre 2024 (14) y
+abril 2025 (15).
+
+**Efecto sobre la cifra de compañía: 19,0% → 16,7%** (DEC-017 + DEC-019).
+
+### Decisión habilitada
+No celebrar una mejora que no ocurrió, y no diseñar un programa general de retención sobre una
+tendencia inexistente. La rotación de compañía es un dato de contexto estable; el problema real
+está concentrado en un área (B.2), no repartido.
+
+### Límite de la evidencia
+Dieciséis meses limpios son pocos para hablar de tendencia con confianza. Y toda tasa de rotación
+de este trabajo **subestima técnicamente** el riesgo: quien figura como activo no es alguien que se
+queda, es alguien cuyo final todavía no se observó. Con este horizonte el efecto es chico, pero se
+nombra antes de que lo pregunten.
+
+### Métrica de seguimiento
+Rotación acumulada del período con denominador fijo (personas expuestas), recalculada cada
+trimestre con la misma fórmula. **Línea de base: 16,7%.** Nunca compararla contra una tasa
+anualizada: son fórmulas distintas sobre los mismos 113 casos.
+
+---
+
+## B.2 — Mantenimiento Eléctrico es la única diferencia que se sostiene (visual G9)
+
+### Pregunta
+¿Qué áreas rotan peor que el resto de la empresa?
+
+### Titular
+> **Una sola de las diez áreas rota distinto del promedio, y rota al doble.**
+
+### Evidencia
+`visualizaciones/G9_rotacion_area_ic95.png` — rotación por área con intervalo de confianza del 95%.
+
+| Área | Personas | Salidas | Rotación | IC 95% | Veredicto |
+|---|---:|---:|---:|---|---|
+| **Mantenimiento Eléctrico** | 46 | 16 | **34,8%** | **22,7 – 49,2%** | **Peor que el promedio** |
+| Estampado | 185 | 37 | 20,0% | 14,9 – 26,3% | Sin diferencia |
+| Ensamble | 151 | 24 | 15,9% | 10,9 – 22,6% | Sin diferencia |
+| Pintura | 80 | 12 | 15,0% | 8,8 – 24,4% | Sin diferencia |
+| Calidad | 71 | 9 | 12,7% | 6,8 – 22,4% | Sin diferencia |
+| Mantenimiento Mecánico | 51 | 6 | 11,8% | 5,5 – 23,4% | Sin diferencia |
+| Logística | 35 | 4 | 11,4% | 4,5 – 26,0% | Sin diferencia |
+| Ingeniería | 23 | 2 | 8,7% | 2,4 – 26,8% | Sin diferencia |
+| Administración | 16 | 1 | 6,2% | 1,1 – 28,3% | Sin diferencia |
+| RRHH | 16 | 1 | 6,2% | 1,1 – 28,3% | Sin diferencia |
+
+*Promedio de compañía: 16,7%.*
+
+**Por qué solo una.** El intervalo completo de Mantenimiento Eléctrico —incluido su piso de 22,7%—
+queda por encima del promedio. Estampado también parecía problemático con su 20,0%, pero su rango
+va de 14,9% a 26,3% y **contiene al 16,7%**: con estos datos no se distingue de lo normal. Mismo
+test, respuestas distintas, porque los tamaños de grupo lo son: 46 personas contra 185.
+
+**Y aguanta la corrección estadística.** Testear diez áreas al umbral habitual del 5% hace que la
+probabilidad de que *alguna* parezca significativa por puro azar ronde el 40%. Corrigiendo por eso
+(Bonferroni: umbral 0,05 ÷ 10 = 0,005), Mantenimiento Eléctrico tiene **p = 0,00105**. Sobrevive
+con margen. No es un hallazgo con asterisco.
+
+### Decisión habilitada
+Intervención de retención **focalizada en Mantenimiento Eléctrico**, no un plan general de empresa.
+Cuarenta y seis personas, dieciséis salidas: es un problema del tamaño de un equipo, y por eso es
+abordable.
+
+### Límite de la evidencia
+**Sabemos que se van; no sabemos por qué.** No hay entrevistas de salida ni encuesta de clima.
+Competencia salarial externa, carga de guardias o liderazgo local son hipótesis sin testear.
+Diseñar el programa de retención antes de instrumentar la entrevista de salida es apostar.
+
+Dos afirmaciones que circularon y no sobreviven al margen de error, y que **no deben volver a la
+presentación**: "Estampado rota mal" (su intervalo contiene al promedio) y "los top performers
+rotan un 35% más" (los intervalos se solapan, 14,7–36,0% contra 13,4–19,2%, sobre 59 personas).
+
+### Métrica de seguimiento
+Rotación de Mantenimiento Eléctrico con su IC95, trimestral. **Línea de base: 34,8% (22,7–49,2).**
+El objetivo se declara cuando el intervalo deje de estar íntegramente por encima del 16,7%, no
+cuando el punto baje: con 46 personas, el punto se mueve solo por azar.
+Métrica de proceso, leíble a los 90 días: **% de bajas con entrevista de salida estructurada.
+Línea de base: 0%.**
+
+---
+
+## B.3 — Las horas extra son capacidad concentrada, no un problema de toda la empresa (visual G10)
+
+### Pregunta
+¿Las horas extra son un exceso generalizado que conviene recortar?
+
+### Titular
+> **La empresa se parte en dos: seis áreas viven sobre once horas extra al mes y cinco no llegan a
+> seis. No es un exceso repartido, es capacidad faltante en un lado.**
+
+### Evidencia
+`visualizaciones/G10_distribucion_horas_extra_area.png` — distribución de horas extra por
+empleado-mes, por área.
+
+**El gráfico es un boxplot, así que muestra medianas.** Para que la slide y la tabla digan lo
+mismo, todo este apartado cita **mediana de horas extra por empleado-mes**. La media está en
+`tablas_soporte/P3_horas_extra_por_area.csv` y difiere poco, salvo en un caso que se explica abajo.
+
+| Área | Mediana h extra/mes | Media | % de la nómina base |
+|---|---:|---:|---:|
+| Pintura | **12,2** | 11,9 | 10,2% |
+| Logística | 11,8 | 11,5 | 9,8% |
+| Mantenimiento Mecánico | 11,8 | 11,1 | 9,4% |
+| Estampado | 11,7 | 11,3 | 9,6% |
+| Mantenimiento Eléctrico | 11,3 | **12,1** | 10,3% |
+| Ensamble | 11,2 | 11,1 | 9,5% |
+| — corte — | | | |
+| Dirección *(1 persona)* | 6,1 | 5,5 | 4,7% |
+| RRHH | 5,0 | 4,3 | 3,7% |
+| Calidad | 4,7 | 5,2 | 4,4% |
+| Administración | 4,2 | 4,1 | 3,5% |
+| Ingeniería | 3,5 | 3,6 | 3,0% |
+
+**El corte es limpio: 11,2 h de un lado, 6,1 del otro.** No hay zona gris. Costo anual total de
+horas extra: **$987,6M**.
+
+**Un detalle que vale mirar.** Mantenimiento Eléctrico es la única área donde la media (12,1)
+supera claramente a la mediana (11,3). Eso significa que tiene una cola larga: algunas personas del
+área acumulan mucho más que sus propios compañeros. Es la misma área con la peor rotación (B.2).
+No se afirma que una cosa cause la otra —no hay evidencia de eso—, pero es una coincidencia que la
+intervención de retención debería mirar.
+
+**Sobrecarga crónica:** 49 empleados activos, de 562, tienen horas extra altas en al menos el 70%
+de sus meses. Concentrados en Estampado (13), Pintura (12) y Ensamble (11).
+
+### Decisión habilitada
+Revisión de **capacidad y cobertura** en las seis áreas cargadas, con nombre y apellido. No una
+política general de recorte de horas extra: en cinco áreas no hay nada que recortar.
+
+### Límite de la evidencia
+**No es un ahorro capturable, y presentarlo como tal sería el error más caro del informe.** El
+recargo efectivo de la hora extra en estos datos es **1,343x** el costo de la hora normal, mientras
+que el costo cargado de un empleado nuevo —cargas patronales, ART, aguinaldo, vacaciones— supera
+**1,40x**. El punto de equilibrio está en cargas del 34,3%: por debajo conviene contratar, por
+encima conviene la hora extra. En Argentina la condición no se cumple. Los $987,6M son el costo de
+operar así, no una oportunidad de ahorro (DEC-009).
+
+Tampoco se sostienen los argumentos de respaldo: los sobrecargados crónicos rotan igual que el
+resto (19,7% vs 19,0%), su exceso de ausentismo es real pero marginal (+11,1%, unos $4,75M
+anuales), y el vínculo con accidentes no es concluyente.
+
+**Verificado y descartado para esta presentación:** el turno noche tiene 15,4% de sobrecargados
+crónicos contra 11,5% de mañana y 9,0% de tarde. Parece una conexión con el bloque de seguridad,
+pero **no se distingue del azar** (z = 1,48; los intervalos se solapan). Se deja registrado para
+que nadie lo "descubra" más adelante como si fuera un hallazgo.
+
+### Métrica de seguimiento
+Mediana de horas extra por empleado-mes en las seis áreas cargadas, mensual. **Línea de base:
+11,2 a 12,2 h.** Y el indicador que importa de verdad: **cantidad de personas con sobrecarga
+crónica. Línea de base: 49 activos.** Es la métrica de riesgo humano; las horas totales son la
+métrica de costo, y esa no se promete bajar.
+
+---
+
+## B.4 — Sucesión: una tarjeta de alerta, no un gráfico (reemplaza G13)
+
+### Pregunta
+¿Cuántos puestos críticos están en riesgo?
+
+### Por qué esto no es un gráfico
+El scatter `G13_riesgo_sucesion_por_puesto.png` grafica un fenómeno que tiene **un solo caso
+verificable**. Un gráfico de dispersión con un punto no comunica: sugiere una distribución que no
+existe y obliga a la audiencia a buscar un patrón donde hay un hecho puntual. Se reemplaza por una
+tarjeta.
+
+> ### ⚠ Punto de falla unipersonal — Supervisor de Logística
+>
+> | | |
+> |---|---|
+> | **Dotación del puesto** | **1 persona** |
+> | **En riesgo a 24 meses** | **1** |
+> | **Sucesores potenciales identificados** | **0** |
+> | **Cobertura** | **Ninguna** |
+>
+> Si esa persona sale, no hay nadie en el puesto y no hay nadie preparándose para ocuparlo.
+
+### Evidencia
+`tablas_soporte/P1_riesgo_sucesion_por_puesto.csv`. Es el único registro persistido de riesgo de
+sucesión, y contiene exactamente esta fila.
+
+### Decisión habilitada
+Documentar en 90 días las decisiones, contactos, rutinas y excepciones operativas que hoy dependen
+de esa persona. Asignar formación cruzada con acompañamiento en el puesto. Es barato, es acotado y
+no requiere ningún dato nuevo para empezar.
+
+### Límite de la evidencia — y una corrección al informe anterior
+**No debe repetirse la afirmación "cuatro de las cinco posiciones críticas se jubilan en 12
+meses".** Esa frase, publicada en la versión previa del informe ejecutivo, está construida sobre el
+campo `es_posicion_critica` del sistema del cliente, que el propio proyecto descartó como insumo
+analítico (DEC-006): marca 10 empleados de 694 (**1,4%**) y **nunca cambia** a lo largo de los 17
+meses, lo que indica que se cargó una vez y no se mantuvo. Con cinco posiciones críticas activas,
+la respuesta literal a "cuántos puestos críticos están en riesgo" sería "cuatro" — cierto e inútil.
+
+El índice propio de criticidad construido por el proyecto —dotación del puesto ≤ 3, span de control
+o nivel jerárquico alto, antigüedad ≥ 10 años, top performer— identifica **47 activos (8,4%)** con
+criticidad estimada. Sobre esa base sí se puede planificar. Pero cruzada con proximidad a
+jubilación, la tabla persistida devuelve **un solo puesto**.
+
+Con un caso no hay patrón. Lo honesto es presentarlo como lo que es: una alerta concreta y
+accionable, más una brecha de calidad de dato para devolverle al cliente.
+
+### Métrica de seguimiento
+| Métrica | Línea de base | Objetivo a 90 días |
+|---|---:|---|
+| Puestos unipersonales sin sucesor identificado | **1** | 0 |
+| Rutinas críticas del puesto documentadas | 0 | 100% |
+| Cobertura del flag `es_posicion_critica` en el sistema origen | 1,4%, sin actualizar en 17 meses | Revisado y mantenido por RR.HH. |
+
+---
+
+**Siguiente:** Subentregable 4 — anexo financiero y seleccion visual (G14, tasa oficial, rango).
+

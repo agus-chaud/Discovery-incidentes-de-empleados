@@ -16,7 +16,7 @@ Entregables previstos, en carpeta `06_resultados/Discovery/business_case/`:
 |---|---|---|
 | 0 | `ESTADO_business_case.md` | **Hecho** |
 | 1 | `01_matriz_evidencia.md` | **Hecho** |
-| 2-4 | `02_guion_ejecutivo.md` (bloque operativo + diagnóstico + anexo financiero) | **Bloque A hecho**; faltan B y C |
+| 2-4 | `02_guion_ejecutivo.md` (bloque operativo + diagnóstico + anexo financiero) | **Bloques A y B hechos**; falta C |
 | 5 | `03_insights_nuevos.md` | Pendiente |
 | 6+ | `04_puente_discovery_automation.md` | Pendiente |
 
@@ -161,23 +161,52 @@ y ningún dato disponible que explique por qué. Eso es precisamente lo que se v
       · tasa promedio de compañía: **4,7** ×1.000 empleado-mes (45 / 9.601). La noche está 2,5x
         por encima del promedio y 5,4x por encima de mañana o tarde.
 
+- [x] **3 — Guion ejecutivo, diagnóstico organizacional (bloque B)** → `02_guion_ejecutivo.md`,
+      secciones B.1 a B.4. Cada una con pregunta · titular · evidencia · decisión habilitada ·
+      límite de la evidencia · métrica de seguimiento con línea de base.
+      · **B.1 (G8)** rotación plana, arrastre de enero, 19,0% → 16,7%.
+      · **B.2 (G9)** Mantenimiento Eléctrico, tabla completa de las diez áreas con IC95 y Bonferroni.
+      · **B.3 (G10)** horas extra como corte limpio en dos grupos.
+      · **B.4** tarjeta de alerta de sucesión, reemplaza el scatter G13.
+      Contradicciones resueltas en este subentregable: **C1** (no se repite "4 de 5 posiciones
+      críticas"; se corrige explícitamente en B.4 citando DEC-006) y **C5** (G10 es boxplot, así
+      que todo B.3 cita **medianas**, con la media al lado en la misma tabla).
+      Hallazgos nuevos verificados al escribirlo:
+      · Medianas de HE por área: el corte es 11,2 h de un lado y 6,1 del otro, sin zona gris.
+      · **Mantenimiento Eléctrico es la única área donde la media (12,1) supera a la mediana
+        (11,3)** — cola larga, unas pocas personas acumulan mucho más que sus pares. Es la misma
+        área con peor rotación. Se presenta como coincidencia a mirar, nunca como causa.
+      · Crónicos por área: Estampado 13, Pintura 12, Ensamble 11, Logística 6, Calidad 3,
+        Mant. Eléctrico 2, Mant. Mecánico 2. Total 49 sobre 562 activos.
+      · **Candidato verificado y DESCARTADO:** sobrecarga crónica por turno — Noche 15,4% (19/123)
+        vs Mañana 11,5% (16/139) vs Tarde 9,0% (12/134). **z = 1,48, no se distingue del azar.**
+        Queda registrado en B.3 para que nadie lo presente después como hallazgo.
+      · Serie mensual limpia: se mueve entre 0,5% y 3,0% sin dirección; picos aislados en marzo
+        2024 (17 salidas), diciembre 2024 (14) y abril 2025 (15).
+
 ---
 
 ## 7. Próximo subentregable
 
-**Subentregable 3 — Guion ejecutivo, diagnóstico organizacional** → agregar bloque B a
+**Subentregable 4 — Guion ejecutivo, anexo financiero y selección visual** → agregar bloque C a
 `02_guion_ejecutivo.md`.
 
-Cuatro apartados, cada uno con: pregunta · evidencia · decisión habilitada · límite de la
-evidencia · métrica de seguimiento.
+Contenido pedido:
 
-- **G8** — enero es arrastre del corte, no una crisis del período. La rotación es plana.
-- **G9** — Mantenimiento Eléctrico es la única diferencia de rotación que se sostiene (Bonferroni).
-- **G10** — horas extra como capacidad concentrada, no problema homogéneo. Resolver antes la
-  contradicción C5 (11,9 media vs 12,2 mediana en Pintura): citar una sola, con su definición.
-- **G13 → tarjeta de alerta de sucesión**, no scatter, porque el output persistido tiene un solo
-  caso (Supervisor de Logística). Resolver C1: no repetir "4 de 5 posiciones críticas", que se
-  apoya en el flag descartado por DEC-006.
+- **G14** como business case de retención **en rango**, según DEC-015.
+- Tasa limpia oficial **16,7%** (DEC-019).
+- Rango **$23,3M – $194,8M**; punto central **$82,7M**; piso verificable **$1,64M**.
+- Qué datos faltan para cerrar el rango: **N1** (producción promedio de un operario formado) y
+  **N2** (meses hasta rendimiento pleno).
+- **Selección visual documentada:** mostrar G8, G9, G10, G11 y G14 · reformular G12 como brecha de
+  medición preventiva, sin afirmar que la capacitación ocurre después del incidente · reemplazar
+  G13 por la tarjeta de alerta ya escrita en B.4.
+
+Resolver además la contradicción **C6**: `BC_resumen_oportunidades.csv` todavía publica
+"$92,4M esperado" para rotación voluntaria, que es la cifra única descartada por DEC-015. Marcarlo
+como superado y usar solo `BC_supuestos.json`.
+Y anclar la reformulación de G12 en lo ya verificado: r = 0,394, p = 0,260 — la relación no se
+distingue de cero, y el código no compara fechas.
 
 ---
 
