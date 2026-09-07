@@ -4,9 +4,7 @@
 Cada bloque corresponde a una slide o a un par de slides. Estructura fija por bloque:
 titular · impacto de negocio · evidencia · acción · límite de la evidencia · métrica de seguimiento.
 
-Regla que gobierna todo el documento: **el titular es una conclusión, no la descripción de un
-gráfico**. Si una slide no responde qué está pasando, cuánto afecta, qué dato lo sostiene y qué
-conviene corregir, es exploración, no comunicación ejecutiva.
+Regla que gobierna todo el documento: **el titular es una conclusión, no la descripción de un gráfico**. Si una slide no responde qué está pasando, cuánto afecta, qué dato lo sostiene y qué conviene corregir, es exploración, no comunicación ejecutiva.
 
 Estado: **completo**. Bloque A (problema operativo prioritario), bloque B (diagnóstico
 organizacional) y bloque C (anexo financiero y selección visual).
@@ -17,14 +15,11 @@ organizacional) y bloque C (anexo financiero y selección visual).
 
 ## A.1 — Titular
 
-> **El turno noche concentra el riesgo de seguridad que más días de operación cuesta,
-> y no sabemos por qué.**
+> **El turno noche concentra el riesgo de seguridad que más días de operación cuesta, y no sabemos por qué.**
 
-Las dos mitades del titular importan igual. La primera es un hecho medido. La segunda es la razón
-por la que lo que se pide es una auditoría y no un programa.
+Las dos mitades del titular importan igual. La primera es un hecho medido. La segunda es la razón por la que lo que se pide es una auditoría y no un programa.
 
 ---
-
 ## A.2 — Impacto de negocio
 
 Lo que está en juego no es un indicador de RR.HH.: son **días de planta**.
@@ -37,9 +32,7 @@ Lo que está en juego no es un indicador de RR.HH.: son **días de planta**.
 | Casos graves en turno noche | **5 de 6** — 84 días | Es un conteo observado, no un patrón demostrado: con seis casos graves en total la diferencia **no se distingue del azar** (Fisher, p = 0,205). Ver A.4 |
 | Personas expuestas | ~125 por mes, **151 distintas** en el período | Concentradas en Estampado (51), Ensamble (40) y Pintura (24) |
 
-**Sobre el costo registrado.** El sistema imputa $975.000 en total a los 45 incidentes. Esa cifra
-**no debe usarse como impacto**: cubre la atención del hecho, no los 138 días de producción
-perdidos, ni el reemplazo, ni la cobertura del puesto. El costo real no está medido. Por eso el
+**Sobre el costo registrado.** El sistema imputa $975.000 en total a los 45 incidentes. Esa cifra **no debe usarse como impacto**: cubre la atención del hecho, no los 138 días de producción perdidos, ni el reemplazo, ni la cobertura del puesto. El costo real no está medido. Por eso el
 caso se presenta en días de operación, que sí están medidos.
 
 ---
@@ -61,16 +54,9 @@ con el turno noche destacado.
 
 Tres razones por las que este número aguanta que lo discutan en la sala:
 
-1. **Está normalizado por exposición, no es un conteo.** La noche tiene 2.124 empleado-mes contra
-   2.254 de mañana y 2.256 de tarde: las tres poblaciones son del mismo tamaño. La diferencia no
-   viene de que haya más gente de noche, porque no la hay.
-2. **Viene de la fuente auditable.** Los 45 incidentes de `eventos_rrhh` traen fecha, severidad,
-   parte del cuerpo y días perdidos. La columna del panel mensual suma 100 incidentes —más del
-   doble— pero no trae ninguna de esas cosas y no puede verificarse. Se usó la que se puede ir a
-   comprobar (DEC-004).
-3. **No es un artefacto de gente nueva.** El accidentado más reciente tenía **14 meses** de
-   antigüedad; la mediana de los accidentados es de **79 meses**. No hay un solo incidente en el
-   primer año de nadie. Esto no es un problema de inducción.
+1. **Está normalizado por exposición, no es un conteo.** La noche tiene 2.124 empleado-mes contra 2.254 de mañana y 2.256 de tarde: las tres poblaciones son del mismo tamaño. La diferencia no viene de que haya más gente de noche, porque no la hay.
+2. **Viene de la fuente auditable.** Los 45 incidentes de `eventos_rrhh` traen fecha, severidad, parte del cuerpo y días perdidos. La columna del panel mensual suma 100 incidentes —más del doble— pero no trae ninguna de esas cosas y no puede verificarse. Se usó la que se puede ir a comprobar (DEC-004).
+3. **No es un artefacto de gente nueva.** El accidentado más reciente tenía **14 meses** de antigüedad; la mediana de los accidentados es de **79 meses**. No hay un solo incidente en el primer año de nadie. Esto no es un problema de inducción.
 
 ### Qué se accidenta, de noche
 
@@ -93,27 +79,19 @@ Es información para la auditoría, no una conclusión para la slide.
 
 **El dato dice turno asignado, no hora del hecho.**
 
-- El campo `turno_evento` coincide con el turno asignado a esa persona en el panel en **45 de 45
-  casos**. Es el turno de la persona, no un dato levantado del accidente.
-- La hora registrada de los 25 incidentes rotulados "Noche" va de las **06:53 a las 22:00**.
-  En todo el dataset **no hay un solo incidente entre las 23:00 y las 06:00**.
+- El campo `turno_evento` coincide con el turno asignado a esa persona en el panel en **45 de 45 casos**. Es el turno de la persona, no un dato levantado del accidente.
+- La hora registrada de los 25 incidentes rotulados "Noche" va de las **06:53 a las 22:00**. En todo el dataset **no hay un solo incidente entre las 23:00 y las 06:00**.
 
-**Qué sigue siendo cierto:** la gente asignada al turno noche se accidenta 5,4 veces más, y ahí
-está el 74% de los días perdidos. Eso es una propiedad de esa población y de cómo se la opera.
+**Qué sigue siendo cierto:** la gente asignada al turno noche se accidenta 5,4 veces más, y ahí está el 74% de los días perdidos. Eso es una propiedad de esa población y de cómo se la opera.
 
-**Qué no puede decirse:** que los accidentes ocurran de madrugada, ni que la causa sea la
-oscuridad, el horario o el sueño. Nada en los datos lo sostiene.
+**Qué no puede decirse:** que los accidentes ocurran de madrugada, ni que la causa sea la oscuridad, el horario o el sueño. Nada en los datos lo sostiene.
 
 ### Y un segundo límite, sobre la gravedad
 
-**El conteo de casos graves nocturnos es real; el patrón no está demostrado.** Cinco de los seis
-casos graves del período ocurrieron en turno noche, y eso se puede decir como lo que es: un conteo.
-Pero afirmar que *la gravedad se concentra en la noche* es otra cosa, y con seis casos no se
-sostiene: la diferencia no se distingue del azar (Fisher exacto bilateral, **p = 0,205**). Lo mismo
-para los incidentes con días perdidos: 10 de noche contra 5 del resto, **p = 0,352**.
+**El conteo de casos graves nocturnos es real; el patrón no está demostrado.** Cinco de los seis casos graves del período ocurrieron en turno noche, y eso se puede decir como lo que es: un conteo.
+Pero afirmar que *la gravedad se concentra en la noche* es otra cosa, y con seis casos no se sostiene: la diferencia no se distingue del azar (Fisher exacto bilateral, **p = 0,205**). Lo mismo para los incidentes con días perdidos: 10 de noche contra 5 del resto, **p = 0,352**.
 
-De hecho, los incidentes leves se reparten **15 y 15**, exactamente iguales. Todo el exceso
-nocturno del conteo está en los casos con días perdidos — que son pocos.
+De hecho, los incidentes leves se reparten **15 y 15**, exactamente iguales. Todo el exceso nocturno del conteo está en los casos con días perdidos — que son pocos.
 
 **Cómo decirlo en la slide.** El hallazgo que aguanta es la **tasa de incidentes**: 5,4x sobre 45
 casos y con exposición comparable. Los días perdidos y los casos graves se presentan como el

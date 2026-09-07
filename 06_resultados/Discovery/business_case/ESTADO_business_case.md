@@ -18,7 +18,7 @@ Entregables previstos, en carpeta `06_resultados/Discovery/business_case/`:
 | 1 | `01_matriz_evidencia.md` | **Hecho** |
 | 2-4 | `02_guion_ejecutivo.md` (bloques A, B y C) | **Hecho — completo** |
 | 5 | `03_insights_nuevos.md` | **Hecho** |
-| 6+ | `04_puente_discovery_automation.md` | **Entregas 6 y 7 hechas** (I2, I10, I4, I6); faltan 8 y 9 |
+| 6+ | `04_puente_discovery_automation.md` | **Entregas 6, 7 y 8 hechas** (I2, I10, I4, I6, I12, I8); falta la 9 |
 
 ---
 
@@ -266,28 +266,74 @@ y ningún dato disponible que explique por qué. Eso es precisamente lo que se v
 | `02_guion_ejecutivo.md` §A.7 | Métrica "casos graves, turno noche" | Se sigue como **conteo**, no como tasa: con seis casos no hay base para una tasa de gravedad por turno |
 | `01_matriz_evidencia.md` fila 4 | — | Se agrega a "qué no se puede afirmar": ni que la gravedad se concentre en la noche |
 
+- [x] **8 — Puente Discovery → Automation, entrega 8 (I12 + I8)** →
+      `04_puente_discovery_automation.md`. Los dos casos donde **el dato existe pero faltaba la
+      interpretación**. Ninguno necesitaba un dato nuevo: necesitaba que alguien corriera el cruce.
+      **Ambos veredictos: `ninguno`.** Y los dos **cerraron una brecha del backlog**.
+
+      · **I12 — N6 queda RESUELTA, y el insight se cae.** `meses_desde_ultimo_aumento` es un
+        **artefacto de registro**, no una señal de fuga. La prueba: el campo abierto por motivo de
+        salida repite el mismo perfil en los cinco motivos — renuncia 1,03 · despido 0,96 ·
+        **jubilación 1,43** · reestructuración 1,40 · fin de contrato 0,50 — y
+        **ninguna de las 132 bajas supera el valor 3**, contra **183 de 562 activos** que sí lo
+        superan (activos: media 4,53, mediana 2,0, máx 17 = el largo del panel).
+        Nadie se jubila porque le dieron un aumento hace un mes. El campo se reescribe o se trunca
+        al registrar la baja, para todos los motivos por igual.
+        **Consecuencia operativa: el campo queda PROHIBIDO** como variable de rotación. Es el tipo
+        de variable que un modelo encontraría "muy predictiva" y que estaría prediciendo el acto de
+        registrar la baja, no la decisión de irse.
+
+      · **I8 — el cruce temporal sí se podía correr, y refuta el titular de G12.** Sobre los 45
+        incidentes: **5 con capacitación de seguridad previa · 4 con posterior · 36 (80%) con
+        ninguna**. Los 4 "posteriores" recibieron el curso a una **mediana de 108 días** (máx 344):
+        calendario normal, no reacción. A nivel persona: accidentados **22,0%** (9 de 41) vs no
+        accidentados **19,1%** (121 de 634), Fisher **p = 0,683**. Cobertura del universo: **19,3%**
+        (130 de 675). Insumos: 145 capacitaciones de Seguridad sobre 133 empleados, con
+        `fecha_inicio`/`fecha_fin`.
+        **El hallazgo real es mejor que el anterior:** la capacitación cubre al 19,3% y se asigna
+        sin ninguna relación con quién se lastima. Y el cuello de botella no es medir, es **diseño**:
+        la asignación no fue aleatoria ni está documentada, así que capacitados y no capacitados no
+        son comparables. Lo que corresponde es una **evaluación de impacto**, no un modelo.
+
+### Correcciones aplicadas a documentos ya entregados (por la entrega 8)
+
+| Archivo | Qué decía | Qué dice ahora |
+|---|---|---|
+| `03_insights_nuevos.md` I12 | "Señal de fuga temprana sin validar" | Artefacto de registro confirmado; variable prohibida |
+| `03_insights_nuevos.md` I8 | "Nadie mide si la capacitación previene algo" | Tres mediciones independientes, incluido el cruce temporal |
+| `03_insights_nuevos.md` I6 | — | Se agrega el caveat de gravedad por turno (Fisher p = 0,205) |
+| `03_insights_nuevos.md` §3 | N6 en prioridad 3 | **N6 tachada como resuelta**, con el motivo |
+| `04_puente...` entrega 6, I2 | N6 como "la señal más discriminante del dataset" | Tachado y corregido: es un artefacto y una variable prohibida |
+| `02_guion_ejecutivo.md` §C.3 | Titular de G12: "no sabemos si previene, porque nadie lo mide" | "La capacitación cubre al 19,3% y no llega a quien se accidenta", con el cruce completo |
+| `01_matriz_evidencia.md` fila 5 | "No hay ninguna comparación de fechas" | El cruce se corrió; el titular anterior de G12 queda refutado |
+
 ---
 
-## 7. Próximo subentregable
+## 7. Próximo subentregable — **último**
 
-**Entrega 8 del puente Discovery → Automation** → agregar a `04_puente_discovery_automation.md`:
-**I12** (señal de fuga temprana) e **I8** (eficacia preventiva de capacitación).
+**Entrega 9 del puente Discovery → Automation** → agregar a `04_puente_discovery_automation.md` y
+**cerrar el documento**: **I3**, **I11**, **I5**, **I7**, **I9** e **I1**.
 
-Son los dos casos donde **el dato existe pero todavía no se sabe qué significa**, que es una
-categoría distinta a las cuatro ya tratadas (donde el problema era escala o falta de dato):
+Son los seis que quedan, y ninguno es un candidato serio a modelo — son decisiones de gestión o
+arreglos de captura. Se pueden tratar más breve que los anteriores, pero con el mismo formato de
+cuatro apartados y con el umbral escrito.
 
-- **I12** — `meses_desde_ultimo_aumento` = 1,0 en renuncias voluntarias (n=89) vs 4,5 en activos
-  (n=562). Es la señal más discriminante que hay en los datos y es contraintuitiva. Brecha **N6**:
-  hasta auditar cómo se escribe el campo al registrar una baja, no se sabe si es contraoferta
-  fallida (señal real) o artefacto de registro. **Modelar sobre ella antes de auditarla sería
-  construir sobre un posible artefacto** — ese es el punto central de la entrega.
-- **I8** — r = 0,394, p = 0,260, y el código **no compara fechas**. El proyecto derivado
-  ("incidente posterior a la capacitación, por persona") es medible con los datos que ya existen:
-  `capacitaciones_limpio.parquet` tiene fecha, y `eventos_limpio.parquet` también. Evaluar si eso
-  es un análisis de Discovery o justifica algo más.
+| Insight | Naturaleza | Nota para el tratamiento |
+|---|---|---|
+| **I3** | Horas extra: decisión de capacidad | Ya resuelto económicamente por DEC-009. El "no" es casi trivial |
+| **I11** | Cola larga de HE en Mant. Eléctrico | Es un diagnóstico interno de un área de 46 personas |
+| **I5** | Turno asignado ≠ turno del hecho | Arreglo de captura, no proyecto |
+| **I7** | El riesgo sube con la experiencia | Hipótesis: asignación de tareas de riesgo a veteranos. Falta la tarea del hecho |
+| **I9** | Sucesión unipersonal | Un caso. No hay patrón que modelar |
+| **I1** | Arrastre de enero | Regla de higiene de datos |
 
-Después: entrega 9 (**I3**, **I11**, **I5**, **I7**, **I9**, **I1**) — los que son decisiones de
-gestión o arreglos de captura. Cierre del documento.
+**Cierre del documento a escribir en esa entrega:** una tabla resumen de los doce veredictos, y la
+conclusión transversal — ninguno falla por falta de técnica; fallan por escala, por falta del dato
+que explicaría el fenómeno, o porque el problema no era de inferencia. Más las dos lecciones
+transferibles que ya aparecieron: **(a)** cuando una variable separa demasiado bien, la primera
+pregunta es cuándo se escribe ese dato; **(b)** antes de pedirle un dato al cliente, agotar lo que
+ya está en la mesa — dos de las seis brechas del backlog eran análisis pendientes, no datos
+faltantes.
 
 ### Formato fijo por insight (ya aplicado en la entrega 6)
 

@@ -61,7 +61,7 @@ Conectados con brechas ya identificadas, ninguna inventada:
 | Brecha | Por qué bloquea este proyecto |
 |---|---|
 | **N3 — entrevistas de salida estructuradas** | No existe ninguna. El modelo podría aprender *quién* se parece a los que se fueron, pero nadie sabría *qué hacer* con esa alerta. Una lista de nombres sin un motivo accionable no es un producto |
-| **N6 — auditoría de `meses_desde_ultimo_aumento`** | Es la señal más discriminante que hoy se ve en los datos (1,0 mes en renuncias vs 4,5 en activos, I12) y **no se sabe si significa lo que parece**. Entrenar sobre ella sin auditarla es construir sobre un artefacto de registro posible |
+| ~~N6~~ **Corregido en la entrega 8** | Este campo parecía la señal más discriminante del dataset (1,0 mes en renuncias vs 4,5 en activos). **Es un artefacto de registro**, confirmado: ninguna de las 132 bajas supera el valor 3, y los jubilados muestran el mismo perfil que los renunciantes. No es una brecha que bloquee el proyecto — es una **variable prohibida**: entrenar sobre ella sería predecir el acto de registrar la baja, no la decisión de irse |
 | Ausencia de encuesta de clima o satisfacción | Las variables que la literatura y el sentido común señalan como motoras de la renuncia —relación con la jefatura, percepción de equidad, carga— no están medidas |
 
 ### 3. Veredicto explícito
@@ -121,8 +121,8 @@ decisión que todavía nadie sabe tomar.
 > **No pasar a ds-06 todavía; sostener como análisis recurrente de Discovery y mejorar la captura
 > de datos.**
 
-Prioridad de captura, en orden: **N3** (entrevistas de salida) y **N6** (auditoría del campo de
-último aumento).
+Prioridad de captura: **N3** (entrevistas de salida). N6 quedó resuelta en la entrega 8 — el campo
+es un artefacto y se retira del análisis, no se audita para poder usarlo.
 
 ---
 
@@ -467,4 +467,253 @@ motivo. Los dos son controles de proceso. Ninguno de los dos es analítica.
 
 **Siguiente:** entrega 8 — **I12** (señal de fuga temprana) e **I8** (eficacia preventiva de
 capacitación). Los dos casos donde el dato existe pero todavía no se sabe qué significa.
+
+---
+
+# Entrega 8 · I12 e I8 — cuando el dato existe pero no se sabe qué significa
+
+Las cuatro entregas anteriores trataron insights que fallaban por **escala** o por **falta de
+dato**. Estos dos son otra categoría: **el dato está, y es la interpretación la que falta**.
+
+Y en los dos casos, al ir a verificar la interpretación con los archivos que ya existen, la
+respuesta apareció. Ninguno de los dos necesitaba un dato nuevo: necesitaba que alguien corriera el
+cruce.
+
+Esta entrega, entonces, no solo emite veredictos. **Cierra dos brechas del backlog** y obliga a
+corregir lo que se había escrito sobre ambos insights.
+
+---
+
+## I12 — La "señal de fuga temprana" es un artefacto de registro
+
+> **Insight, tal como estaba enunciado.** Quien renuncia había recibido un aumento hace 1,0 mes;
+> quien se queda, hace 4,5. Era la señal más discriminante de todo el dataset, y era
+> contraintuitiva. La brecha **N6** proponía auditar cómo se escribe el campo antes de usarlo.
+
+### La verificación que resuelve N6 sin salir de los datos
+
+`meses_desde_ultimo_aumento`, abierto por motivo de salida:
+
+| Grupo | n | Media | Mediana | Mín | **Máx** |
+|---|---:|---:|---:|---:|---:|
+| Renuncia voluntaria | 89 | 1,03 | 1,0 | 0 | **3** |
+| Despido | 27 | 0,96 | 1,0 | 0 | **3** |
+| Jubilación | 7 | 1,43 | 1,0 | 0 | **3** |
+| Reestructuración | 5 | 1,40 | 1,0 | 0 | **3** |
+| Fin de contrato | 4 | 0,50 | 0,5 | 0 | **1** |
+| **Activos** | **562** | **4,53** | **2,0** | 0 | **17** |
+
+Y el número que cierra la discusión:
+
+| | |
+|---|---:|
+| Salidas con valor mayor a 3 | **0 de 132** |
+| Activos con valor mayor a 3 | **183 de 562** |
+
+**Ninguna baja, de ningún motivo, supera el valor 3. Un tercio de los activos sí.**
+
+### Por qué esto no es una señal
+
+Si el aumento reciente fuera un predictor de renuncia —la hipótesis de la contraoferta fallida, o
+de la frustración salarial— el patrón tendría que ser **específico de las renuncias voluntarias**.
+
+No lo es. Los despedidos tienen media 0,96. Los jubilados, 1,43. Los de fin de contrato, 0,50. Los
+cinco motivos comparten el mismo perfil, y los cinco están capados en 3.
+
+El caso de las jubilaciones es la prueba directa: **nadie se jubila porque le dieron un aumento
+hace un mes.** Y sin embargo los siete jubilados del período tienen valores de 0, 0, 1, 1, 2, 3 y 3
+—incluido uno de 60 años con 4,3 años de antigüedad—. La jubilación es una decisión que se planifica
+con años; que ese grupo muestre exactamente el mismo "indicador de fuga" que los renunciantes
+demuestra que el campo no está midiendo nada sobre la decisión de irse.
+
+**Qué está pasando, entonces.** El campo se reescribe o se trunca en el momento de registrar la
+baja, para todas las bajas por igual. En los activos el contador corre libre hasta 17 —que es
+exactamente el largo del panel—; en las salidas nunca pasa de 3. Eso es la firma de un artefacto de
+registro, no de un comportamiento humano.
+
+### 1. Tipo de proyecto posible
+
+**`ninguno`**, y por una razón anterior a cualquier consideración de escala: **la variable no
+significa lo que su nombre dice**. No hay proyecto de ningún tipo —supervisado, no supervisado o
+descriptivo— que se construya sobre un campo cuyo contenido depende del acto administrativo de dar
+de baja y no del fenómeno que se quiere estudiar.
+
+### 2. Datos faltantes
+
+**N6 queda resuelta desde el lado analítico.** Ya no hace falta preguntarse *si* el patrón es un
+artefacto: los datos lo muestran. Lo que sigue abierto es de otra naturaleza:
+
+| Qué queda | Naturaleza |
+|---|---|
+| Por qué el sistema reescribe el campo al registrar una baja | Auditoría de **proceso**, para arreglar el sistema origen. Ya no bloquea ningún análisis |
+| Un registro histórico real de aumentos, con fecha | **Dato nuevo.** Es lo que permitiría estudiar de verdad la relación entre compensación y renuncia |
+
+### 3. Veredicto explícito
+
+**`ninguno — sigue siendo Discovery recurrente`**, y con una advertencia que vale más que el
+veredicto:
+
+> **`meses_desde_ultimo_aumento` no debe usarse como variable en ningún análisis de rotación,
+> ni entrar como feature en ningún modelo futuro.**
+
+Es exactamente el tipo de variable que un modelo encontraría "muy predictiva" —separa salidas de
+activos casi perfectamente— y que estaría prediciendo el **acto de registrar la baja**, no la
+decisión de irse. Fuga de la variable objetivo, disfrazada de hallazgo de negocio.
+
+Vale detenerse un segundo acá, porque es la lección más transferible de todo el documento: **una
+variable que separa demasiado bien suele estar contaminada por el desenlace.** Cuando un campo
+discrimina así de limpio, la primera pregunta no es "qué buen predictor", es "¿cuándo se escribe
+este dato?".
+
+#### El umbral — qué cambiaría el veredicto
+
+Que exista un **registro histórico de aumentos con fecha propia**, independiente del estado del
+empleado. Con eso la pregunta original —¿la gente se va después de un aumento que no alcanzó?—
+vuelve a ser investigable, y sería un análisis de Discovery legítimo. Seguiría sin justificar un
+modelo, por las mismas razones de escala de I2.
+
+### 4. Mapa ds-*
+
+> **No pasar a ds-06 todavía; sostener como análisis recurrente de Discovery y mejorar la captura
+> de datos.**
+
+Y agregar el campo a una lista de variables prohibidas para cualquier trabajo futuro de rotación.
+
+---
+
+## I8 — La capacitación en seguridad no llega a quien se accidenta, ni antes ni después
+
+> **Insight, tal como estaba enunciado.** Nadie mide si la capacitación en seguridad previene algo.
+> La correlación área a área es r = 0,394 con p = 0,260, y el código del proyecto **no compara
+> fechas**. G12 afirmaba "se entrena después del accidente, no antes" sin ningún cálculo detrás.
+
+### El cruce temporal que nunca se había corrido
+
+Se podía hacer con lo que ya existe: `capacitaciones_limpio.parquet` tiene `fecha_inicio` y
+`fecha_fin` (145 capacitaciones de Seguridad, 133 empleados distintos, enero 2024 – mayo 2025), y
+`eventos_limpio.parquet` tiene `fecha_evento`. Corrido sobre los 45 incidentes:
+
+| De los 45 incidentes | n | % |
+|---|---:|---:|
+| Con capacitación de seguridad **previa** al hecho | 5 | 11% |
+| Con capacitación de seguridad **posterior** al hecho | 4 | 9% |
+| **Sin ninguna capacitación de seguridad, en ninguna dirección** | **36** | **80%** |
+
+**El titular de G12 está contradicho por los datos.** "Se entrena después del accidente" describe a
+**4 casos de 45**. Y esos cuatro recibieron su capacitación a una mediana de **108 días** del hecho,
+con un máximo de **344 días**: eso no es una reacción al accidente, es el calendario normal de
+capacitación que en algún momento los alcanzó.
+
+### Y el hallazgo real, que es mejor que el que se creía
+
+A nivel persona, comparando cobertura de capacitación entre quienes se accidentaron y quienes no:
+
+| Grupo | n | Con capacitación de seguridad |
+|---|---:|---:|
+| Accidentados | 41 | 9 (**22,0%**) |
+| No accidentados | 634 | 121 (**19,1%**) |
+| **Universo completo** | **675** | **130 (19,3%)** |
+
+Fisher exacto bilateral: **p = 0,683. No se distingue.**
+
+Los accidentados tienen capacitación de seguridad **exactamente en la proporción de la empresa**.
+No más, no menos, ni antes ni después. Sumado a la correlación por área (r = 0,394, p = 0,260), son
+tres mediciones independientes que apuntan a lo mismo.
+
+**El hallazgo, entonces, no es "no lo medimos": es que la capacitación de seguridad cubre al 19,3%
+de la gente y se asigna sin ninguna relación con quién se lastima.** Eso es más fuerte, más
+accionable y más incómodo que la brecha de medición que decía el enunciado anterior.
+
+### 1. Tipo de proyecto posible
+
+**El candidato sería `supervisado`:** predecir quién necesita capacitación de seguridad, o estimar
+el efecto de la capacitación sobre el riesgo de incidente.
+
+| Elemento | Definición |
+|---|---|
+| **Variable objetivo** | `incidente en los N meses posteriores a la capacitación`, por empleado |
+| **Anticipación necesaria** | La de la planificación del calendario de capacitación: un trimestre |
+
+### 2. Datos faltantes
+
+| Brecha | Por qué bloquea |
+|---|---|
+| **N5 — causa raíz** | Sin saber qué falló en cada accidente, no se puede saber qué capacitación lo habría prevenido. Un curso genérico de "refuerzo de seguridad" no tiene contra qué evaluarse |
+| Criterio de asignación de la capacitación | No está registrado por qué a una persona le tocó un curso y a otra no. Sin eso, cualquier comparación entre capacitados y no capacitados confunde el efecto del curso con el criterio de quien lo asignó |
+
+Esa segunda fila es el problema serio, y no es de volumen: es de **diseño**. Comparar la tasa de
+incidentes de capacitados contra no capacitados no mide el efecto de la capacitación si la
+asignación no fue aleatoria ni siquiera documentada.
+
+### 3. Veredicto explícito
+
+**`ninguno — sigue siendo Discovery recurrente`.**
+
+| Condición | Qué muestra el caso |
+|---|---|
+| **Frecuencia** | **No cumple.** El calendario de capacitación se arma por trimestre o por año |
+| **Escala** | **No cumple.** 145 capacitaciones de seguridad y 45 incidentes en 17 meses. Una planilla lo cubre |
+| **Cuello de botella** | **Es diseño de la medición, no scoring.** La pregunta —¿la capacitación previene?— no se contesta con un modelo predictivo sobre datos observacionales donde la asignación es desconocida |
+
+**Y lo que corresponde hacer es barato y no es analítica.** Con la cobertura al 19,3% y sin relación
+con el riesgo, el primer paso es de gestión pura: **cubrir con capacitación de seguridad al turno
+noche y a las áreas de producción**, que es donde están los incidentes, y registrar el criterio de
+asignación. Recién con eso registrado durante un par de años se podría evaluar el efecto —y aun así
+sería una evaluación, no un modelo predictivo.
+
+#### El umbral — qué cambiaría el veredicto
+
+1. **Asignación registrada**, y preferentemente escalonada en el tiempo por algún criterio
+   explícito. Eso convierte el despliegue del programa en algo evaluable.
+2. **N5 en régimen**, para saber qué falló en cada caso y si el contenido del curso lo cubría.
+3. Volumen de eventos en el orden de los cientos.
+
+Con (1) y (2), lo que aparece no es un modelo predictivo: es una **evaluación de impacto**. Que es
+una herramienta distinta y la correcta para esta pregunta.
+
+### 4. Mapa ds-*
+
+> **No pasar a ds-06 todavía; sostener como análisis recurrente de Discovery y mejorar la captura
+> de datos.**
+
+Prioridad: registrar el criterio de asignación de la capacitación, y **N5**.
+
+---
+
+## Correcciones que esta entrega obliga
+
+Las dos verificaciones cambian lo que se había escrito. Ya están aplicadas.
+
+| Documento | Qué decía | Qué dice ahora |
+|---|---|---|
+| `03_insights_nuevos.md` I12 | "Señal de fuga temprana sin validar; puede ser contraoferta fallida o artefacto" | **Artefacto de registro confirmado.** Ninguna de las 132 bajas supera el valor 3; los jubilados muestran el mismo perfil que los renunciantes |
+| `03_insights_nuevos.md` I8 | "Nadie mide si la capacitación previene algo" | El cruce temporal **sí se corrió**: 80% de los accidentados nunca tuvo capacitación de seguridad, y la cobertura no se distingue del resto de la empresa (p = 0,683) |
+| `03_insights_nuevos.md` §3 | N6 en prioridad 3 | **N6 resuelta analíticamente.** Lo que queda es auditoría de proceso del sistema origen, y ya no bloquea ningún análisis |
+| `02_guion_ejecutivo.md` §C.3 | G12: "no sabemos si la capacitación previene, porque nadie lo mide" | Se agrega el resultado del cruce temporal, que es un hallazgo más fuerte y accionable |
+| `01_matriz_evidencia.md` fila 5 | — | Se incorporan las tres mediciones independientes |
+| `04_puente...` entrega 6, I2 | N6 descrita como "la señal más discriminante que hoy se ve en los datos" | Corregido: es un artefacto, y el campo queda **prohibido** como variable de rotación |
+
+---
+
+## Cierre de la entrega 8
+
+Seis insights evaluados, seis veces **ninguno**. Pero estos dos aportan algo que los cuatro
+anteriores no:
+
+**Ninguno de los dos necesitaba un dato nuevo.** Necesitaba que alguien corriera el cruce. N6 se
+resolvió abriendo el campo por motivo de salida; la temporalidad de G12 se resolvió con dos
+archivos que ya estaban en el proyecto y tienen fecha.
+
+Es una advertencia sobre el propio backlog: **antes de pedirle un dato al cliente, conviene agotar
+lo que ya está en la mesa.** Dos de las seis brechas que este proyecto iba a solicitar no eran
+brechas de dato — eran análisis pendientes.
+
+Y dejan una regla que se lleva a cualquier proyecto: **cuando una variable separa demasiado bien,
+la primera pregunta es cuándo se escribe ese dato, no qué buen predictor es.**
+
+---
+
+**Siguiente:** entrega 9 — **I3**, **I11**, **I5**, **I7**, **I9** e **I1**. Los que son
+decisiones de gestión o arreglos de captura. Cierre del documento.
+
 
