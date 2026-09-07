@@ -16,7 +16,7 @@ Entregables previstos, en carpeta `06_resultados/Discovery/business_case/`:
 |---|---|---|
 | 0 | `ESTADO_business_case.md` | **Hecho** |
 | 1 | `01_matriz_evidencia.md` | **Hecho** |
-| 2-4 | `02_guion_ejecutivo.md` (bloque operativo + diagnóstico + anexo financiero) | **Bloques A y B hechos**; falta C |
+| 2-4 | `02_guion_ejecutivo.md` (bloques A, B y C) | **Hecho — completo** |
 | 5 | `03_insights_nuevos.md` | Pendiente |
 | 6+ | `04_puente_discovery_automation.md` | Pendiente |
 
@@ -184,29 +184,64 @@ y ningún dato disponible que explique por qué. Eso es precisamente lo que se v
       · Serie mensual limpia: se mueve entre 0,5% y 3,0% sin dirección; picos aislados en marzo
         2024 (17 salidas), diciembre 2024 (14) y abril 2025 (15).
 
+- [x] **4 — Guion ejecutivo, anexo financiero y selección visual (bloque C)** →
+      `02_guion_ejecutivo.md`, secciones C.1 a C.4. El guion queda **completo** (656 líneas).
+      · **C.1** las tres tasas de rotación posibles y por qué la oficial es 16,7% (DEC-019).
+      · **C.2** business case en rango: tabla 3×3 de escenarios, piso $23,3M, centro $82,7M, techo
+        $194,8M, amplitud 8,4x, piso verificable $1,64M, los dos supuestos explícitos y N1+N2.
+      · **C.3** selección visual documentada: mostrar / reformular / reemplazar / fuera.
+      · **C.4** las cuatro brechas de dato que se devuelven al cliente, priorizadas.
+      Contradicción resuelta: **C6** — `BC_resumen_oportunidades.csv` queda marcado como superado
+      dentro del propio guion; la fuente vigente es `BC_supuestos.json`.
+      Cifras nuevas verificadas al escribirlo:
+      · Descomposición exacta del costo por salida central ($6.044.356): dato duro **$200.000** +
+        vacancia **$2.991.905** (47,2 días de time-to-fill × $1.901.634 de salario medio del
+        saliente) + rampa **$2.852.451** (3 meses al 50%). El dato duro es el **3,3%**.
+      · `meses_desde_ultimo_aumento`: **1,0 en renuncias voluntarias (n=89) vs 4,5 en activos
+        (n=562)**. Confirma el patrón contraintuitivo que motiva la brecha N6.
+      · Amplitud del rango: 194.840.088 / 23.298.312 = **8,4x**.
+      · Renuncias voluntarias anualizadas exactas: **54,75** (se cita como ≈55).
+
 ---
 
 ## 7. Próximo subentregable
 
-**Subentregable 4 — Guion ejecutivo, anexo financiero y selección visual** → agregar bloque C a
-`02_guion_ejecutivo.md`.
+**Subentregable 5 — Lista formal de insights nuevos** → `03_insights_nuevos.md`
 
-Contenido pedido:
+Tres secciones separadas:
 
-- **G14** como business case de retención **en rango**, según DEC-015.
-- Tasa limpia oficial **16,7%** (DEC-019).
-- Rango **$23,3M – $194,8M**; punto central **$82,7M**; piso verificable **$1,64M**.
-- Qué datos faltan para cerrar el rango: **N1** (producción promedio de un operario formado) y
-  **N2** (meses hasta rendimiento pleno).
-- **Selección visual documentada:** mostrar G8, G9, G10, G11 y G14 · reformular G12 como brecha de
-  medición preventiva, sin afirmar que la capacitación ocurre después del incidente · reemplazar
-  G13 por la tarjeta de alerta ya escrita en B.4.
+1. **Preguntas iniciales respondidas** — lo que Martina trajo y qué contestó el análisis.
+2. **Insights nuevos** — "cosas que el negocio no sabe que no sabe".
+3. **Brechas de medición y próximos datos a pedir.**
 
-Resolver además la contradicción **C6**: `BC_resumen_oportunidades.csv` todavía publica
-"$92,4M esperado" para rotación voluntaria, que es la cifra única descartada por DEC-015. Marcarlo
-como superado y usar solo `BC_supuestos.json`.
-Y anclar la reformulación de G12 en lo ya verificado: r = 0,394, p = 0,260 — la relación no se
-distingue de cero, y el código no compara fechas.
+Cada insight nuevo va con nueve columnas: Insight · Fuente/evidencia · Decisión habilitada · Qué
+hoy no puede afirmarse · Brecha de datos real · Proyecto derivado · Variable objetivo o patrón ·
+Veredicto Discovery → Automation · Etapas ds-* futuras (solo si aplica).
+
+Candidatos ya verificados y con ancla en fuente, listos para incluir:
+
+| Candidato | Ancla verificada |
+|---|---|
+| Enero 2024 era arrastre del corte | DEC-017; las 19 salidas con 1 mes observado |
+| Mantenimiento Eléctrico concentra la única diferencia de rotación sostenida | `P5_rotacion_por_area_con_IC.csv`, p=0,00105 vs Bonferroni 0,005 |
+| Horas extra concentradas por área | `P3_horas_extra_por_area.csv`; corte limpio 11,2 vs 6,1 h (mediana) |
+| Seguridad nocturna concentrada | `P4_incidentes_por_turno.csv`; 11,8 vs 2,2 ×1.000 |
+| Falta de medición de eficacia preventiva de capacitación | r=0,394 p=0,260; 30 de 45 sin acción correctiva; 15 con la misma frase |
+| Sucesión puntual y concentrada | `P1_riesgo_sucesion_por_puesto.csv`, una sola fila |
+| Brecha para medir costo real de vacancia y rampa | `BC_supuestos.json`; el dato duro es el 3,3% del costo por salida |
+
+Candidatos adicionales que surgieron del preflight y también tienen ancla:
+
+| Candidato | Ancla verificada |
+|---|---|
+| El turno registrado en el incidente es el turno **asignado**, no el del hecho | `turno_evento` = `turno_trabajo` en 45/45; `hora_evento` va de 6 a 22 h |
+| El riesgo severo está concentrado en muy pocos casos | 6 graves explican 109 de 138 días perdidos (79% del daño en el 13% de los casos) |
+| No hay accidentes de ingresantes | Antigüedad mínima del accidentado: 14 meses; mediana 79 |
+| Mantenimiento Eléctrico tiene cola larga de horas extra | Única área donde la media (12,1) supera a la mediana (11,3) |
+| Señal de fuga temprana sin validar | `meses_desde_ultimo_aumento` 1,0 en renuncias vs 4,5 en activos |
+
+**No incluir** (verificado y descartado, para que no reaparezca): sobrecarga crónica por turno,
+z = 1,48, no se distingue del azar.
 
 ---
 

@@ -8,8 +8,8 @@ Regla que gobierna todo el documento: **el titular es una conclusión, no la des
 gráfico**. Si una slide no responde qué está pasando, cuánto afecta, qué dato lo sostiene y qué
 conviene corregir, es exploración, no comunicación ejecutiva.
 
-Estado: bloques **A** (problema operativo prioritario) y **B** (diagnóstico organizacional).
-El anexo financiero y la selección visual se agregan en el subentregable 4.
+Estado: **completo**. Bloque A (problema operativo prioritario), bloque B (diagnóstico
+organizacional) y bloque C (anexo financiero y selección visual).
 
 ---
 
@@ -437,5 +437,220 @@ accionable, más una brecha de calidad de dato para devolverle al cliente.
 
 ---
 
-**Siguiente:** Subentregable 4 — anexo financiero y seleccion visual (G14, tasa oficial, rango).
+---
+
+# BLOQUE C · Anexo financiero y selección visual
+
+Este bloque va **después** de los dos anteriores, y esa posición es deliberada. La conversación de
+negocio se gana con días de operación y con un área que rota al doble; el número en pesos es
+soporte, no titular. Un rango de amplitud 8x presentado primero contamina todo lo que viene atrás.
+
+---
+
+## C.1 — La única cifra de rotación de la compañía es 16,7%
+
+Antes de cualquier número en pesos, hay que fijar el denominador. Con los mismos 113 casos
+conviven **tres tasas defendibles**, y publicar dos sin distinguirlas es lo que hace que un
+directorio descarte un informe entero.
+
+| Definición | Cálculo | Valor |
+|---|---|---:|
+| **A — Acumulada del período (oficial)** | 113 salidas ÷ 675 personas expuestas | **16,7%** |
+| B — Anualizada sobre dotación activa promedio | 113 ÷ 16 meses × 12 ÷ 563 activos | 15,0% |
+| C — Del período, anualizada | — | 12,6% |
+
+**Se adopta la A** (DEC-019). No porque sea la más alta, sino porque es la que **ya sostiene todo
+el trabajo fino del proyecto**: las diez áreas, los intervalos de confianza de Wilson, el 34,8% de
+Mantenimiento Eléctrico y el gráfico G9. La anualizada se calculaba una sola vez, aparte, solo para
+el titular.
+
+Esto importa en la sala: comparar el 34,8% de Mantenimiento Eléctrico —calculado con la fórmula
+acumulada— contra un titular de 15,0% inflaba la brecha de **2,08x a 2,32x**. Misma empresa, mismos
+casos, dos tasas en la misma slide.
+
+**Regla para la presentación: 16,7% en todas partes.** Si RR.HH. necesita una cifra anualizada para
+compararse contra un benchmark de industria, se calcula aparte y se etiqueta explícitamente como
+proyección. Nunca reemplaza la base de comparación entre áreas.
+
+---
+
+## C.2 — Business case de retención: un rango, no un número (visual G14)
+
+### Titular
+> **Reducir las renuncias voluntarias vale entre $23M y $195M al año. Esa amplitud no es
+> imprecisión nuestra: es lo que la empresa todavía no mide.**
+
+### Evidencia
+`visualizaciones/G14_business_case_escenarios.png` · `tablas_soporte/BC_rango_retencion.csv` ·
+`tablas_soporte/BC_supuestos.json`
+
+Base: **≈55 renuncias voluntarias anualizadas** en el período limpio.
+
+| Escenario | Costo por salida | Reducir 15% | Reducir 25% | Reducir 40% |
+|---|---:|---:|---:|---:|
+| Conservador | $2.836.933 | **$23.298.312** | $38.830.520 | $62.128.831 |
+| Central | $6.044.356 | $49.639.275 | **$82.732.125** | $132.371.400 |
+| Agresivo | $8.896.808 | $73.065.033 | $121.775.055 | **$194.840.088** |
+
+- **Piso del rango:** $23,3M/año — conservador, reducción del 15%
+- **Punto central:** $82,7M/año — escenario central, reducción del 25%
+- **Techo del rango:** $194,8M/año — agresivo, reducción del 40%
+- **Amplitud: 8,4 veces**
+
+### El piso verificable: $1,64M/año
+
+Esta es la cifra que sobrevive si se le quita **todo** supuesto propio.
+
+Desarmando el costo por salida del escenario central ($6,04M):
+
+| Componente | Monto | Origen |
+|---|---:|---|
+| Reclutamiento + onboarding | **$200.000** | **Dato que TechnoStamp mide** |
+| Sueldo perdido durante la vacancia | **$2.991.905** | **Supuesto nuestro** (47,2 dias de time-to-fill x $1.901.634 de salario medio del saliente) |
+| Rampa del ingresante hasta rendimiento pleno | **$2.852.451** | **Supuesto nuestro** (3 meses al 50% de rendimiento) |
+
+**El 97% del costo por salida es juicio, no medición.** Usando únicamente los $200.000 que la
+empresa registra, con la reducción más conservadora, el ahorro anual es de **$1.642.500**. Ese
+número no depende de ningún supuesto nuestro y se puede defender frente a cualquier pregunta.
+
+### Los dos supuestos, explícitos
+
+| Escenario | Fracción de sueldo perdida en la vacancia | Rampa | Rendimiento durante la rampa |
+|---|---:|---:|---:|
+| Conservador | 50% — el equipo absorbe parte del trabajo | 2 meses | 70% |
+| Central | 100% — el puesto queda descubierto | 3 meses | 50% |
+| Agresivo | 100% — puesto descubierto | 6 meses | 50% |
+
+Solo mover la rampa de 3 a 6 meses mueve el ahorro entre **$49,6M y $132,4M**. Una cifra única
+escondería eso y lo presentaría como una precisión que no existe.
+
+### Los dos datos que cierran el rango
+
+| # | Dato | Fuente probable | Qué desbloquea |
+|---|---|---|---|
+| **N1** | Producción promedio mensual de un operario ya formado, por puesto | Sistema de producción / MES de planta. El proyecto ya observa `unidades_producidas` en las tres áreas de producción | Convierte la rampa de supuesto a medición |
+| **N2** | Meses desde el ingreso hasta alcanzar ese nivel | Derivable de N1 cruzado con la fecha de ingreso del panel | Cierra el segundo supuesto |
+
+Con N1 y N2, el 97% que hoy es juicio pasa a ser medición y el rango de 8,4x se comprime a una
+estimación con incertidumbre acotada.
+
+### Límite de la evidencia
+Esto es una **oportunidad estimada**, no un ahorro. Tres advertencias que van en la slide:
+
+1. **Nadie garantiza la reducción.** Los porcentajes de 15/25/40% son objetivos de gestión, no
+   resultados proyectados de una intervención concreta.
+2. **No hay diagnóstico de causa.** Sin entrevistas de salida no se sabe por qué se van, y sin eso
+   ningún programa de retención tiene un objetivo al que apuntar.
+3. **`BC_resumen_oportunidades.csv` está superado.** Ese archivo todavía publica "$92,4M esperado"
+   para rotación voluntaria: es exactamente la cifra única que DEC-015 descartó. La fuente vigente
+   es `BC_supuestos.json`. No usar ese CSV en la presentación.
+
+### Métrica de seguimiento
+| Métrica | Línea de base | Objetivo |
+|---|---:|---|
+| Renuncias voluntarias anualizadas | **≈55/año** | Definir objetivo recién con N3 (entrevistas de salida) en marcha |
+| % del costo por salida sostenido en datos del cliente | **3%** | 100%, con N1 y N2 |
+| Amplitud del rango | **8,4x** | Reducirla es el entregable, antes que capturar el ahorro |
+
+---
+
+## C.3 — Selección visual: qué se muestra, qué se reformula, qué se reemplaza
+
+Un gráfico entra a la presentación si prueba el titular que ilustra y está normalizado por la
+exposición de cada grupo. Los dos criterios, no uno.
+
+### ✅ Mostrar
+
+| Visual | Titular que sostiene | Por qué entra |
+|---|---|---|
+| **G11** `G11_incidentes_por_turno.png` | El turno noche concentra el riesgo | Tasa por empleado-mes, no conteo; grafica turno, que es la variable del titular (DEC-007, DEC-021) |
+| **G9** `G9_rotacion_area_ic95.png` | Una sola área rota distinto del promedio | Lleva el intervalo de confianza a la vista: se ve por qué Mantenimiento Eléctrico sí y Estampado no |
+| **G8** `G8_rotacion_original_vs_limpia.png` | La rotación es plana, no descendente | Muestra las dos series juntas: el hallazgo *es* la comparación |
+| **G10** `G10_distribucion_horas_extra_area.png` | Seis áreas viven sobre 11 h extra; cinco no llegan a 6 | El boxplot muestra la distribución, no solo el promedio: es lo que hace visible que el corte es limpio |
+| **G14** `G14_business_case_escenarios.png` | El ahorro es un rango, no una cifra | Muestra los tres escenarios juntos; ver la amplitud *es* el mensaje |
+
+**Orden sugerido en el deck:** G11 → G9 → G8 → G10 → G14. Sigue la prioridad del caso: primero el
+riesgo operativo, después el diagnóstico, el dinero al final.
+
+### ✏️ Reformular — G12
+
+**`G12_capacitacion_seguridad_vs_incidentes.png`**
+
+**Título actual:** *"Más capacitación coincide con más incidentes (se entrena después del
+accidente, no antes)"*.
+
+**Ese título no se sostiene, por dos motivos independientes:**
+
+1. **La relación no existe estadísticamente.** La correlación área a área entre horas de
+   capacitación en seguridad por empleado y tasa de incidentes es **r = 0,394 con p = 0,260**
+   (n = 10 áreas). No se distingue de cero. Quitando Logística —que con 35,2 h por empleado es un
+   caso aparte— baja a r = 0,279. Presentar "coincide con" ya es afirmar de más.
+2. **La temporalidad no está medida.** El código agrega totales de todo el período por área.
+   **No hay ninguna comparación entre la fecha de una capacitación y la fecha de un incidente.**
+   Decir "se entrena después del accidente" es una hipótesis narrativa, no un cálculo del proyecto.
+
+**Titular de reemplazo:**
+
+> **No sabemos si la capacitación en seguridad previene incidentes, porque nadie lo mide.**
+
+**Qué sí sostiene la evidencia, y es un hallazgo real:**
+
+| Hecho verificado | Cifra |
+|---|---|
+| Incidentes sin ninguna acción correctiva registrada | **30 de 45** |
+| Incidentes con acción correctiva | 15, **todos con la misma frase**: "Capacitación refuerzo seguridad" |
+| Campo de causa raíz en el sistema | **No existe** |
+| Acciones correctivas específicas del hecho | **0 de 45** |
+
+Eso no es un programa de capacitación evaluado: es un campo de formulario que se completa siempre
+igual. La brecha es de **medición preventiva**, y esa sí es una conclusión defendible.
+
+**Cómo mostrarlo.** Si se conserva el scatter, va con el título nuevo y con una etiqueta visible:
+*"comparación descriptiva de totales del período; no mide temporalidad ni causalidad"*.
+La alternativa más honesta es reemplazarlo por la tabla de arriba, que comunica la brecha sin
+sugerir una relación que los datos no muestran.
+
+### 🔄 Reemplazar — G13
+
+**`G13_riesgo_sucesion_por_puesto.png`** → **tarjeta de alerta de sucesión** (ya escrita en B.4).
+
+El scatter dibuja una distribución que no existe: el único output persistido de riesgo de sucesión
+tiene **una sola fila**. Un gráfico de dispersión con un punto obliga a la audiencia a buscar un
+patrón donde hay un hecho puntual, y lo peor es que invita a llenar el vacío con la tabla de "4 de
+5 posiciones críticas" — que está construida sobre `es_posicion_critica`, el flag que DEC-006
+descartó por marcar solo el 1,4% del universo y no actualizarse en 17 meses.
+
+Una tarjeta con cuatro números —dotación 1, en riesgo 1, sucesores 0, cobertura ninguna— comunica
+el riesgo completo sin insinuar un patrón. Si más adelante el índice propio de criticidad devuelve
+varios puestos, el gráfico vuelve a tener sentido; hoy no.
+
+### ❌ Fuera de la presentación
+
+| Elemento | Motivo |
+|---|---|
+| "Estampado rota mal" | Su IC 14,9–26,3% contiene al promedio de 16,7% (DEC-016) |
+| "Los top performers rotan un 35% más" | Intervalos solapados: 14,7–36,0% vs 13,4–19,2%, sobre 59 personas (DEC-016) |
+| "$988M de ahorro en horas extra" | No es capturable: recargo de la hora extra 1,343x vs costo cargado del ingresante >1,40x (DEC-009). Se reporta en negativo, como costo de operar |
+| "$92,4M esperado" de `BC_resumen_oportunidades.csv` | Cifra única descartada por DEC-015; el archivo está superado |
+| G1–G7 (pirámide etaria, género, brecha salarial, etc.) | Son visuales de exploración, no de decisión. Van al anexo técnico si alguien pregunta |
+
+---
+
+## C.4 — Las cuatro brechas de dato que se le devuelven al cliente
+
+No son un pedido genérico de "mejores datos". Cada una desbloquea una decisión concreta que hoy no
+puede tomarse.
+
+| # | Dato faltante | Decisión que desbloquea | Costo de conseguirlo |
+|---|---|---|---|
+| **N5** | Ficha de investigación con causa raíz obligatoria, y hora real del hecho | Vuelve defendible cualquier conclusión de seguridad. Es el habilitador de la auditoría nocturna | Control de proceso en el sistema actual, no analítica |
+| **N3** | Entrevistas de salida estructuradas | Separa "sabemos quién se va y cuánto cuesta" de "sabemos por qué". Sin esto, retención en Mantenimiento Eléctrico es una apuesta | Proceso nuevo de RR.HH.; experimento de 3 meses sin prerrequisitos |
+| **N1 + N2** | Producción de un operario formado y meses hasta rendimiento pleno | Cierra el 97% de supuesto del business case y comprime el rango de 8,4x | Cruce del sistema de producción con la fecha de ingreso |
+| **N6** | Auditoría del campo `meses_desde_ultimo_aumento` en las bajas | Define si el patrón contraintuitivo (1,0 mes en renuncias vs 4,5 en activos) es señal de fuga temprana o artefacto de registro | Una sola auditoría. Es la validación más barata del proyecto |
+
+**Prioridad: N5 primero.** Es la única que bloquea la recomendación principal de la presentación.
+
+---
+
+**Siguiente:** Subentregable 5 — lista formal de insights nuevos (`03_insights_nuevos.md`).
 
