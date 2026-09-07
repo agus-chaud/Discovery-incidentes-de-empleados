@@ -18,7 +18,7 @@ Entregables previstos, en carpeta `06_resultados/Discovery/business_case/`:
 | 1 | `01_matriz_evidencia.md` | **Hecho** |
 | 2-4 | `02_guion_ejecutivo.md` (bloques A, B y C) | **Hecho — completo** |
 | 5 | `03_insights_nuevos.md` | **Hecho** |
-| 6+ | `04_puente_discovery_automation.md` | **Entrega 6 hecha** (I2, I10); faltan 7, 8 y 9 |
+| 6+ | `04_puente_discovery_automation.md` | **Entregas 6 y 7 hechas** (I2, I10, I4, I6); faltan 8 y 9 |
 
 ---
 
@@ -233,20 +233,61 @@ y ningún dato disponible que explique por qué. Eso es precisamente lo que se v
       motivos de salida (89 renuncia voluntaria · 27 despido · 7 jubilación · 5 reestructuración ·
       4 fin de contrato).
 
+- [x] **7 — Puente Discovery → Automation, entrega 7 (I4 + I6)** →
+      `04_puente_discovery_automation.md`. El segundo candidato a modelo predictivo.
+      **Ambos veredictos: `ninguno — sigue siendo Discovery recurrente`.**
+      Dos hallazgos previos verificados en esta entrega, y **los dos obligaron a corregir
+      documentos ya escritos**:
+      · **V1 — `severidad` es una recodificación de `dias_perdidos`.** Cero solapamiento:
+        Leve = **0 días los treinta casos**, Moderado = 1–5, Grave = 8–25. Un corte así de limpio
+        no sale de dos personas clasificando a criterio: la etiqueta se deriva del número.
+        Consecuencia: "predecir severidad" y "predecir días perdidos" son el mismo problema, y un
+        modelo de severidad que use días perdidos como entrada es fuga de la variable objetivo.
+      · **V2 — la concentración de gravedad en el turno noche NO se distingue del azar.**
+        Graves 5 vs 1 → Fisher exacto bilateral **p = 0,205**. Incidentes con días perdidos
+        10 vs 5 → **p = 0,352**. Los **leves se reparten 15 y 15**, idénticos.
+        El "5 de 6" es un conteo real y se puede decir; afirmar que la gravedad se concentra en la
+        noche es una generalización que con seis casos no se sostiene.
+      Cifras nuevas verificadas: 45 incidentes en **41 personas distintas**, solo **3 reincidentes**
+      · tasa base **0,47%** por empleado-mes (45 / 9.601) · **6,1%** de las personas tuvo al menos
+      un incidente · ~2,8 incidentes por mes, máximo 6 · solo **15 de 45** incidentes tienen algún
+      día perdido.
+      El veredicto de I4 suma dos razones que no son estadísticas: **la acción correctiva no es
+      individual** (dotación, supervisión y relevo se ejecutan sobre el turno, no sobre personas), y
+      un score de riesgo por operario desplazaría la responsabilidad de las condiciones a la
+      persona. También se anticipa y responde la objeción "balanceá las clases".
+
+### Correcciones aplicadas a documentos ya entregados (por V2)
+
+| Archivo | Qué decía | Qué dice ahora |
+|---|---|---|
+| `02_guion_ejecutivo.md` §A.2 | "El riesgo severo es casi exclusivamente nocturno" | Conteo observado, no patrón demostrado; Fisher p = 0,205 |
+| `02_guion_ejecutivo.md` §A.4 | — | Nueva subsección "Y un segundo límite, sobre la gravedad", con los dos tests y cómo decirlo en la slide |
+| `02_guion_ejecutivo.md` §A.7 | Métrica "casos graves, turno noche" | Se sigue como **conteo**, no como tasa: con seis casos no hay base para una tasa de gravedad por turno |
+| `01_matriz_evidencia.md` fila 4 | — | Se agrega a "qué no se puede afirmar": ni que la gravedad se concentre en la noche |
+
 ---
 
 ## 7. Próximo subentregable
 
-**Entrega 7 del puente Discovery → Automation** → agregar a `04_puente_discovery_automation.md`:
-**I4** (seguridad nocturna) e **I6** (concentración de la gravedad).
+**Entrega 8 del puente Discovery → Automation** → agregar a `04_puente_discovery_automation.md`:
+**I12** (señal de fuga temprana) e **I8** (eficacia preventiva de capacitación).
 
-Es el segundo candidato a modelo predictivo. Datos de tamaño ya verificados y disponibles para
-usar: 45 incidentes auditables en 17 meses · 25 en turno noche · **6 graves** que explican 109 de
-los 138 días perdidos · 30 leves que suman **cero** días. La clase positiva de cualquier modelo de
-severidad serían 6 casos.
+Son los dos casos donde **el dato existe pero todavía no se sabe qué significa**, que es una
+categoría distinta a las cuatro ya tratadas (donde el problema era escala o falta de dato):
 
-Después: entrega 8 (**I12** señal de fuga temprana + **I8** eficacia preventiva de capacitación) y
-entrega 9 (**I3**, **I11**, **I5**, **I7**, **I9**, **I1**).
+- **I12** — `meses_desde_ultimo_aumento` = 1,0 en renuncias voluntarias (n=89) vs 4,5 en activos
+  (n=562). Es la señal más discriminante que hay en los datos y es contraintuitiva. Brecha **N6**:
+  hasta auditar cómo se escribe el campo al registrar una baja, no se sabe si es contraoferta
+  fallida (señal real) o artefacto de registro. **Modelar sobre ella antes de auditarla sería
+  construir sobre un posible artefacto** — ese es el punto central de la entrega.
+- **I8** — r = 0,394, p = 0,260, y el código **no compara fechas**. El proyecto derivado
+  ("incidente posterior a la capacitación, por persona") es medible con los datos que ya existen:
+  `capacitaciones_limpio.parquet` tiene fecha, y `eventos_limpio.parquet` también. Evaluar si eso
+  es un análisis de Discovery o justifica algo más.
+
+Después: entrega 9 (**I3**, **I11**, **I5**, **I7**, **I9**, **I1**) — los que son decisiones de
+gestión o arreglos de captura. Cierre del documento.
 
 ### Formato fijo por insight (ya aplicado en la entrega 6)
 

@@ -215,3 +215,256 @@ construir un modelo— sostenida ahora insight por insight, con el umbral escrit
 
 **Siguiente:** entrega 7 — **I4** (seguridad nocturna) e **I6** (concentración de la gravedad).
 El segundo candidato a modelo predictivo, donde n = 45 y n = 6 son buena parte de la respuesta.
+
+---
+
+# Entrega 7 · I4 e I6 — el segundo candidato a modelo predictivo
+
+El primer candidato era predecir **quién se va** (entrega 6). El segundo es predecir **quién se
+accidenta**, y de paso **qué tan grave**. Se tratan juntos porque comparten el mismo techo: el
+fenómeno completo ocurrió 45 veces, y la parte que importa, 6.
+
+Antes de entrar, dos verificaciones nuevas que cambian el análisis y que conviene tener a mano.
+
+---
+
+## Dos hallazgos previos, verificados en esta entrega
+
+### V1 — `severidad` no es una variable observada: es una recodificación de `dias_perdidos`
+
+Rangos de días perdidos por categoría, sobre los 45 incidentes:
+
+| Severidad | n | Días perdidos observados |
+|---|---:|---|
+| Leve | 30 | **0** — los treinta, sin excepción |
+| Moderado | 9 | 1, 2, 3, 4, 5 |
+| Grave | 6 | 8, 9, 21, 22, 24, 25 |
+
+**Cero solapamiento entre las tres categorías.** No hay un solo "Leve" con un día perdido, ni un
+"Moderado" con seis. Un corte tan limpio no ocurre cuando dos personas clasifican un hecho a
+criterio: ocurre cuando la etiqueta **se deriva** del número.
+
+Esto no es un defecto del dato, pero cambia lo que se puede hacer con él: **"predecir la severidad"
+y "predecir los días perdidos" son el mismo problema con distinto nombre.** Un modelo de severidad
+no aportaría una dimensión nueva del riesgo — estaría prediciendo un renombre de su propia
+variable objetivo.
+
+### V2 — La concentración de gravedad en el turno noche **no se distingue del azar**
+
+Es un ajuste al bloque A del guion ejecutivo, y ya está aplicado ahí.
+
+| Comparación | Noche | Resto | Test |
+|---|---:|---:|---|
+| Casos graves | 5 | 1 | Fisher exacto bilateral, **p = 0,205** |
+| Incidentes con días perdidos | 10 | 5 | Fisher, **p = 0,352** |
+| Incidentes leves | **15** | **15** | Idénticos |
+
+El "5 de 6 casos graves ocurrió de noche" es un **conteo real y se puede decir**. Afirmar que *la
+gravedad se concentra en la noche* es una generalización, y con seis casos no se sostiene.
+
+**Lo que sí aguanta es el hallazgo principal:** la tasa de incidentes, 5,4x, calculada sobre 45
+casos con exposición comparable. Los días perdidos son el **impacto observado** de ese hallazgo, no
+un segundo hallazgo con entidad propia.
+
+---
+
+## I4 — El turno noche concentra 5,4x la tasa de incidentes
+
+> **Insight.** 11,8 incidentes cada 1.000 empleado-mes contra 2,2 de mañana y tarde, con exposición
+> comparable (2.124 vs 2.254 y 2.256 empleado-mes). 25 de 45 incidentes y 102 de 138 días perdidos.
+
+### 1. Tipo de proyecto posible
+
+Hay dos candidatos, y conviene evaluarlos por separado porque fallan por motivos distintos.
+
+**Candidato A — `supervisado`:** un modelo de riesgo de accidente por empleado-mes.
+
+| Elemento | Definición |
+|---|---|
+| **Variable objetivo** | `incidente de seguridad en los próximos 3 meses` — binaria, por empleado-mes |
+| **Anticipación necesaria** | 1 a 3 meses. Menos no deja margen para cambiar dotación, tarea o cobertura |
+| **Unidad de análisis** | Empleado-mes del panel activo |
+
+**Candidato B — `no supervisado`:** agrupar condiciones de trabajo para descubrir perfiles de
+riesgo sin usar la etiqueta de incidente.
+
+| Elemento | Definición |
+|---|---|
+| **Patrón buscado** | Combinaciones de turno, área, tarea, dotación y estado de equipo que se repiten en las condiciones donde ocurren los hechos |
+| **Decisión que habilitaría** | Priorizar qué configuraciones auditar primero |
+
+### 2. Datos faltantes
+
+| Brecha | Por qué bloquea |
+|---|---|
+| **N5 — ficha de investigación con causa raíz** | 30 de 45 incidentes no tienen ninguna acción correctiva; los 15 restantes repiten la misma frase. **No existe campo de causa raíz.** Sin esto no hay ninguna variable explicativa del hecho |
+| **Hora real del hecho** | `turno_evento` es el turno asignado a la persona, no el del accidente, y `hora_evento` lo contradice (6 a 22 h) |
+| **Variables del evento, no de la persona** | El dataset describe bien al **empleado** —antigüedad, horas extra, área, turno— y casi nada del **hecho**: qué máquina, qué tarea, qué condición del entorno. Para modelar un evento hacen falta variables del evento |
+
+Esa última fila es el problema de fondo del candidato B, y es fácil de pasar por alto: no se pueden
+agrupar condiciones de trabajo si las condiciones de trabajo no están registradas.
+
+### 3. Veredicto explícito
+
+**`ninguno — sigue siendo Discovery recurrente`.**
+
+| Condición | Qué muestra el caso |
+|---|---|
+| **Frecuencia** | **No cumple.** La decisión real es "¿auditamos el turno noche?", y se toma una vez. Las decisiones diarias de seguridad —parar una línea, revisar un equipo— son operativas y las toma un supervisor mirando, no scoreando |
+| **Escala** | **No cumple.** 675 personas en el universo, ~125 en el turno noche. Un jefe de turno recorre esa línea en una noche |
+| **Cuello de botella** | **Es calidad de inferencia, y ni siquiera está en condiciones de serlo.** No se sabe por qué pasan los accidentes, y no se sabe porque **nadie registra la causa**. El problema no es que falte un modelo: falta el dato de entrada |
+
+**Y el tamaño del fenómeno cierra la discusión:**
+
+| Cantidad | Valor |
+|---|---:|
+| Empleado-mes en el panel activo | 9.601 |
+| Incidentes auditables | **45** |
+| **Tasa base de la clase positiva** | **0,47%** |
+| Personas distintas accidentadas | 41 de 675 (**6,1%**) |
+| **Personas con más de un incidente** | **3** |
+
+Esa última fila es la que decide. **Con 41 personas accidentadas y solo 3 reincidentes, no hay
+señal individual persistente que aprender.** Un modelo por persona no tiene a qué agarrarse: el
+accidente no le "pertenece" a un perfil de empleado, le pertenece a una situación.
+
+#### El argumento que hay que anticipar: "balanceá las clases"
+
+Es la objeción previsible, y por eso vale contestarla de frente. Con 45 positivos en 9.601
+observaciones, alguien va a proponer sobremuestrear la clase minoritaria.
+
+**No arregla nada, y empeora una cosa.** Balancear no crea información: reparte de otro modo la que
+ya hay. Interpolar entre 45 casos —muchos de ellos leves, sin días perdidos, en 41 personas
+distintas— fabrica ejemplos sintéticos que no corresponden a ningún accidente que haya ocurrido.
+El modelo sale más confiado, no más correcto. Es el mismo error que la pseudorreplicación de la
+tabla persona-mes: confianza que no se ganó.
+
+#### Y una razón que no es estadística
+
+Aunque el modelo funcionara, **la acción correctiva no es individual.** Lo que este análisis
+recomienda —revisar dotación, supervisión, tareas, mantenimiento y relevo del turno noche— se
+ejecuta sobre el turno, no sobre personas. Un score de riesgo por empleado no cambiaría ni una de
+esas seis decisiones.
+
+Peor: señalaría trabajadores individuales por un riesgo que es de condiciones. Poner un número de
+"probabilidad de accidentarse" al lado del nombre de un operario, cuando lo que falla es la
+configuración del turno, desplaza la responsabilidad exactamente en la dirección equivocada. Es una
+razón suficiente por sí sola para no hacerlo, incluso si los datos alcanzaran.
+
+#### El umbral — qué cambiaría el veredicto
+
+1. **Que exista N5 en régimen**, con causa raíz y condiciones del hecho registradas, durante al
+   menos dos años. Sin variables del evento no hay modelo posible, con cualquier volumen.
+2. **Que el volumen crezca en dos órdenes de magnitud**: miles de eventos, no decenas. Eso implica
+   una operación mucho más grande, o consolidar datos de varias plantas.
+3. **Que la decisión se vuelva individual y frecuente** — por ejemplo, asignar diariamente tareas
+   de riesgo entre cientos de personas con restricciones que un planificador no puede resolver a
+   mano. Hoy no es el caso.
+
+Las tres, no una.
+
+### 4. Mapa ds-*
+
+> **No pasar a ds-06 todavía; sostener como análisis recurrente de Discovery y mejorar la captura
+> de datos.**
+
+Prioridad de captura: **N5** (causa raíz + hora real del hecho) y variables del evento. Es la
+brecha número uno de todo el proyecto, porque bloquea la recomendación principal.
+
+---
+
+## I6 — Seis casos graves explican 109 de los 138 días perdidos
+
+> **Insight.** El daño está concentrado en poquísimos casos: los 6 graves suman 109 días, los 9
+> moderados 29, y los **30 leves suman cero**.
+
+### 1. Tipo de proyecto posible
+
+**El candidato es `supervisado`:** predecir la severidad de un incidente, o directamente los días
+perdidos, para priorizar prevención donde duele.
+
+| Elemento | Definición |
+|---|---|
+| **Variable objetivo** | `días perdidos` (regresión) o `incidente con días perdidos` (binaria) |
+| **Anticipación necesaria** | No aplica en el sentido habitual: no se predice antes del hecho, se predice la consecuencia del hecho |
+
+**Y acá aparece el problema antes que cualquier consideración de tamaño.** Por V1, `severidad` es
+una recodificación de `dias_perdidos`: Leve = 0 días, Moderado = 1–5, Grave = 8–25, sin un solo
+caso que cruce. Predecir severidad **es** predecir días perdidos. No son dos variables, es una.
+
+Un modelo entrenado para clasificar severidad usando días perdidos como variable de entrada tendría
+una exactitud perfecta y no diría absolutamente nada. Es fuga de la variable objetivo en su forma
+más pura, y es fácil de cometer sin darse cuenta, porque las dos columnas existen por separado en
+el archivo y tienen nombres distintos.
+
+### 2. Datos faltantes
+
+| Brecha | Por qué bloquea |
+|---|---|
+| **N5 — causa raíz y condiciones del hecho** | Es la misma brecha de I4, y acá pesa todavía más. Para predecir la consecuencia de un accidente hacen falta las características **del accidente**: qué energía estaba involucrada, qué protección falló, qué tarea se estaba haciendo. El dataset tiene la parte del cuerpo afectada y el subtipo, y poco más |
+| Volumen de eventos con consecuencia | Solo **15 de 45** incidentes tienen algún día perdido. Los otros 30 son ceros |
+
+### 3. Veredicto explícito
+
+**`ninguno — sigue siendo Discovery recurrente`.**
+
+| Condición | Qué muestra el caso |
+|---|---|
+| **Frecuencia** | **No cumple.** Ocurren ~2,8 incidentes por mes en toda la empresa, con un máximo de 6 en el peor mes. No hay ningún flujo que scorear |
+| **Escala** | **No cumple, por mucho.** La clase que importa son **6 casos**. Y la clase "con alguna consecuencia", 15 |
+| **Cuello de botella** | **Ni scoring ni inferencia: es registro.** Faltan las variables del hecho. Y la etiqueta que se querría predecir es una recodificación del resultado |
+
+**Lo que sí corresponde hacer, y es más útil:** usar la concentración como criterio de priorización,
+que es una decisión de gestión y no necesita ningún modelo. Los 30 incidentes leves suman **cero**
+días perdidos; bajar el conteo total de incidentes y bajar los días perdidos **son objetivos
+distintos**, y hoy la empresa no los distingue. Eso solo ya cambia dónde se pone el esfuerzo.
+
+#### El umbral — qué cambiaría el veredicto
+
+Este es el más lejano de todos los evaluados. Haría falta:
+
+1. **N5 en régimen**, con variables del hecho —no del empleado— registradas de forma estructurada.
+2. **Cientos de eventos con consecuencia**, no quince. Con la tasa actual de la empresa, eso son
+   décadas; en la práctica implica datos sectoriales o multiplanta.
+3. Que la severidad se registre **de forma independiente** de los días perdidos, o que se abandone
+   como objetivo y se modele directamente la consecuencia.
+
+Mientras tanto, el criterio de priorización por concentración se sostiene solo con aritmética.
+
+### 4. Mapa ds-*
+
+> **No pasar a ds-06 todavía; sostener como análisis recurrente de Discovery y mejorar la captura
+> de datos.**
+
+Prioridad de captura: **N5**, con foco explícito en variables del evento. Y una recomendación de
+registro que no cuesta nada: **dejar de derivar `severidad` de `dias_perdidos`**, o documentar
+explícitamente que es una recodificación, para que nadie la use más adelante como si fuera una
+observación independiente.
+
+---
+
+## Cierre de la entrega 7
+
+Los cuatro insights evaluados hasta acá —los dos de rotación y los dos de seguridad— son los cuatro
+candidatos "obvios" a modelo del proyecto. Los cuatro dan **ninguno**, y el patrón de por qué ya se
+puede ver:
+
+| Insight | Falla en |
+|---|---|
+| **I2** — rotación en un área | Escala (89 positivos en toda la empresa, 11 en el área) y cuello de botella (falta saber *por qué*) |
+| **I10** — costo de la rotación | No es inferencia: faltan **dos mediciones** que nadie tomó |
+| **I4** — seguridad nocturna | Escala (45 eventos, 3 reincidentes), falta de variables del hecho, y la acción correctiva **no es individual** |
+| **I6** — concentración de la gravedad | Seis casos, y una etiqueta que es una **recodificación del resultado** |
+
+Ninguno falla por falta de técnica. Tres fallan porque el fenómeno ocurrió pocas veces, y todos
+fallan porque **falta el dato que explicaría el fenómeno**, no el algoritmo que lo predeciría.
+
+Esa es la conclusión que vale llevar a la sala: el próximo paso de TechnoStamp no es un modelo, es
+un formulario de carga de incidentes que pida la causa, y una entrevista de salida que pida el
+motivo. Los dos son controles de proceso. Ninguno de los dos es analítica.
+
+---
+
+**Siguiente:** entrega 8 — **I12** (señal de fuga temprana) e **I8** (eficacia preventiva de
+capacitación). Los dos casos donde el dato existe pero todavía no se sabe qué significa.
+

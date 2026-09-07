@@ -34,7 +34,7 @@ Lo que está en juego no es un indicador de RR.HH.: son **días de planta**.
 | Días de trabajo perdidos en el período | **138** | Equivale a más de seis meses de una persona fuera de operación |
 | Días perdidos que ocurren en turno noche | **102 (74%)** | Tres de cada cuatro |
 | Casos graves del período | **6** | Explican **109 de los 138 días**: el 79% del daño está en el 13% de los casos |
-| Casos graves en turno noche | **5 de 6** — 84 días | El riesgo severo es casi exclusivamente nocturno |
+| Casos graves en turno noche | **5 de 6** — 84 días | Es un conteo observado, no un patrón demostrado: con seis casos graves en total la diferencia **no se distingue del azar** (Fisher, p = 0,205). Ver A.4 |
 | Personas expuestas | ~125 por mes, **151 distintas** en el período | Concentradas en Estampado (51), Ensamble (40) y Pintura (24) |
 
 **Sobre el costo registrado.** El sistema imputa $975.000 en total a los 45 incidentes. Esa cifra
@@ -104,6 +104,23 @@ está el 74% de los días perdidos. Eso es una propiedad de esa población y de 
 **Qué no puede decirse:** que los accidentes ocurran de madrugada, ni que la causa sea la
 oscuridad, el horario o el sueño. Nada en los datos lo sostiene.
 
+### Y un segundo límite, sobre la gravedad
+
+**El conteo de casos graves nocturnos es real; el patrón no está demostrado.** Cinco de los seis
+casos graves del período ocurrieron en turno noche, y eso se puede decir como lo que es: un conteo.
+Pero afirmar que *la gravedad se concentra en la noche* es otra cosa, y con seis casos no se
+sostiene: la diferencia no se distingue del azar (Fisher exacto bilateral, **p = 0,205**). Lo mismo
+para los incidentes con días perdidos: 10 de noche contra 5 del resto, **p = 0,352**.
+
+De hecho, los incidentes leves se reparten **15 y 15**, exactamente iguales. Todo el exceso
+nocturno del conteo está en los casos con días perdidos — que son pocos.
+
+**Cómo decirlo en la slide.** El hallazgo que aguanta es la **tasa de incidentes**: 5,4x sobre 45
+casos y con exposición comparable. Los días perdidos y los casos graves se presentan como el
+**impacto observado** de ese hallazgo, no como un segundo hallazgo con entidad propia. La
+distinción parece fina y no lo es: es la diferencia entre un dato y una generalización que un
+directorio puede desarmar con una pregunta.
+
 Decirlo primero es lo que vuelve creíble el resto. Y además refuerza el pedido: hay una diferencia
 grande, real y medida, y ningún dato disponible que la explique. Eso es exactamente lo que se va a
 buscar al piso.
@@ -170,7 +187,7 @@ fórmula al cierre de los 90 días y a los 12 meses.
 | Tasa de incidentes, turno noche | **11,8** ×1.000 empleado-mes | Incidentes de la fuente auditable ÷ empleado-mes del turno × 1.000 | Acercarse al promedio de compañía: **4,7** (45 incidentes / 9.601 empleado-mes). Hoy la noche está **2,5x** por encima de ese promedio |
 | Brecha noche vs mañana/tarde | **5,4x** | Cociente de tasas | Reducirla, no eliminarla: 5,4x → 3x ya es un cambio de régimen |
 | Días perdidos, turno noche | **102** (74% del total) | Suma de `dias_perdidos` del turno | Bajar el peso relativo por debajo del 50% |
-| Casos graves, turno noche | **5 de 6** | Conteo por severidad | Cero graves nocturnos en el período de medición |
+| Casos graves, turno noche | **5 de 6** | Conteo por severidad | Cero graves nocturnos en el período de medición. Se sigue como **conteo**, no como tasa: con seis casos no hay base para una tasa de gravedad por turno |
 
 ### Métricas de proceso — miden si la auditoría se hizo, y se pueden leer a los 90 días
 
