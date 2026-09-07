@@ -93,22 +93,16 @@ Pero afirmar que *la gravedad se concentra en la noche* es otra cosa, y con seis
 
 De hecho, los incidentes leves se reparten **15 y 15**, exactamente iguales. Todo el exceso nocturno del conteo está en los casos con días perdidos — que son pocos.
 
-**Cómo decirlo en la slide.** El hallazgo que aguanta es la **tasa de incidentes**: 5,4x sobre 45
-casos y con exposición comparable. Los días perdidos y los casos graves se presentan como el
-**impacto observado** de ese hallazgo, no como un segundo hallazgo con entidad propia. La
-distinción parece fina y no lo es: es la diferencia entre un dato y una generalización que un
-directorio puede desarmar con una pregunta.
+**Cómo decirlo en la slide.** El hallazgo que aguanta es la **tasa de incidentes**: 5,4x sobre 45 casos y con exposición comparable. Los días perdidos y los casos graves se presentan como el
+**impacto observado** de ese hallazgo, no como un segundo hallazgo con entidad propia. La distinción parece fina y no lo es: es la diferencia entre un dato y una generalización que un directorio puede desarmar con una pregunta.
 
-Decirlo primero es lo que vuelve creíble el resto. Y además refuerza el pedido: hay una diferencia
-grande, real y medida, y ningún dato disponible que la explique. Eso es exactamente lo que se va a
-buscar al piso.
+Decirlo primero es lo que vuelve creíble el resto. Y además refuerza el pedido: hay una diferencia grande, real y medida, y ningún dato disponible que la explique. Eso es exactamente lo que se va a buscar al piso.
 
 ---
 
 ## A.5 — Recomendación: auditoría operativa nocturna focalizada, 90 días
 
-No es un plan de capacitación. No es una campaña de seguridad. Es ir a mirar seis cosas concretas
-en el turno donde está el daño, con un entregable con fecha.
+ mirar seis cosas concretas en el turno donde está el daño, con un entregable con fecha.
 
 | Eje | Qué se va a mirar | Por qué está en la lista |
 |---|---|---|
@@ -123,21 +117,16 @@ en el turno donde está el daño, con un entregable con fecha.
 
 Sin esto, la próxima medición no va a ser mejor que ésta.
 
-1. **Hora real del hecho**, validada contra el parte de turno. Hoy la hora registrada contradice al
-   turno rotulado.
+1. **Hora real del hecho**, validada contra el parte de turno. Hoy la hora registrada contradice al turno rotulado.
 2. **Ficha de investigación con causa raíz obligatoria.** De los 45 incidentes, **30 no tienen
-   ninguna acción correctiva registrada** y los 15 restantes repiten la misma frase: "Capacitación
-   refuerzo seguridad". No existe un campo de causa raíz. No hay análisis que analizar.
-3. **Conciliar las dos fuentes de incidentes.** El panel suma 100, el registro auditable 45. Hasta
-   que coincidan, la mitad del fenómeno es invisible.
+ninguna acción correctiva registrada** y los 15 restantes repiten la misma frase: "Capacitación refuerzo seguridad". No existe un campo de causa raíz. No hay análisis que analizar.
+3. **Conciliar las dos fuentes de incidentes.** El panel suma 100, el registro auditable 45. Hasta que coincidan, la mitad del fenómeno es invisible.
 
 ---
 
 ## A.6 — Hipótesis a investigar (no son causas, y así deben presentarse)
 
-Ninguna de las cinco está probada. Se listan porque son lo que la auditoría tiene que poder
-confirmar o descartar en 90 días, y porque nombrarlas explícitamente evita que la sala las dé por
-ciertas.
+Ninguna de las cinco está probada. Se listan porque son lo que la auditoría tiene que poder confirmar o descartar en 90 días, y porque nombrarlas explícitamente evita que la sala las dé por ciertas.
 
 | # | Hipótesis | Qué la confirmaría | Qué la descartaría |
 |---|---|---|---|
@@ -182,21 +171,16 @@ Estas son las que el Directorio va a poder mirar primero. Las de resultado neces
 
 ### Qué no se promete
 
-No se promete un ahorro. El costo real de un accidente en TechnoStamp no está medido —los $975.000
-del sistema cubren la atención del hecho, no los 138 días de producción—. Este caso se sostiene en
-continuidad operativa y en riesgo para las personas, que es donde la evidencia es firme. La
-cuantificación económica de seguridad queda como brecha declarada, no como número de la slide.
+No se promete un ahorro. El costo real de un accidente en TechnoStamp no está medido —los $975.000 del sistema cubren la atención del hecho, no los 138 días de producción—. Este caso se sostiene en continuidad operativa y en riesgo para las personas, que es donde la evidencia es firme. La cuantificación económica de seguridad queda como brecha declarada, no como número de la slide.
 
 ---
 
 # BLOQUE B · Diagnóstico organizacional
 
 Cuatro preguntas que el negocio trajo, respondidas con lo que la evidencia sostiene y nada más.
-Cada apartado cierra con el límite de esa evidencia: es lo que impide que una decisión correcta se
-tome por el motivo equivocado.
+Cada apartado cierra con el límite de esa evidencia: es lo que impide que una decisión correcta se tome por el motivo equivocado.
 
 ---
-
 ## B.1 — La rotación no está bajando. Nunca subió. (visual G8)
 
 ### Pregunta
@@ -243,7 +227,6 @@ trimestre con la misma fórmula. **Línea de base: 16,7%.** Nunca compararla con
 anualizada: son fórmulas distintas sobre los mismos 113 casos.
 
 ---
-
 ## B.2 — Mantenimiento Eléctrico es la única diferencia que se sostiene (visual G9)
 
 ### Pregunta
@@ -309,12 +292,10 @@ Línea de base: 0%.**
 ¿Las horas extra son un exceso generalizado que conviene recortar?
 
 ### Titular
-> **La empresa se parte en dos: seis áreas viven sobre once horas extra al mes y cinco no llegan a
-> seis. No es un exceso repartido, es capacidad faltante en un lado.**
+> **La empresa se parte en dos: seis áreas viven sobre once horas extra al mes y cinco no llegan a  seis. No es un exceso repartido, es capacidad faltante en un lado.**
 
 ### Evidencia
-`visualizaciones/G10_distribucion_horas_extra_area.png` — distribución de horas extra por
-empleado-mes, por área.
+`visualizaciones/G10_distribucion_horas_extra_area.png` — distribución de horas extra por empleado-mes, por área.
 
 **El gráfico es un boxplot, así que muestra medianas.** Para que la slide y la tabla digan lo
 mismo, todo este apartado cita **mediana de horas extra por empleado-mes**. La media está en
@@ -338,41 +319,34 @@ mismo, todo este apartado cita **mediana de horas extra por empleado-mes**. La m
 **El corte es limpio: 11,2 h de un lado, 6,1 del otro.** No hay zona gris. Costo anual total de
 horas extra: **$987,6M**.
 
-**Un detalle que vale mirar.** Mantenimiento Eléctrico es la única área donde la media (12,1)
-supera claramente a la mediana (11,3). Eso significa que tiene una cola larga: algunas personas del
-área acumulan mucho más que sus propios compañeros. Es la misma área con la peor rotación (B.2).
-No se afirma que una cosa cause la otra —no hay evidencia de eso—, pero es una coincidencia que la
-intervención de retención debería mirar.
+**Un detalle que vale mirar.** Mantenimiento Eléctrico tiene la mayor brecha entre media (12,06) y
+mediana (11,30) de las once áreas: **+0,76 h**. Eso indica una cola larga — algunas personas del
+área acumulan bastante más que sus propios compañeros. Es la única del grupo de seis áreas cargadas
+en esa situación; Calidad (+0,53) e Ingeniería (+0,06) también tienen media por encima de la
+mediana, pero pertenecen al grupo liviano.
 
-**Sobrecarga crónica:** 49 empleados activos, de 562, tienen horas extra altas en al menos el 70%
-de sus meses. Concentrados en Estampado (13), Pintura (12) y Ensamble (11).
+Es la misma área con la peor rotación (B.2). No se afirma que una cosa cause la otra —no hay
+evidencia de eso—, y con 46 personas la brecha es una **señal débil, no testeada**. Se menciona
+para que la intervención de retención mire la distribución interna del área, no como hallazgo.
+
+**Sobrecarga crónica:** 49 empleados activos, de 562, tienen horas extra altas en al menos el 70% de sus meses. Concentrados en Estampado (13), Pintura (12) y Ensamble (11).
 
 ### Decisión habilitada
-Revisión de **capacidad y cobertura** en las seis áreas cargadas, con nombre y apellido. No una
-política general de recorte de horas extra: en cinco áreas no hay nada que recortar.
+Revisión de **capacidad y cobertura** en las seis áreas cargadas, con nombre y apellido. No una política general de recorte de horas extra: en cinco áreas no hay nada que recortar.
 
 ### Límite de la evidencia
-**No es un ahorro capturable, y presentarlo como tal sería el error más caro del informe.** El
-recargo efectivo de la hora extra en estos datos es **1,343x** el costo de la hora normal, mientras
+**No es un ahorro capturable, y presentarlo como tal sería el error más caro del informe.** El recargo efectivo de la hora extra en estos datos es **1,343x** el costo de la hora normal, mientras
 que el costo cargado de un empleado nuevo —cargas patronales, ART, aguinaldo, vacaciones— supera
-**1,40x**. El punto de equilibrio está en cargas del 34,3%: por debajo conviene contratar, por
-encima conviene la hora extra. En Argentina la condición no se cumple. Los $987,6M son el costo de
-operar así, no una oportunidad de ahorro (DEC-009).
+**1,40x**. El punto de equilibrio está en cargas del 34,3%: por debajo conviene contratar, por encima conviene la hora extra. En Argentina la condición no se cumple. Los $987,6M son el costo de operar así, no una oportunidad de ahorro (DEC-009).
 
-Tampoco se sostienen los argumentos de respaldo: los sobrecargados crónicos rotan igual que el
-resto (19,7% vs 19,0%), su exceso de ausentismo es real pero marginal (+11,1%, unos $4,75M
-anuales), y el vínculo con accidentes no es concluyente.
+Tampoco se sostienen los argumentos de respaldo: los sobrecargados crónicos rotan igual que el resto (19,7% vs 19,0%), su exceso de ausentismo es real pero marginal (+11,1%, unos $4,75M anuales), y el vínculo con accidentes no es concluyente.
 
-**Verificado y descartado para esta presentación:** el turno noche tiene 15,4% de sobrecargados
-crónicos contra 11,5% de mañana y 9,0% de tarde. Parece una conexión con el bloque de seguridad,
-pero **no se distingue del azar** (z = 1,48; los intervalos se solapan). Se deja registrado para
+**Verificado y descartado para esta presentación:** el turno noche tiene 15,4% de sobrecargados crónicos contra 11,5% de mañana y 9,0% de tarde. Parece una conexión con el bloque de seguridad, pero **no se distingue del azar** (z = 1,48; los intervalos se solapan). Se deja registrado para
 que nadie lo "descubra" más adelante como si fuera un hallazgo.
 
 ### Métrica de seguimiento
 Mediana de horas extra por empleado-mes en las seis áreas cargadas, mensual. **Línea de base:
-11,2 a 12,2 h.** Y el indicador que importa de verdad: **cantidad de personas con sobrecarga
-crónica. Línea de base: 49 activos.** Es la métrica de riesgo humano; las horas totales son la
-métrica de costo, y esa no se promete bajar.
+11,2 a 12,2 h.** Y el indicador que importa de verdad: **cantidad de personas con sobrecarga crónica. Línea de base: 49 activos.** Es la métrica de riesgo humano; las horas totales son la métrica de costo, y esa no se promete bajar.
 
 ---
 
@@ -382,10 +356,7 @@ métrica de costo, y esa no se promete bajar.
 ¿Cuántos puestos críticos están en riesgo?
 
 ### Por qué esto no es un gráfico
-El scatter `G13_riesgo_sucesion_por_puesto.png` grafica un fenómeno que tiene **un solo caso
-verificable**. Un gráfico de dispersión con un punto no comunica: sugiere una distribución que no
-existe y obliga a la audiencia a buscar un patrón donde hay un hecho puntual. Se reemplaza por una
-tarjeta.
+El scatter `G13_riesgo_sucesion_por_puesto.png` grafica un fenómeno que tiene **un solo caso verificable**. Un gráfico de dispersión con un punto no comunica: sugiere una distribución que no existe y obliga a la audiencia a buscar un patrón donde hay un hecho puntual. Se reemplaza por una tarjeta.
 
 > ### ⚠ Punto de falla unipersonal — Supervisor de Logística
 >
@@ -454,10 +425,8 @@ directorio descarte un informe entero.
 | B — Anualizada sobre dotación activa promedio | 113 ÷ 16 meses × 12 ÷ 563 activos | 15,0% |
 | C — Del período, anualizada | — | 12,6% |
 
-**Se adopta la A** (DEC-019). No porque sea la más alta, sino porque es la que **ya sostiene todo
-el trabajo fino del proyecto**: las diez áreas, los intervalos de confianza de Wilson, el 34,8% de
-Mantenimiento Eléctrico y el gráfico G9. La anualizada se calculaba una sola vez, aparte, solo para
-el titular.
+**Se adopta la A** (DEC-019). No porque sea la más alta, sino porque es la que **ya sostiene todo el trabajo fino del proyecto**: las diez áreas, los intervalos de confianza de Wilson, el 34,8% de
+Mantenimiento Eléctrico y el gráfico G9. La anualizada se calculaba una sola vez, aparte, solo para el titular.
 
 Esto importa en la sala: comparar el 34,8% de Mantenimiento Eléctrico —calculado con la fórmula
 acumulada— contra un titular de 15,0% inflaba la brecha de **2,08x a 2,32x**. Misma empresa, mismos
@@ -469,7 +438,7 @@ proyección. Nunca reemplaza la base de comparación entre áreas.
 
 ---
 
-## C.2 — Business case de retención: un rango, no un número (visual G14)
+## C.2 — Business case de retención: un rango  (visual G14)
 
 ### Titular
 > **Reducir las renuncias voluntarias vale entre $23M y $195M al año. Esa amplitud no es

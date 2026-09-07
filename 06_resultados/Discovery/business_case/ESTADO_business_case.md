@@ -18,7 +18,7 @@ Entregables previstos, en carpeta `06_resultados/Discovery/business_case/`:
 | 1 | `01_matriz_evidencia.md` | **Hecho** |
 | 2-4 | `02_guion_ejecutivo.md` (bloques A, B y C) | **Hecho — completo** |
 | 5 | `03_insights_nuevos.md` | **Hecho** |
-| 6+ | `04_puente_discovery_automation.md` | **Entregas 6, 7 y 8 hechas** (I2, I10, I4, I6, I12, I8); falta la 9 |
+| 6-9 | `04_puente_discovery_automation.md` | **Hecho — completo.** Los doce insights, más el cierre |
 
 ---
 
@@ -307,33 +307,57 @@ y ningún dato disponible que explique por qué. Eso es precisamente lo que se v
 | `02_guion_ejecutivo.md` §C.3 | Titular de G12: "no sabemos si previene, porque nadie lo mide" | "La capacitación cubre al 19,3% y no llega a quien se accidenta", con el cruce completo |
 | `01_matriz_evidencia.md` fila 5 | "No hay ninguna comparación de fechas" | El cruce se corrió; el titular anterior de G12 queda refutado |
 
+- [x] **9 — Puente Discovery → Automation, entrega 9 y cierre (I3, I11, I5, I7, I9, I1)** →
+      `04_puente_discovery_automation.md`, ahora **completo** (1.000 líneas, cuatro entregas).
+      **Los seis veredictos: `ninguno`.** Con eso, **doce de doce** y cero etapas `ds-*` habilitadas.
+      **Dos correcciones más, ambas a texto propio de este mismo trabajo:**
+      · **I11 — "Mantenimiento Eléctrico es la única área donde la media supera a la mediana" era
+        FALSO.** Son **tres**: Mant. Eléctrico (+0,76), Calidad (+0,53) e Ingeniería (+0,06). Lo
+        que sí se sostiene: es la brecha **más grande de las once** y la única **dentro del grupo de
+        seis áreas cargadas**. Y con 46 personas y 538 empleado-mes es una **señal débil, no
+        testeada**. Corregido en I11 y en `02_guion_ejecutivo.md` §B.3.
+      · **I7 — el gradiente de riesgo por antigüedad no se distingue.** La tabla está bien
+        normalizada por exposición, pero las tasas por banda (0,0 · 0,0 · 5,2 · 3,7 · 5,1 · 7,0
+        ×1.000) dan **chi² de homogeneidad = 5,68, gl = 5, p = 0,339**, y la serie ni siquiera es
+        monótona. Los ceros de las dos primeras bandas no prueban nada: con 449 y 188 empleado-mes,
+        lo esperable bajo tasa pareja son ~2 y ~1 incidentes.
+        **El valor de I7 es negativo y sigue siendo válido:** refuta que los ingresantes sean el
+        problema —lo que sugería la columna del panel, con 10x el promedio (DEC-004)—, pero **no**
+        establece que el riesgo suba con la experiencia. Reformulado en esa clave.
+      **Cierre escrito:** tabla de los doce veredictos con el porqué y el umbral · agrupación de los
+      cuatro motivos de falla · la conclusión para la sala · tres lecciones transferibles · y el
+      registro completo de las seis autocorrecciones del documento.
+
 ---
 
-## 7. Próximo subentregable — **último**
+## 7. Estado del plan: **completo**
 
-**Entrega 9 del puente Discovery → Automation** → agregar a `04_puente_discovery_automation.md` y
-**cerrar el documento**: **I3**, **I11**, **I5**, **I7**, **I9** e **I1**.
+Los diez subentregables (0 a 9) están hechos, commiteados y verificados contra los outputs.
 
-Son los seis que quedan, y ninguno es un candidato serio a modelo — son decisiones de gestión o
-arreglos de captura. Se pueden tratar más breve que los anteriores, pero con el mismo formato de
-cuatro apartados y con el umbral escrito.
+### Nota para quien retome
 
-| Insight | Naturaleza | Nota para el tratamiento |
+Este archivo ya no tiene un "próximo paso" pendiente del plan original. Si el trabajo continúa, los
+frentes abiertos —que **no** son parte de este encargo— son:
+
+| Frente | Estado |
+|---|---|
+| Armar el PowerPoint a partir de `02_guion_ejecutivo.md` | No iniciado. El guion está listo y con la selección visual documentada |
+| Regenerar G12 y G13 en `18_visualizaciones_decision.py` | Los títulos y la elección de visual están decididos en el guion §C.3, pero **el código todavía no se tocó** |
+| Sincronizar `conclusiones_ejecutivas_technostamp.md` y `Discovery_report.md` | Contienen afirmaciones que este trabajo corrigió (ver abajo) |
+| Registrar las decisiones nuevas en `decisions.md` | Ninguna de las correcciones de este trabajo está todavía como DEC-0xx |
+
+### Afirmaciones de documentos previos que este trabajo contradice
+
+No se editaron esos archivos porque estaban fuera del encargo, pero quedan registradas:
+
+| Documento | Afirmación | Estado |
 |---|---|---|
-| **I3** | Horas extra: decisión de capacidad | Ya resuelto económicamente por DEC-009. El "no" es casi trivial |
-| **I11** | Cola larga de HE en Mant. Eléctrico | Es un diagnóstico interno de un área de 46 personas |
-| **I5** | Turno asignado ≠ turno del hecho | Arreglo de captura, no proyecto |
-| **I7** | El riesgo sube con la experiencia | Hipótesis: asignación de tareas de riesgo a veteranos. Falta la tarea del hecho |
-| **I9** | Sucesión unipersonal | Un caso. No hay patrón que modelar |
-| **I1** | Arrastre de enero | Regla de higiene de datos |
-
-**Cierre del documento a escribir en esa entrega:** una tabla resumen de los doce veredictos, y la
-conclusión transversal — ninguno falla por falta de técnica; fallan por escala, por falta del dato
-que explicaría el fenómeno, o porque el problema no era de inferencia. Más las dos lecciones
-transferibles que ya aparecieron: **(a)** cuando una variable separa demasiado bien, la primera
-pregunta es cuándo se escribe ese dato; **(b)** antes de pedirle un dato al cliente, agotar lo que
-ya está en la mesa — dos de las seis brechas del backlog eran análisis pendientes, no datos
-faltantes.
+| `conclusiones_ejecutivas_technostamp.md` §4 | "Cuatro de las cinco posiciones críticas activas" se jubilan a 12 meses, con tabla de 3 puestos | Construida sobre `es_posicion_critica`, descartado por DEC-006. El output persistido tiene **1 fila** |
+| `Discovery_report.md` §6 | "Hallazgo contra-intuitivo: el riesgo sube con la experiencia" | **No se sostiene**: chi² p = 0,339 |
+| `06_backlog_priorizado.md` N4 | "`eventos_limpio.parquet` no tiene columna de turno" | **Incorrecto**: la columna existe; el problema es que registra el turno asignado |
+| `06_backlog_priorizado.md` N6 | Brecha a solicitar al cliente | **Resuelta** analíticamente en la entrega 8 |
+| `BC_resumen_oportunidades.csv` | "$92,4M esperado" para rotación voluntaria | Cifra única descartada por DEC-015. Archivo superado |
+| `18_visualizaciones_decision.py` G12 | "Más capacitación coincide con más incidentes (se entrena después del accidente)" | Refutado: r = 0,394 p = 0,260; y son **4 casos de 45** |
 
 ### Formato fijo por insight (ya aplicado en la entrega 6)
 

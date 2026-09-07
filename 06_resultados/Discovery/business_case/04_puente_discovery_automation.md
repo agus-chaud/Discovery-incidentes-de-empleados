@@ -713,7 +713,288 @@ la primera pregunta es cuándo se escribe ese dato, no qué buen predictor es.**
 
 ---
 
-**Siguiente:** entrega 9 — **I3**, **I11**, **I5**, **I7**, **I9** e **I1**. Los que son
-decisiones de gestión o arreglos de captura. Cierre del documento.
+---
+
+# Entrega 9 · I3, I11, I5, I7, I9 e I1 — y cierre del documento
+
+Los seis que quedan. Ninguno es un candidato serio a modelo, así que se tratan más breve —pero con
+el mismo formato y con el umbral escrito, porque un "no" sin umbral sigue siendo una opinión.
+
+Dos de ellos, además, **obligan a corregir lo que este mismo documento había escrito**. Van
+señalados.
+
+---
+
+## I3 — Las horas extra parten la empresa en dos, y el grupo cargado no es sustituible
+
+> **Insight.** Seis áreas con mediana ≥ 11,2 h extra/mes, cinco con ≤ 6,1. Sin zona gris. Costo
+> anual total: $987,6M.
+
+**1. Tipo de proyecto posible.** El candidato imaginable sería optimizar la asignación de horas
+extra o dimensionar dotación. Es `ninguno`, y por un motivo previo a los datos: **la pregunta ya
+está contestada, y la respuesta es que no conviene hacer el cambio.**
+
+**2. Datos faltantes.** Ninguna que bloquee la conclusión. El costo cargado real de TechnoStamp
+—en lugar del supuesto de más de 1,40x— afinaría el punto de equilibrio, pero no lo daría vuelta.
+
+**3. Veredicto: `ninguno — sigue siendo Discovery recurrente`.**
+
+| Condición | Qué muestra |
+|---|---|
+| Frecuencia | La revisión de capacidad es trimestral o anual |
+| Escala | Once áreas. Una planilla |
+| Cuello de botella | **Ninguno de los dos.** La decisión ya está resuelta por aritmética: el recargo de la hora extra es 1,343x y el costo cargado de un ingresante supera 1,40x. El punto de equilibrio está en cargas del 34,3% y en Argentina no se cumple (DEC-009) |
+
+Un modelo de optimización aquí resolvería con más precisión un problema cuya respuesta correcta ya
+es "no lo hagas". Eso no es automatizar una decisión: es decorarla.
+
+**4. Mapa ds-*.** No pasar a ds-06 todavía; sostener como análisis recurrente de Discovery y
+mejorar la captura de datos.
+
+---
+
+## I11 — Mantenimiento Eléctrico tiene cola larga de horas extra ⚠ *corregido*
+
+> **Insight, corregido en esta entrega.** Mantenimiento Eléctrico tiene la brecha media–mediana más
+> grande de las once áreas (+0,76 h) y es **la única entre las seis áreas cargadas** donde la media
+> supera a la mediana.
+
+### La corrección
+
+Las entregas anteriores y el bloque B.3 del guion decían que era **la única área** donde la media
+supera a la mediana. **Es falso.** Son tres:
+
+| Área | Media | Mediana | Brecha |
+|---|---:|---:|---:|
+| **Mantenimiento Eléctrico** | 12,06 | 11,30 | **+0,76** |
+| Calidad | 5,23 | 4,70 | +0,53 |
+| Ingeniería | 3,56 | 3,50 | +0,06 |
+
+Lo que sí se sostiene: es la brecha **más grande** de las once, y la única dentro del grupo de seis
+áreas con carga alta —Calidad e Ingeniería pertenecen al grupo liviano, y la de Ingeniería (+0,06)
+es indistinguible de cero a ojo—.
+
+Y una honestidad adicional: con 46 personas y 538 empleado-mes, una brecha de 0,76 h entre media y
+mediana es una **señal débil, no testeada**. Se reporta como observación descriptiva para que la
+intervención de retención mire la distribución interna del área, no como hallazgo.
+
+**1. Tipo de proyecto posible.** `ninguno`. Es un diagnóstico interno de un equipo de 46 personas.
+
+**2. Datos faltantes.** **N3** — la entrevista de salida es lo único que conectaría la carga
+interna con la rotación del área, y hoy esa conexión es una coincidencia observada, no una relación
+medida.
+
+**3. Veredicto: `ninguno — sigue siendo Discovery recurrente`.** Cuarenta y seis personas. El jefe
+del área puede mirar la lista completa en una tarde. No hay nada que escalar.
+
+**4. Mapa ds-*.** No pasar a ds-06 todavía; sostener como análisis recurrente de Discovery y
+mejorar la captura de datos.
+
+---
+
+## I5 — El turno del incidente es el turno asignado, no el del hecho
+
+> **Insight.** `turno_evento` coincide con `turno_trabajo` del panel en 45 de 45 casos, y
+> `hora_evento` de los 25 casos "Noche" va de 06:53 a 22:00.
+
+**1. Tipo de proyecto posible.** `ninguno`, y no por escala: **esto no es un proyecto de análisis,
+es un campo de formulario.** Corresponde arreglar la captura, no modelar alrededor del defecto.
+
+**2. Datos faltantes.** La hora real del hecho, validada contra el parte de turno. El backlog N4
+está mal enunciado —dice que falta la columna de turno, y la columna existe—; la brecha real es que
+registra el turno asignado a la persona.
+
+**3. Veredicto: `ninguno — es un arreglo de registro`.** No hay condición del criterio que evaluar:
+no hay decisión repetida, no hay escala, y el cuello de botella es que el dato no dice lo que su
+nombre sugiere.
+
+**4. Mapa ds-*.** No pasar a ds-06 todavía; sostener como análisis recurrente de Discovery y
+mejorar la captura de datos.
+
+---
+
+## I7 — Sobre la antigüedad y el riesgo ⚠ *corregido*
+
+> **Insight, tal como estaba enunciado.** "El riesgo de accidente **sube** con la experiencia, no
+> baja."
+
+### La corrección: eso no se sostiene
+
+La tabla está bien construida —normalizada por exposición, como manda DEC-007—, pero el gradiente
+que se le leyó no está:
+
+| Banda de antigüedad | Empleado-mes | Incidentes | Tasa ×1.000 | Esperados si la tasa fuera pareja |
+|---|---:|---:|---:|---:|
+| 0–6 m | 449 | 0 | 0,0 | 2,1 |
+| 6–12 m | 188 | 0 | 0,0 | 0,9 |
+| 1–2 a | 387 | 2 | 5,2 | 1,8 |
+| 2–5 a | 2.943 | 11 | 3,7 | 13,8 |
+| 5–10 a | 3.921 | 20 | 5,1 | 18,4 |
+| 10 a+ | 1.713 | 12 | 7,0 | 8,0 |
+
+**Chi-cuadrado de homogeneidad de tasas: 5,68 con 5 grados de libertad, p = 0,339. Las tasas no se
+distinguen entre bandas.** Y la serie ni siquiera es monótona: cae de 5,2 a 3,7 antes de volver a
+subir.
+
+Los ceros de las dos primeras bandas tampoco prueban nada: con 449 y 188 empleado-mes de
+exposición, lo esperable bajo tasa pareja son ~2 y ~1 incidentes. Observar cero es completamente
+compatible con el azar.
+
+### Lo que sí vale de I7 — y es valioso
+
+**Su valor es negativo, y eso está bien.** El insight no establece que el riesgo suba con la
+antigüedad; **refuta que los ingresantes sean el problema**, que es la lectura que sugería la
+columna del panel mensual (con esa fuente los ingresantes parecían accidentarse a 10 veces el
+promedio — ver DEC-004).
+
+Lo que se puede afirmar, con la fuente auditable: **el accidentado más nuevo tenía 14 meses de
+antigüedad y la mediana de los accidentados es de 79 meses.** No hay un solo incidente en el primer
+año de nadie. Eso alcanza para no invertir en inducción como respuesta al problema de seguridad.
+No alcanza para afirmar un gradiente.
+
+**1. Tipo de proyecto posible.** `ninguno`. No hay siquiera un patrón establecido sobre el cual
+construir algo.
+
+**2. Datos faltantes.** **Qué tarea hacía la persona en el momento del hecho.** Si existe un efecto
+de antigüedad, la hipótesis razonable es que a los veteranos se les asignan las tareas de riesgo —
+y eso es una variable del evento que no está registrada (misma brecha de I4 e I6).
+
+**3. Veredicto: `ninguno — sigue siendo Discovery recurrente`.** Con 45 eventos repartidos en seis
+bandas, ninguna comparación por antigüedad va a distinguirse de nada.
+
+**4. Mapa ds-*.** No pasar a ds-06 todavía; sostener como análisis recurrente de Discovery y
+mejorar la captura de datos.
+
+---
+
+## I9 — La sucesión real es un punto de falla unipersonal
+
+> **Insight.** El único output persistido de riesgo de sucesión tiene una fila: Supervisor de
+> Logística, dotación 1, sucesores 0.
+
+**1. Tipo de proyecto posible.** `ninguno`. Con un caso no hay patrón, y sin patrón no hay nada que
+aprender. Lo que corresponde es un plan de continuidad para un puesto, que es gestión.
+
+**2. Datos faltantes.** El mantenimiento del flag `es_posicion_critica` en el sistema origen —marca
+10 de 694 (1,4%) y nunca cambia en 17 meses—, o la adopción formal del índice propio de criticidad
+(47 activos, 8,4%) como reemplazo. Es una decisión de negocio pendiente, no un dato a recolectar.
+
+**3. Veredicto: `ninguno — un solo caso`.** Ni frecuencia, ni escala, ni cuello de botella
+analítico.
+
+**Umbral.** Aunque el índice propio se adoptara y devolviera decenas de puestos en riesgo, seguiría
+siendo una lista revisable a mano por RR.HH. La planificación de sucesión de una empresa de 694
+personas no es un problema de escala.
+
+**4. Mapa ds-*.** No pasar a ds-06 todavía; sostener como análisis recurrente de Discovery y
+mejorar la captura de datos.
+
+---
+
+## I1 — Enero 2024 fue arrastre del corte, no una crisis
+
+> **Insight.** Las 19 salidas de enero aparecen un solo mes cada una, contra 9,5 del resto. Sacado
+> el arrastre, la rotación es plana: +0,05 puntos por año.
+
+**1. Tipo de proyecto posible.** `ninguno`. Esto no es un insight de negocio que pueda derivar en
+un proyecto: es una **regla de higiene de datos** que debe aplicarse a todo panel con fecha de
+corte, en este proyecto y en el próximo.
+
+**2. Datos faltantes.** Ninguno.
+
+**3. Veredicto: `ninguno — es una regla de higiene`.** Se convierte en un chequeo obligatorio, no
+en un proyecto: revisar siempre el primer y el último mes por separado antes de calcular cualquier
+tasa, y verificar si los casos del borde aparecen una sola vez.
+
+**4. Mapa ds-*.** No aplica. Es una práctica, y su lugar es el checklist de limpieza —
+`ds-05-limpiar-datos` en cualquier trabajo futuro, no `ds-06`.
+
+---
+
+# Cierre del documento
+
+## Los doce veredictos
+
+| # | Insight | Veredicto | Por qué no | Qué habilitaría revisarlo |
+|---|---|---|---|---|
+| **I1** | Arrastre de enero | `ninguno` | Es una regla de higiene de datos, no un fenómeno | Nada. Se convierte en checklist |
+| **I2** | Rotación en Mant. Eléctrico | `ninguno` | **Escala** (89 renuncias voluntarias en la empresa, 11 en el área, contra 60 variables) + **cuello de botella**: falta saber *por qué* | Decenas de miles de personas · acción de retención individual y recurrente · N3 en régimen |
+| **I3** | Horas extra concentradas | `ninguno` | La decisión ya está resuelta por aritmética, y la respuesta es no hacerlo (DEC-009) | Que cambie la estructura de cargas sociales |
+| **I4** | Seguridad nocturna | `ninguno` | **Escala** (45 eventos, 41 personas, 3 reincidentes) + faltan variables del hecho + **la acción correctiva no es individual** | N5 en régimen 2 años · miles de eventos · decisión individual y diaria |
+| **I5** | Turno asignado ≠ turno del hecho | `ninguno` | Es un campo de formulario mal capturado | Nada. Se arregla la captura |
+| **I6** | Concentración de la gravedad | `ninguno` | **Seis casos**, y la etiqueta de severidad es una **recodificación del resultado** | N5 · cientos de eventos con consecuencia · severidad registrada de forma independiente |
+| **I7** | Antigüedad y riesgo ⚠ | `ninguno` | El gradiente **no se distingue** (chi², p = 0,339). Su valor es refutar la hipótesis del ingresante | Tarea del hecho registrada · mucho más volumen |
+| **I8** | Capacitación y seguridad ⚠ | `ninguno` | El cuello de botella es **diseño de la medición**: la asignación no fue aleatoria ni documentada | Criterio de asignación registrado · N5 → habilita una **evaluación de impacto**, no un modelo |
+| **I9** | Sucesión unipersonal | `ninguno` | **Un caso.** Sin patrón no hay nada que aprender | Nada realista: 694 personas nunca es un problema de escala |
+| **I10** | Costo de la rotación | `ninguno` | **No es inferencia: es medición.** Faltan dos cantidades que nadie tomó | N1 + N2. Y entonces es un indicador, no un modelo |
+| **I11** | Cola larga de HE ⚠ | `ninguno` | Diagnóstico interno de 46 personas, sobre una señal débil no testeada | Nada. Es gestión de un equipo |
+| **I12** | Campo de último aumento ⚠ | `ninguno` | **La variable no significa lo que su nombre dice.** Es un artefacto de registro | Registro histórico de aumentos con fecha propia |
+
+**Doce insights, doce veces `ninguno`.** Cero etapas `ds-*` habilitadas.
+
+## Por qué fallan, agrupado
+
+Ninguno falla por falta de técnica. Fallan por cuatro motivos, y vale distinguirlos porque cada uno
+se arregla distinto:
+
+| Motivo | Insights | Cómo se destraba |
+|---|---|---|
+| **El fenómeno ocurrió pocas veces** | I2, I4, I6, I7, I9 | Solo con más volumen o más años. No hay atajo técnico |
+| **Falta el dato que explicaría el fenómeno** | I2 (N3), I4 (N5), I6 (N5), I7, I8 | Control de proceso en el sistema origen. No es analítica |
+| **El problema no es de inferencia** | I10 (es medición), I3 (ya está resuelto), I9, I11 (es gestión) | Medir, o simplemente decidir |
+| **El dato no significa lo que parece** | I5, I12, y parcialmente I8 | Arreglar la captura, y retirar la variable del análisis |
+
+## La conclusión que se lleva a la sala
+
+> **El próximo paso de TechnoStamp no es un modelo. Es un formulario de incidentes que pida la
+> causa, y una entrevista de salida que pida el motivo.**
+
+Los dos son controles de proceso. Ninguno de los dos es analítica. Y sin ellos, cualquier modelo
+que se construyera estaría automatizando una decisión que todavía nadie sabe tomar.
+
+Es la misma conclusión con la que arrancó el proyecto —§1 del `ESTUDIO`: *la primera decisión fue
+no construir un modelo*— pero ahora sostenida doce veces, insight por insight, con el umbral
+escrito al lado de cada una.
+
+## Tres lecciones transferibles
+
+Estas salen del ejercicio, no del caso, y sirven para el próximo proyecto.
+
+**1. Cuando una variable separa demasiado bien, la primera pregunta no es "qué buen predictor" — es
+"¿cuándo se escribe este dato?".** `meses_desde_ultimo_aumento` separaba salidas de activos casi
+perfectamente. Estaba prediciendo el acto administrativo de dar de baja. Lo mismo con `severidad`,
+que resultó ser una recodificación de `dias_perdidos`.
+
+**2. Antes de pedirle un dato al cliente, agotá lo que ya está en la mesa.** Dos de las seis
+brechas que este proyecto iba a solicitar no eran brechas de dato: eran análisis pendientes. N6 se
+resolvió abriendo un campo por motivo de salida; la temporalidad de G12 se resolvió cruzando dos
+archivos que ya estaban en el proyecto.
+
+**3. Un "no" sin umbral es una opinión.** Doce veredictos negativos que dijeran solamente "no se
+justifica" serían indistinguibles de una preferencia personal. Con el umbral escrito, cada uno es
+una hipótesis falsable: si el volumen llega a X, si el dato Y existe, si la decisión pasa a tomarse
+con frecuencia Z, se revisa.
+
+## Registro de autocorrecciones de este documento
+
+Se deja explícito porque es parte del entregable: **el documento se corrigió a sí mismo cuatro
+veces mientras se escribía.**
+
+| Entrega | Qué se encontró | Qué se corrigió |
+|---|---|---|
+| 7 | La concentración de gravedad en el turno noche no se distingue del azar (Fisher, p = 0,205) | `02_guion_ejecutivo.md` A.2, A.4 y A.7; `01_matriz_evidencia.md` fila 4 |
+| 7 | `severidad` es una recodificación de `dias_perdidos`, sin solapamiento entre categorías | Se documenta como límite; bloquea cualquier modelo de severidad |
+| 8 | `meses_desde_ultimo_aumento` es un artefacto de registro (N6 resuelta) | I12, I8, §3 de insights; entrega 6; `02_guion_ejecutivo.md` C.3; matriz fila 5 |
+| 8 | El cruce temporal capacitación↔incidente sí se podía correr, y refuta el titular de G12 | I8; titular de G12 en el guion; matriz fila 5 |
+| 9 | "Mantenimiento Eléctrico es la única área con media > mediana" era **falso**: son tres | I11; `02_guion_ejecutivo.md` B.3 |
+| 9 | El gradiente de riesgo por antigüedad no se distingue (chi², p = 0,339) | I7; se reformula como evidencia negativa |
+
+Encontrar seis errores en el propio trabajo antes de la presentación vale más que llegar a la sala
+con cero errores conocidos. Los que no se buscan, los encuentra el directorio.
+
+---
+
+**Documento completo.** Los cuatro entregables del business case están en
+`06_resultados/Discovery/business_case/`.
 
 
