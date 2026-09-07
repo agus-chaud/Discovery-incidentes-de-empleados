@@ -18,7 +18,7 @@ Entregables previstos, en carpeta `06_resultados/Discovery/business_case/`:
 | 1 | `01_matriz_evidencia.md` | **Hecho** |
 | 2-4 | `02_guion_ejecutivo.md` (bloques A, B y C) | **Hecho — completo** |
 | 5 | `03_insights_nuevos.md` | **Hecho** |
-| 6+ | `04_puente_discovery_automation.md` | Pendiente |
+| 6+ | `04_puente_discovery_automation.md` | **Entrega 6 hecha** (I2, I10); faltan 7, 8 y 9 |
 
 ---
 
@@ -216,13 +216,41 @@ y ningún dato disponible que explique por qué. Eso es precisamente lo que se v
       **Veredicto preliminar de los doce: ninguno justifica Automation hoy.** El desarrollo del
       porqué, insight por insight, va en el subentregable 6+.
 
+- [x] **6 — Puente Discovery → Automation, entrega 6 (I2 + I10)** →
+      `04_puente_discovery_automation.md`. Se tratan juntos porque son las dos mitades de la misma
+      pregunta: quién se va y cuánto cuesta. Es donde la tentación de modelar es máxima.
+      **Ambos veredictos: `ninguno — sigue siendo Discovery recurrente`**, por motivos distintos:
+      · **I2** no se modela por **escala** y por **cuello de botella**. Cifras nuevas verificadas:
+        694 personas, 132 salidas, **89 renuncias voluntarias** (la clase positiva real), **11** en
+        Mantenimiento Eléctrico, contra **60 columnas candidatas** en el panel. 89 positivos vs 60
+        variables no es un problema de algoritmo: el fenómeno ocurrió 89 veces. Y la etiqueta está
+        mal definida por censura a derecha. Lo que falta saber es *por qué*, no *quién*.
+      · **I10** no se modela porque **el problema no es de inferencia, es de medición**. Faltan dos
+        cantidades que nadie registró (N1, N2). Un modelo entrenado sobre estos datos devolvería
+        nuestros propios supuestos con apariencia de resultado.
+      Ambos cierran con el **umbral** escrito: qué tendría que cambiar para que el veredicto fuera
+      sí. Otras cifras verificadas: 52 puestos distintos, **90 contrataciones** en el período,
+      motivos de salida (89 renuncia voluntaria · 27 despido · 7 jubilación · 5 reestructuración ·
+      4 fin de contrato).
+
 ---
 
 ## 7. Próximo subentregable
 
-**Subentregable 6 — Puente Discovery → Automation** → `04_puente_discovery_automation.md`
+**Entrega 7 del puente Discovery → Automation** → agregar a `04_puente_discovery_automation.md`:
+**I4** (seguridad nocturna) e **I6** (concentración de la gravedad).
 
-Trabajar **uno o dos insights por subentregable**. Para cada uno, cuatro apartados:
+Es el segundo candidato a modelo predictivo. Datos de tamaño ya verificados y disponibles para
+usar: 45 incidentes auditables en 17 meses · 25 en turno noche · **6 graves** que explican 109 de
+los 138 días perdidos · 30 leves que suman **cero** días. La clase positiva de cualquier modelo de
+severidad serían 6 casos.
+
+Después: entrega 8 (**I12** señal de fuga temprana + **I8** eficacia preventiva de capacitación) y
+entrega 9 (**I3**, **I11**, **I5**, **I7**, **I9**, **I1**).
+
+### Formato fijo por insight (ya aplicado en la entrega 6)
+
+Para cada uno, cuatro apartados:
 
 1. **Tipo de proyecto posible** — una sola opción: `supervisado` · `no supervisado` ·
    `ninguno — sigue siendo Discovery`. Si supervisado: variable objetivo y anticipación necesaria.
