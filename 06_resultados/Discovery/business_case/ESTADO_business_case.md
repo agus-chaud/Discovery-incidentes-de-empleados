@@ -15,7 +15,7 @@ Entregables previstos, en carpeta `06_resultados/Discovery/business_case/`:
 | # | Archivo | Estado |
 |---|---|---|
 | 0 | `ESTADO_business_case.md` | **Hecho** |
-| 1 | `01_matriz_evidencia.md` | Pendiente |
+| 1 | `01_matriz_evidencia.md` | **Hecho** |
 | 2-4 | `02_guion_ejecutivo.md` (bloque operativo + diagnóstico + anexo financiero) | Pendiente |
 | 5 | `03_insights_nuevos.md` | Pendiente |
 | 6+ | `04_puente_discovery_automation.md` | Pendiente |
@@ -134,17 +134,30 @@ y ningún dato disponible que explique por qué. Eso es precisamente lo que se v
 ## 6. Subentregables terminados
 
 - [x] **0 — Preflight.** Fuentes leídas, cifras verificadas contra output, contradicciones listadas.
+- [x] **1 — Matriz de evidencia** → `01_matriz_evidencia.md`. Siete temas cubiertos con las seis
+      columnas pedidas. Hallazgo adicional verificado al escribirla: la correlación área a área
+      entre horas de capacitación en seguridad y tasa de incidentes es **r = 0,394, p = 0,260**
+      (n = 10 áreas; sin Logística, r = 0,279). **No se distingue de cero.** El título actual de
+      G12 —"Más capacitación coincide con más incidentes"— sobreafirma incluso el patrón
+      descriptivo, además del problema de temporalidad ya registrado como C2. Confirma la decisión
+      de reformular G12 como brecha de medición preventiva.
+      También verificado: el costo anual total de horas extra suma **$987,6M**, consistente con
+      los "$988M" de DEC-009.
 
 ---
 
 ## 7. Próximo subentregable
 
-**Subentregable 1 — Matriz de evidencia** → `01_matriz_evidencia.md`
+**Subentregable 2 — Guion ejecutivo, bloque operativo** → `02_guion_ejecutivo.md`
 
-Tabla con columnas: Tema · Fuente · Evidencia observada · Qué se puede afirmar · Qué no se puede
-afirmar · Decisión potencial. Cubre como mínimo: rotación limpia y arrastre de enero,
-Mantenimiento Eléctrico, horas extra por área, seguridad nocturna, capacitación e incidentes,
-sucesión, business case de retención.
+Primera parte del documento para PowerPoint: (1) problema operativo prioritario, seguridad
+nocturna; (2) evidencia G11; (3) recomendación de auditoría operativa de 90 días; (4) métricas de
+seguimiento antes/después; (5) hipótesis a investigar, nunca presentadas como causas probadas.
+
+Cifras a usar, ya verificadas: 11,8 vs 2,2 cada 1.000 empleado-mes (5,4x) · 25 de 45 incidentes ·
+102 de 138 días perdidos · 5 de 6 graves · exposición 2.124 empleado-mes. Límite obligatorio a
+declarar: `hora_evento` va de 6 a 22 h, así que el hallazgo describe a la **población asignada** al
+turno, no al horario del hecho.
 
 ---
 
