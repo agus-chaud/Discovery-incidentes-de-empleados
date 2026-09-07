@@ -95,36 +95,101 @@ ax.axvline(tasa_prom, color=AZUL, ls="--", label=f"Promedio: {tasa_prom:.1f} ×1
 ax.set(xlabel="Incidentes cada 1.000 empleado-mes", title="El turno noche tiene 5,4x la tasa de mañana o tarde\n(56% de los incidentes y 74% de los días perdidos, sobre 45 casos)")
 ax.legend(frameon=False); save(fig, "G11_incidentes_por_turno.png")
 
-# G12: Capacitacion de seguridad versus incidentes.
+# G12: cobertura de la capacitacion de seguridad, y su relacion temporal con los
+# incidentes. Antes era un scatter de horas de training vs incidentes por area,
+# titulado "mas capacitacion coincide con mas incidentes (se entrena despues del
+# accidente, no antes)". Dos problemas independientes: (1) la correlacion no se
+# distingue de cero (r=0,394, p=0,260 sobre 10 areas); (2) el calculo agregaba
+# totales de todo el periodo y nunca comparaba fechas, asi que el titulo afirmaba
+# una temporalidad que el codigo no medía. El cruce temporal si se podia hacer con
+# los archivos que ya existen, y da vuelta la conclusion: son 4 casos de 45.
 inc = evt[evt.tipo_evento == "incidente_seguridad"].copy()
-seg = cap[cap.categoria_training == "Seguridad"].groupby("area_empleado").agg(horas=("duracion_horas", "sum"))
-dotacion = ult.groupby("area").empleado_id.size().rename("empleados")
-incidentes = inc.groupby("area_empleado").size().rename("incidentes")
-training = pd.concat([seg, dotacion, incidentes], axis=1).fillna(0)
-training["horas_por_empleado"] = training.horas / training.empleados
-training["incidentes_x100"] = training.incidentes / training.empleados * 100
-fig, ax = plt.subplots(figsize=(8.5, 6))
-ax.scatter(training.horas_por_empleado, training.incidentes_x100, s=110, color=AZUL, alpha=.8)
-for area, row in training.iterrows(): ax.annotate(area, (row.horas_por_empleado, row.incidentes_x100), xytext=(6, 5), textcoords="offset points", fontsize=8)
-ax.set(xlabel="Horas de capacitación en seguridad por empleado", ylabel="Incidentes por 100 empleados", title="Más capacitación coincide con más incidentes\n(se entrena después del accidente, no antes)")
-ax.text(.01, .01, "Comparacion descriptiva: no prueba causalidad.", transform=ax.transAxes, fontsize=8, color=GRIS)
-save(fig, "G12_capacitacion_seguridad_vs_incidentes.png")
+seg = cap[cap.categoria_training == "Seguridad"]
 
-# G13: Riesgo de sucesion por puesto. DEC-006: usa el indice propio; el flag
-# es_posicion_critica se conserva en los datos solo para comparacion y auditoria.
+previa = posterior = ninguna = 0
+for _, r in inc.iterrows():
+    t_emp = seg[seg.empleado_id == r.empleado_id]
+    hay_previa = bool((t_emp.fecha_fin <= r.fecha_evento).any())
+    hay_post = bool((t_emp.fecha_inicio > r.fecha_evento).any())
+    previa += hay_previa
+    posterior += hay_post
+    ninguna += not (hay_previa or hay_post)
+
+universo = set(panel[panel.activo].empleado_id)
+accidentados = set(inc.empleado_id) & universo
+capacitados = set(seg.empleado_id)
+pct_acc = len(accidentados & capacitados) / len(accidentados) * 100
+pct_no = len(((universo - accidentados) & capacitados)) / len(universo - accidentados) * 100
+pct_univ = len(universo & capacitados) / len(universo) * 100
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12.5, 5), gridspec_kw={"width_ratios": [1.25, 1]})
+
+etiquetas = ["Sin ninguna\ncapacitación", "Con capacitación\nPREVIA al hecho", "Con capacitación\nPOSTERIOR al hecho"]
+valores = [ninguna, previa, posterior]
+barras = ax1.bar(etiquetas, valores, color=[ROJO, GRIS, GRIS])
+ax1.bar_label(barras, labels=[f"{v}\n({v / len(inc) * 100:.0f}%)" for v in valores], padding=4, fontsize=10)
+ax1.set(ylabel="Incidentes", ylim=(0, max(valores) * 1.28),
+        title=f"De los {len(inc)} incidentes auditables")
+ax1.tick_params(axis="x", labelsize=9)
+
+grupos = ["Accidentados", "No accidentados"]
+pcts = [pct_acc, pct_no]
+b2 = ax2.bar(grupos, pcts, color=[ROJO, GRIS], width=.55)
+ax2.bar_label(b2, labels=[f"{p:.1f}%" for p in pcts], padding=4, fontsize=11)
+ax2.axhline(pct_univ, color=AZUL, ls="--", lw=1.5, label=f"Toda la empresa: {pct_univ:.1f}%")
+ax2.set(ylabel="% con capacitación en seguridad", ylim=(0, max(pcts) * 1.6),
+        title="Cobertura de la capacitación")
+ax2.legend(frameon=False, fontsize=9, loc="upper left")
+ax2.text(.5, -.14, "Fisher exacto bilateral: p = 0,683 — la diferencia no se distingue del azar",
+         transform=ax2.transAxes, ha="center", fontsize=8.5, color=GRIS)
+
+fig.suptitle("La capacitación en seguridad cubre al 19,3% de la gente, y no llega a quien se accidenta",
+             fontsize=13, y=1.02)
+save(fig, "G12_cobertura_capacitacion_seguridad.png")
+
+# G13: tarjeta de alerta de sucesion. Antes era un scatter de hasta 15 puestos.
+# El cruce del indice propio de criticidad (DEC-006) con proximidad a jubilacion
+# devuelve un unico puesto: un grafico de dispersion con un punto sugiere una
+# distribucion que no existe y obliga a la audiencia a buscar un patron donde hay
+# un hecho puntual. Con un caso no hay patron; hay una alerta.
 activos = ult[~ult.salio].copy()
 if not {"score_crit", "es_critico_indice"}.issubset(activos.columns):
     raise ValueError("Faltan columnas del indice de criticidad; ejecutar 13_limpieza_v2.py antes de generar G13.")
 criticos = activos[activos.es_critico_indice & (activos.meses_hasta_jubilacion <= 24)]
 dotacion_puesto = activos.groupby(["area", "puesto"]).empleado_id.size().rename("dotacion")
-sucesion = criticos.groupby(["area", "puesto"]).agg(en_riesgo=("empleado_id", "size"), antiguedad=("antiguedad_anios", "mean")).join(dotacion_puesto).reset_index()
-sucesion["pct_riesgo"] = sucesion.en_riesgo / sucesion.dotacion * 100
-sucesion = sucesion.sort_values(["pct_riesgo", "en_riesgo"], ascending=False).head(15)
-fig, ax = plt.subplots(figsize=(10, 6.5))
-scatter = ax.scatter(sucesion.dotacion, sucesion.pct_riesgo, s=150 + sucesion.antiguedad.fillna(0) * 70, c=sucesion.en_riesgo, cmap="Reds", alpha=.75, edgecolors="#7f1d1d")
-for _, row in sucesion.iterrows(): ax.annotate(f"{row['puesto']}\n({row['area']})", (row.dotacion, row.pct_riesgo), xytext=(6, 5), textcoords="offset points", fontsize=7)
-ax.set(xlabel="Dotacion del puesto", ylabel="Personal con criticidad estimada en riesgo a 24 meses (%)", title="Riesgo de sucesion por puesto\n(indice propio de criticidad: score >= 2)")
-fig.colorbar(scatter, ax=ax, label="Personas con criticidad estimada en riesgo"); save(fig, "G13_riesgo_sucesion_por_puesto.png")
+sucesion = (criticos.groupby(["area", "puesto"])
+            .agg(en_riesgo=("empleado_id", "size"))
+            .join(dotacion_puesto).reset_index())
+sucesion["sucesores"] = sucesion.dotacion - sucesion.en_riesgo
+sucesion = sucesion.sort_values(["sucesores", "dotacion"]).head(4)
+
+n = len(sucesion)
+fig, axes = plt.subplots(n, 1, figsize=(9, 2.5 * n + .6), squeeze=False)
+for ax, (_, row) in zip(axes.ravel(), sucesion.iterrows()):
+    ax.axis("off")
+    critico = row.sucesores == 0
+    ax.add_patch(plt.Rectangle((0, 0), 1, 1, transform=ax.transAxes, facecolor="#fdf2f2" if critico else "#f4f6f7",
+                               edgecolor=ROJO if critico else GRIS, linewidth=2.5))
+    ax.text(.035, .78, f"{'⚠  ' if critico else ''}{row.puesto}", transform=ax.transAxes,
+            fontsize=15, fontweight="bold", color=ROJO if critico else "#2c3e50")
+    ax.text(.035, .60, f"Área: {row.area}", transform=ax.transAxes, fontsize=10.5, color="#2c3e50")
+    for i, (etiqueta, valor) in enumerate([("Dotación del puesto", row.dotacion),
+                                           ("En riesgo a 24 meses", row.en_riesgo),
+                                           ("Sucesores potenciales", row.sucesores)]):
+        x = .06 + i * .31
+        ax.text(x, .30, str(int(valor)), transform=ax.transAxes, fontsize=26, fontweight="bold",
+                color=ROJO if (critico and i == 2) else "#2c3e50")
+        ax.text(x, .15, etiqueta, transform=ax.transAxes, fontsize=9, color=GRIS)
+    if critico:
+        ax.text(.97, .74, "Sin cobertura", transform=ax.transAxes, fontsize=11, color=ROJO,
+                ha="right", va="center", fontweight="bold")
+        ax.text(.035, .045, "Si esa persona sale, no hay nadie en el puesto y nadie preparándose para ocuparlo.",
+                transform=ax.transAxes, fontsize=9.5, color=ROJO, va="bottom", style="italic")
+
+fig.suptitle("Riesgo de sucesión: punto de falla unipersonal\n"
+             "(índice propio de criticidad, score ≥ 2 — DEC-006; el flag es_posicion_critica no se usa)",
+             fontsize=12.5, y=.99)
+save(fig, "G13_alerta_sucesion.png")
 
 # G14: Business case por escenario.
 bc = pd.read_csv(T / "BC_rango_retencion.csv")

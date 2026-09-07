@@ -356,7 +356,9 @@ Mediana de horas extra por empleado-mes en las seis áreas cargadas, mensual. **
 ¿Cuántos puestos críticos están en riesgo?
 
 ### Por qué esto no es un gráfico
-El scatter `G13_riesgo_sucesion_por_puesto.png` grafica un fenómeno que tiene **un solo caso verificable**. Un gráfico de dispersión con un punto no comunica: sugiere una distribución que no existe y obliga a la audiencia a buscar un patrón donde hay un hecho puntual. Se reemplaza por una tarjeta.
+El scatter anterior (`G13_riesgo_sucesion_por_puesto.png`) graficaba un fenómeno que tiene **un solo caso verificable**. Un gráfico de dispersión con un punto no comunica: sugiere una distribución que no existe y obliga a la audiencia a buscar un patrón donde hay un hecho puntual. Se reemplazó por una tarjeta.
+
+**Visual vigente: `visualizaciones/G13_alerta_sucesion.png`** — generado por `04_scripts/18_visualizaciones_decision.py`, que ahora renderiza la tarjeta directamente desde el índice propio de criticidad.
 
 > ### ⚠ Punto de falla unipersonal — Supervisor de Logística
 >
@@ -536,9 +538,19 @@ exposición de cada grupo. Los dos criterios, no uno.
 **Orden sugerido en el deck:** G11 → G9 → G8 → G10 → G14. Sigue la prioridad del caso: primero el
 riesgo operativo, después el diagnóstico, el dinero al final.
 
-### ✏️ Reformular — G12
+### ✏️ Reformular — G12 · **hecho**
 
-**`G12_capacitacion_seguridad_vs_incidentes.png`**
+**Visual vigente: `visualizaciones/G12_cobertura_capacitacion_seguridad.png`**
+*(reemplaza a `G12_capacitacion_seguridad_vs_incidentes.png`, regenerado por
+`04_scripts/18_visualizaciones_decision.py`)*
+
+El gráfico nuevo tiene dos paneles: a la izquierda el cruce temporal sobre los 45 incidentes
+—36 sin ninguna capacitación, 5 con previa, 4 con posterior—, y a la derecha la cobertura de
+accidentados (22,0%) contra no accidentados (19,1%), con la línea de la empresa (19,3%) y el
+p = 0,683 al pie. Muestra la variable de la que habla el título, que es lo que el scatter anterior
+no hacía.
+
+**Lo que decía el visual anterior, y por qué se retiró:**
 
 **Título actual:** *"Más capacitación coincide con más incidentes (se entrena después del
 accidente, no antes)"*.
@@ -574,9 +586,10 @@ igual. La brecha es de **medición preventiva**, y esa sí es una conclusión de
 La alternativa más honesta es reemplazarlo por la tabla de arriba, que comunica la brecha sin
 sugerir una relación que los datos no muestran.
 
-### 🔄 Reemplazar — G13
+### 🔄 Reemplazar — G13 · **hecho**
 
-**`G13_riesgo_sucesion_por_puesto.png`** → **tarjeta de alerta de sucesión** (ya escrita en B.4).
+**`G13_riesgo_sucesion_por_puesto.png`** → **`G13_alerta_sucesion.png`**, la tarjeta de alerta
+descrita en B.4. Ya está generada por `04_scripts/18_visualizaciones_decision.py`.
 
 El scatter dibuja una distribución que no existe: el único output persistido de riesgo de sucesión
 tiene **una sola fila**. Un gráfico de dispersión con un punto obliga a la audiencia a buscar un
