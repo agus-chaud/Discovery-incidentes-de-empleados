@@ -334,30 +334,56 @@ y ningún dato disponible que explique por qué. Eso es precisamente lo que se v
 
 Los diez subentregables (0 a 9) están hechos, commiteados y verificados contra los outputs.
 
-### Nota para quien retome
-
-Este archivo ya no tiene un "próximo paso" pendiente del plan original. Si el trabajo continúa, los
-frentes abiertos —que **no** son parte de este encargo— son:
+### Sincronización de los tres frentes — **hecha (2026-09-07)**
 
 | Frente | Estado |
 |---|---|
-| Armar el PowerPoint a partir de `02_guion_ejecutivo.md` | No iniciado. El guion está listo y con la selección visual documentada |
-| Regenerar G12 y G13 en `18_visualizaciones_decision.py` | Los títulos y la elección de visual están decididos en el guion §C.3, pero **el código todavía no se tocó** |
-| Sincronizar `conclusiones_ejecutivas_technostamp.md` y `Discovery_report.md` | Contienen afirmaciones que este trabajo corrigió (ver abajo) |
-| Registrar las decisiones nuevas en `decisions.md` | Ninguna de las correcciones de este trabajo está todavía como DEC-0xx |
+| **1. Visualizaciones** | **Hecho.** G12 → `G12_cobertura_capacitacion_seguridad.png` (cruce temporal + cobertura). G13 → `G13_alerta_sucesion.png` (tarjetas, base jubilación 12 meses). Los siete visuales regenerados y verificados |
+| **2. Informes previos** | **Hecho.** `Discovery_report.md` y `conclusiones_ejecutivas_technostamp.md` sincronizados, cada corrección con su nota de trazabilidad |
+| **3. `decisions.md`** | **Hecho.** DEC-022 a DEC-027. Cierra dos pendientes, abre una |
+| Armar el PowerPoint | **No iniciado.** Único frente que queda del encargo original |
 
-### Afirmaciones de documentos previos que este trabajo contradice
+### Una corrección de la corrección, registrada en DEC-025
 
-No se editaron esos archivos porque estaban fuera del encargo, pero quedan registradas:
+Al sincronizar apareció que **el business case se había pasado de corrección con la sucesión**.
+
+Se había escrito que la tabla de tres puestos del informe ejecutivo "no tiene respaldo en el output
+persistido" y se la reemplazó por el caso único del Supervisor de Logística. **Eso estaba mal.** La
+tabla es correcta: cuatro personas se jubilan a ≤12 meses sobre los 562 activos, en tres puestos
+—Supervisor de Logística (dotación 1, sucesores 0), Team Leader Logística (5, sucesores 3) y
+Técnico Setup (25, sucesores 24)—, todo verificable sobre `meses_hasta_jubilacion`.
+
+Lo que estaba mal era **solo el rótulo**: llamarlas "posiciones críticas" importa
+`es_posicion_critica`, descartado por DEC-006.
+
+**La causa de fondo:** dos análisis distintos daban números distintos y se los trató como si
+respondieran lo mismo. `P1_riesgo_sucesion_por_puesto.csv` cruza el índice propio de criticidad con
+jubilación a **24** meses → 1 puesto. La pregunta de Martina era a **12** meses sin filtro de
+criticidad → 3 puestos. Las dos son correctas. Mezclarlas produjo primero una afirmación inflada y
+después una recortada de más.
+
+**Regla que queda:** al corregir, separar el **rótulo** del **cálculo**. Retirar una etiqueta mal
+puesta no es motivo para descartar la tabla que la acompañaba.
+
+### Afirmaciones de documentos previos, y qué se hizo con cada una
 
 | Documento | Afirmación | Estado |
 |---|---|---|
-| `conclusiones_ejecutivas_technostamp.md` §4 | "Cuatro de las cinco posiciones críticas activas" se jubilan a 12 meses, con tabla de 3 puestos | Construida sobre `es_posicion_critica`, descartado por DEC-006. El output persistido tiene **1 fila** |
-| `Discovery_report.md` §6 | "Hallazgo contra-intuitivo: el riesgo sube con la experiencia" | **No se sostiene**: chi² p = 0,339 |
-| `06_backlog_priorizado.md` N4 | "`eventos_limpio.parquet` no tiene columna de turno" | **Incorrecto**: la columna existe; el problema es que registra el turno asignado |
-| `06_backlog_priorizado.md` N6 | Brecha a solicitar al cliente | **Resuelta** analíticamente en la entrega 8 |
-| `BC_resumen_oportunidades.csv` | "$92,4M esperado" para rotación voluntaria | Cifra única descartada por DEC-015. Archivo superado |
-| `18_visualizaciones_decision.py` G12 | "Más capacitación coincide con más incidentes (se entrena después del accidente)" | Refutado: r = 0,394 p = 0,260; y son **4 casos de 45** |
+| `conclusiones_ejecutivas_technostamp.md` §4 | "Cuatro de las cinco **posiciones críticas** activas" se jubilan a 12 meses | **Corregido el rótulo, conservada la tabla.** Ver DEC-025 |
+| `Discovery_report.md` §6 | "El riesgo sube con la experiencia" + complacencia del personal experimentado | **Retirado** (chi² p = 0,339), conservado su valor negativo. DEC-026 |
+| `Discovery_report.md` §6 | "Se capacita después del accidente" · "$34M anuales en training" | **Refutado** (4 casos de 45) y corregida la cifra: el training de seguridad son $3,8M, no $34M. DEC-024 |
+| `Discovery_report.md` §6 | "~14 incidentes/año evitables" | **Etiquetado** como aritmética de brecha, con la alternativa contra el promedio de compañía (10,6) |
+| `06_backlog_priorizado.md` N4 | "`eventos_limpio.parquet` no tiene columna de turno" | **Incorrecto**: la columna existe. Registrado en DEC-022; el backlog no se editó |
+| `06_backlog_priorizado.md` N6 | Brecha a solicitar al cliente | **Resuelta** analíticamente. DEC-023 |
+| `BC_resumen_oportunidades.csv` | "$92,4M esperado" | Declarado superado en el guion §C.2. **El borrado del archivo sigue como decisión pendiente** |
+| `decisions.md` | DEC-001 cita "ver DEC-002" | **DEC-002 no existe.** Referencia colgada preexistente; agregada a decisiones pendientes |
+
+### Un dato de higiene, para quien retome
+
+Durante la entrega 9 se perdió una frase y media de `02_guion_ejecutivo.md` §A.5 ("No es un plan de
+capacitación. No es una campaña de seguridad. Es ir a…"), que quedó commiteada truncada en
+`7b2df27`. Se detectó al sincronizar y **se restauró**. El diff completo contra `f7c2b7b` confirmó
+que fue la **única** pérdida: el resto de las diferencias era reflow de líneas.
 
 ### Formato fijo por insight (ya aplicado en la entrega 6)
 
