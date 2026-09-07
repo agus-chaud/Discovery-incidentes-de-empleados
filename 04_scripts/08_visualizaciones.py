@@ -41,7 +41,7 @@ for i, (m, f) in enumerate(zip(pir.get("M", 0), pir.get("F", 0))):
     ax.text(-m - 8, i, str(m), va="center", ha="right", fontsize=8)
     ax.text(f + 8, i, str(f), va="center", fontsize=8)
 ax.axvline(0, color="k", lw=.8)
-ax.set_title("Pirámide etaria — 562 activos (mayo 2025)\nHueco estructural en 50-59: solo 20 personas (3,6%)", fontweight="bold")
+ax.set_title("Dotación activa por edad y género (mayo 2025)", fontweight="bold")
 ax.legend(loc="lower right", frameon=False)
 save(fig, "G1_piramide_etaria.png")
 
@@ -64,7 +64,7 @@ for x, v, tot in zip(n.index, n.pct_F, n.get("F", 0) + n.get("M", 0)):
     a2.annotate(f"{v:.0f}%\n(n={tot})", (x, v), textcoords="offset points", xytext=(0, 12), ha="center", fontsize=8)
 a2.axhline(37.0, color=GRIS, ls="--", label="Dotación total 37,0%")
 a2.set_xticks(n.index); a2.set_xlabel("Nivel jerárquico"); a2.set_ylabel("% mujeres")
-a2.set_ylim(15, 55); a2.set_title("Embudo de promoción: se angosta en el nivel 3", fontweight="bold")
+a2.set_ylim(15, 55); a2.set_title("Representación femenina por nivel jerárquico", fontweight="bold")
 a2.legend(frameon=False, fontsize=8)
 save(fig, "G2_genero_area_y_nivel.png")
 
@@ -100,14 +100,14 @@ a1.plot(ev.index, ev.values, "o-", color=ROJO, lw=2, ms=4)
 z = np.polyfit(range(len(ev)), ev.values, 1)
 a1.plot(ev.index, np.poly1d(z)(range(len(ev))), "--", color=AZUL, lw=1.6,
         label=f"Tendencia: +{z[0]*12:.2f} h/año")
-a1.set_ylabel("Horas extra promedio/mes"); a1.set_ylim(9, 11)
+a1.set_ylabel("Horas extra promedio/mes"); a1.set_ylim(0, 12)
 a1.set_title("HE estructural, no un pico: 17 meses sostenidos", fontweight="bold")
 a1.legend(frameon=False, fontsize=8); a1.tick_params(axis="x", rotation=45)
 
 ar = pa.groupby("area").horas_extra.mean().sort_values()
 a2.barh(ar.index, ar.values, color=[ROJO if v > 11 else (NARANJA if v > 5 else GRIS) for v in ar.values])
 for i, v in enumerate(ar.values): a2.text(v + .15, i, f"{v:.1f}", va="center", fontsize=8)
-a2.set_xlabel("Horas extra promedio/mes"); a2.set_title("Producción duplica a soporte", fontweight="bold")
+a2.set_xlabel("Horas extra promedio/mes"); a2.set_title("Horas extra promedio", fontweight="bold")
 
 he_emp = pa.groupby("empleado_id").costo_horas_extra.sum().sort_values(ascending=False)
 cum = (he_emp.cumsum() / he_emp.sum() * 100).values
@@ -119,7 +119,7 @@ a3.scatter([20], [cum[int(len(cum) * .2)]], color=ROJO, zorder=5, s=45)
 a3.annotate(f"Top 20% = {cum[int(len(cum)*.2)]:.0f}% del costo\n(si fuera concentrado sería >60%)",
             (20, cum[int(len(cum) * .2)]), textcoords="offset points", xytext=(12, -32), fontsize=8, color=ROJO)
 a3.set_xlabel("% de empleados (ordenados por costo HE)"); a3.set_ylabel("% del costo acumulado")
-a3.set_title("Pareto plano → el problema es SISTÉMICO,\nno de unos pocos abusadores", fontweight="bold")
+a3.set_title("El problema de HE es SISTÉMICO", fontweight="bold")
 a3.legend(frameon=False, fontsize=8)
 
 t = pa.groupby("turno_trabajo").horas_extra.mean().sort_values()
@@ -129,14 +129,24 @@ a4.set_xlabel("Horas extra promedio/mes"); a4.set_title("Noche lidera en horas e
 save(fig, "G4_horas_extra.png")
 
 # ---------- G5: Seguridad ----------
-fig, ((a1, a2), (a3, a4)) = plt.subplots(2, 2, figsize=(11.5, 7))
+fig, ((a1, a2), (a3, a4), (a5, a6)) = plt.subplots(3, 2, figsize=(11.5, 11))
+
+def _poisson_ci(count, exposure, scale=1000, z=1.96):
+    """Approximate Poisson rate CI; exposure is employee-months."""
+    rate = count / exposure * scale
+    margin = z * np.sqrt(count) / exposure * scale if count else 0
+    return max(0, rate - margin), rate + margin
+
 expo = pa.groupby("turno_trabajo").size()
 it = inc.groupby("turno_trabajo").size()
 tt = (it / expo * 1000).dropna().sort_values()
 a1.barh(tt.index, tt.values, color=[ROJO if v > 8 else GRIS for v in tt.values])
-for i, v in enumerate(tt.values): a1.text(v + .2, i, f"{v:.1f}", va="center", fontsize=8, fontweight="bold")
+for i, (turno, v) in enumerate(tt.items()):
+    n = int(it.get(turno, 0)); lo, hi = _poisson_ci(n, int(expo[turno]))
+    a1.errorbar(v, i, xerr=[[v - lo], [hi - v]], fmt="none", ecolor="#2c3e50", capsize=3)
+    a1.text(hi + .2, i, f"{v:.1f} (n={n})", va="center", fontsize=8, fontweight="bold")
 a1.set_xlabel("Incidentes cada 1.000 empleados-mes")
-a1.set_title("Turno NOCHE: 5,4x el riesgo de mañana/tarde\n(hallazgo robusto en ambas fuentes)", fontweight="bold")
+a1.set_title("Tasa observada de incidentes por turno\n(barras: tasa; lineas: IC aproximado)", fontweight="bold")
 
 bins, labs = [-1, 6, 12, 24, 60, 120, 999], ["0-6m", "6-12m", "1-2a", "2-5a", "5-10a", "10a+"]
 pa["ba"] = pd.cut(pa.antiguedad_meses, bins, labels=labs)
@@ -146,26 +156,34 @@ i2 = inc.groupby("ba", observed=True).size().reindex(e2.index).fillna(0)
 r2 = (i2 / e2 * 1000)
 a2.bar(range(len(r2)), r2.values, color=[GRIS if v < 5 else ROJO for v in r2.values])
 a2.set_xticks(range(len(r2))); a2.set_xticklabels(r2.index)
-for i, v in enumerate(r2.values): a2.text(i, v + .15, f"{v:.1f}", ha="center", fontsize=8, fontweight="bold")
-a2.set_ylabel("Incidentes cada 1.000 empleados-mes"); a2.set_xlabel("Antigüedad")
-a2.set_title("CONTRA-INTUITIVO: el riesgo sube con la experiencia\nCero incidentes en los primeros 12 meses", fontweight="bold")
+for i, (banda, v) in enumerate(r2.items()):
+    n = int(i2.get(banda, 0)); lo, hi = _poisson_ci(n, int(e2.iloc[i]))
+    a2.errorbar(i, v, yerr=[[v - lo], [hi - v]], fmt="none", ecolor="#2c3e50", capsize=3)
+    a2.text(i, hi + .15, f"{v:.1f} (n={n})", ha="center", fontsize=8, fontweight="bold")
+a2.set_ylabel("Incidentes cada 1.000 empleados-mes"); a2.set_xlabel("Antiguedad")
+a2.set_title("Tasa observada por antiguedad\n(cero incidentes auditables en los primeros 12 meses)", fontweight="bold")
 
 sev = inc.groupby("severidad").agg(n=("evento_id", "size"), dias=("dias_perdidos", "sum")).reindex(["Leve", "Moderado", "Grave"])
-xx = np.arange(3); w = .38
-a3.bar(xx - w / 2, sev.n, w, color=GRIS, label="Cantidad de incidentes")
-a3.bar(xx + w / 2, sev.dias, w, color=ROJO, label="Días perdidos")
-for i, (a, b) in enumerate(zip(sev.n, sev.dias)):
-    a3.text(i - w / 2, a + 1.5, int(a), ha="center", fontsize=8)
-    a3.text(i + w / 2, b + 1.5, int(b), ha="center", fontsize=8, fontweight="bold")
-a3.set_xticks(xx); a3.set_xticklabels(sev.index)
-a3.set_title("6 incidentes GRAVES (13%) causan\n109 de 138 días perdidos (79%)", fontweight="bold")
-a3.legend(frameon=False, fontsize=8)
+a3.bar(sev.index, sev.n, color=GRIS)
+for i, v in enumerate(sev.n): a3.text(i, v + 1, f"{int(v)}", ha="center", fontsize=9, fontweight="bold")
+a3.set_ylabel("Cantidad de incidentes")
+a3.set_title("Frecuencia de incidentes por severidad", fontweight="bold")
+
+a4.bar(sev.index, sev.dias, color=ROJO)
+for i, v in enumerate(sev.dias): a4.text(i, v + 3, f"{int(v)}", ha="center", fontsize=9, fontweight="bold")
+a4.set_ylabel("Dias perdidos")
+a4.set_title("Impacto por severidad: dias perdidos", fontweight="bold")
 
 st = inc.groupby("subtipo_evento").agg(n=("evento_id", "size"), dias=("dias_perdidos", "sum")).sort_values("dias")
-a4.barh(st.index, st.dias, color=[ROJO if v > 30 else GRIS for v in st.dias])
-for i, (d, n_) in enumerate(zip(st.dias, st.n)): a4.text(d + .8, i, f"{int(d)} días (n={n_})", va="center", fontsize=8)
-a4.set_xlabel("Días perdidos"); a4.set_xlim(0, 62)
-a4.set_title("Caídas y sobreesfuerzo = 63% de los días perdidos", fontweight="bold")
+a5.barh(st.index, st.dias, color=[ROJO if v > 30 else GRIS for v in st.dias])
+for i, (d, n_) in enumerate(zip(st.dias, st.n)): a5.text(d + .8, i, f"{int(d)} dias (n={n_})", va="center", fontsize=8)
+a5.set_xlabel("Dias perdidos"); a5.set_xlim(0, 62)
+a5.set_title("Dias perdidos por subtipo (n = incidentes)", fontweight="bold")
+
+a6.axis("off")
+a6.text(.02, .85, "Lectura", fontsize=11, fontweight="bold")
+a6.text(.02, .67, "La frecuencia y el impacto no son lo mismo.\nLos incidentes graves son pocos, pero concentran\nla mayor parte de los dias perdidos.", fontsize=10, va="top")
+a6.text(.02, .37, "Fuente: eventos_rrhh (45 incidentes auditables).\nLas tasas son descriptivas; no prueban causalidad.", fontsize=9, va="top", color="#555555")
 save(fig, "G5_seguridad.png")
 
 # ---------- G6: Rotacion ----------
@@ -194,7 +212,7 @@ y = np.arange(len(ra))
 a1.barh(y, ra.pct, color=[ROJO if d else GRIS for d in ra.destaca])
 a1.errorbar(ra.pct, y, xerr=[ra.pct - ra.lo, ra.hi - ra.pct], fmt="none",
             ecolor="#2c3e50", elinewidth=1.3, capsize=3.5)
-a1.axvline(BASE, color=AZUL, ls="--", lw=1.4, label=f"Promedio {BASE:.1f}%")
+a1.axvline(BASE, color=AZUL, ls="--", lw=1.4, label=f"Periodo limpio {BASE:.1f}%")
 a1.set_yticks(y); a1.set_yticklabels(ra.index)
 for i, (v, hi_, n_) in enumerate(zip(ra.pct, ra.hi, ra.total)):
     a1.text(hi_ + 1, i, f"{v:.0f}% (n={n_})", va="center", fontsize=7.5)
