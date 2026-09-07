@@ -8,18 +8,23 @@ pd.set_option("display.width",220); pd.set_option("display.max_columns",60)
 
 ult = pd.read_parquet(D/"empleados_nivel_persona.parquet")
 act = ult[~ult.salio].copy()          # 562 activos al ultimo snapshot
+requeridas_crit = {"score_crit", "es_critico_indice"}
+faltantes_crit = requeridas_crit.difference(act.columns)
+if faltantes_crit:
+    raise ValueError(f"Faltan columnas de criticidad {sorted(faltantes_crit)}; ejecutar 13_limpieza_v2.py antes de P1.")
 print(f"Universo de analisis: {len(act)} empleados ACTIVOS a {act.mes_snapshot.max().date()}\n")
 
 print("="*100); print("P1 — RIESGO DE SUCESION / JUBILACION"); print("="*100)
+print("Criterio activo de criticidad: indice propio (score_crit >= 2); es_posicion_critica se conserva solo para auditoria.")
 print(f"\nJubilaciones proximas (sobre {len(act)} activos):")
 for k,lab in [(12,"<= 12 meses"),(24,"<= 24 meses"),(36,"<= 36 meses"),(60,"<= 60 meses")]:
     m = act.meses_hasta_jubilacion <= k
-    print(f"  {lab:14s}: {m.sum():3d} empleados ({m.mean()*100:4.1f}%) | de ellos criticos: {int((m & act.es_posicion_critica).sum())}")
+    print(f"  {lab:14s}: {m.sum():3d} empleados ({m.mean()*100:4.1f}%) | de ellos criticos por indice: {int((m & act.es_critico_indice).sum())}")
 
-crit = act[act.es_posicion_critica]
-print(f"\nPosiciones criticas activas: {len(crit)} ({len(crit)/len(act)*100:.1f}% de la dotacion)")
+crit = act[act.es_critico_indice]
+print(f"\nPosiciones con criticidad estimada activa: {len(crit)} ({len(crit)/len(act)*100:.1f}% de la dotacion)")
 
-print("\n--- Criticos que se jubilan en <=12m, por area y puesto ---")
+print("\n--- Criticidad estimada que se jubila en <=12m, por area y puesto ---")
 r12 = crit[crit.meses_hasta_jubilacion<=12]
 if len(r12):
     t = (r12.groupby(["area","puesto"])
@@ -29,9 +34,9 @@ if len(r12):
                 salario=("salario_base_mensual","mean"))
            .sort_values("n",ascending=False).round(1))
     print(t.to_string())
-print(f"\n  TOTAL criticos en riesgo <=12m: {len(r12)}")
+print(f"\n  TOTAL con criticidad estimada en riesgo <=12m: {len(r12)}")
 
-print("\n--- Cobertura: para cada puesto critico en riesgo, cuanta gente hay en el mismo puesto? ---")
+print("\n--- Cobertura: para cada puesto con criticidad estimada en riesgo, cuanta gente hay en el mismo puesto? ---")
 pool = act.groupby(["area","puesto"]).empleado_id.size().rename("dotacion_puesto")
 rr = (crit[crit.meses_hasta_jubilacion<=24]
       .groupby(["area","puesto"]).agg(en_riesgo_24m=("empleado_id","size"),
@@ -42,12 +47,12 @@ rr["sucesor_potencial"] = rr.dotacion_puesto - rr.en_riesgo_24m
 print(rr.sort_values("pct_puesto_en_riesgo",ascending=False).to_string())
 rr.to_csv(T/"P1_riesgo_sucesion_por_puesto.csv", encoding="utf-8-sig")
 
-print("\n--- Concentracion de conocimiento: puestos criticos con UNA sola persona (single point of failure) ---")
+print("\n--- Concentracion de conocimiento: puestos con criticidad estimada y UNA sola persona (single point of failure) ---")
 spof = act.groupby(["area","puesto"]).agg(n=("empleado_id","size"),
-        criticos=("es_posicion_critica","sum"),
+        criticos_indice=("es_critico_indice","sum"),
         jub24=("jubila_24m","sum"), edad=("edad","mean"), antig=("antiguedad_anios","mean")).round(1)
-sp = spof[(spof.n==1)&(spof.criticos==1)]
-print(f"  Puestos criticos unipersonales: {len(sp)}")
+sp = spof[(spof.n==1)&(spof.criticos_indice==1)]
+print(f"  Puestos con criticidad estimada unipersonales: {len(sp)}")
 print(sp.sort_values("edad",ascending=False).head(20).to_string())
 spof.to_csv(T/"P1_dotacion_por_puesto.csv", encoding="utf-8-sig")
 

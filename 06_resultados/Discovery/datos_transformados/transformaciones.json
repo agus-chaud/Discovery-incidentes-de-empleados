@@ -1,5 +1,5 @@
 {
-  "generado": "2026-09-06T12:19:51",
+  "generado": "2026-09-07T10:31:52",
   "script": "04_scripts/13_limpieza_v2.py",
   "origen": "02_datos/01_Originales/{empleados_mensual,eventos_rrhh,capacitaciones}.csv",
   "codificacion": "utf-8",
@@ -215,6 +215,21 @@
       "descripcion": "el registro mensual es anterior a la fecha de ingreso",
       "remediacion": "marcar",
       "filas_marcadas": 71
+    },
+    {
+      "op": "indice_criticidad_propio",
+      "tabla": "empleados_nivel_persona",
+      "score": "0_a_4",
+      "criterio_activo": "es_critico_indice = score_crit >= 2",
+      "universo": "empleados_activos",
+      "columnas_componentes": [
+        "crit_escaso",
+        "crit_manda",
+        "crit_knowhow",
+        "crit_top_performer"
+      ],
+      "criticos_indice": 47,
+      "flag_fuente_preservado": "es_posicion_critica"
     }
   ]
 }

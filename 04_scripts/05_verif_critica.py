@@ -30,19 +30,23 @@ print(act.banda_edad.value_counts().sort_index().to_string())
 print("\n  Empleados 55+:", int((act.edad>=55).sum()), " | 60+:", int((act.edad>=60).sum()))
 print("  Se jubilan en <=36m (recalculado con edad_jub):", int((act.meses_hasta_jubilacion<=36).sum()))
 
-print("\n### CRITICIDAD ALTERNATIVA basada en datos (el flag oficial cubre solo 5 personas)")
-# senal 1: puestos con dotacion chica  senal 2: gente que manda  senal 3: know-how (antiguedad alta)
-dot = act.groupby('puesto').empleado_id.size().rename('dotacion_puesto')
-a = act.merge(dot, on='puesto')
-a['escaso']     = a.dotacion_puesto <= 3
-a['manda']      = (a.span_of_control >= 3) | (a.nivel_jerarquico >= 3)
-a['knowhow']    = a.antiguedad_anios >= 10
-a['top']        = a.es_top_performer
-a['score_crit'] = a[['escaso','manda','knowhow','top']].sum(1)
-print("  distribucion score de criticidad (0-4):", dict(a.score_crit.value_counts().sort_index()))
-alto = a[a.score_crit>=2]
-print(f"\n  Empleados con score>=2 (criticidad real estimada): {len(alto)} ({len(alto)/len(a)*100:.1f}% de la dotacion)")
+print("\n### INDICE PROPIO DE CRITICIDAD (criterio analitico activo)")
+requeridas_crit = {"dotacion_puesto_crit", "crit_escaso", "crit_manda", "crit_knowhow", "crit_top_performer", "score_crit", "es_critico_indice"}
+faltantes_crit = requeridas_crit.difference(ult.columns)
+if faltantes_crit:
+    raise ValueError(f"Faltan columnas de criticidad {sorted(faltantes_crit)}; ejecutar 13_limpieza_v2.py antes de esta verificacion.")
+
+componentes_crit = ["crit_escaso", "crit_manda", "crit_knowhow", "crit_top_performer"]
+score_esperado = act[componentes_crit].sum(axis=1).astype("int8")
+assert act.score_crit.equals(score_esperado), "score_crit persistido no coincide con sus cuatro senales"
+assert act.es_critico_indice.equals(act.score_crit.ge(2)), "es_critico_indice debe ser score_crit >= 2"
+print("  Criterio activo: es_critico_indice = score_crit >= 2")
+print("  distribucion score de criticidad (0-4):", dict(act.score_crit.value_counts().sort_index()))
+alto = act[act.es_critico_indice]
+print(f"\n  Empleados con score>=2 (criticidad real estimada): {len(alto)} ({len(alto)/len(act)*100:.1f}% de la dotacion)")
 print(f"  De esos, edad 55+: {int((alto.edad>=55).sum())} | 58+: {int((alto.edad>=58).sum())} | 60+: {int((alto.edad>=60).sum())}")
-print("\n  Top areas con criticidad estimada alta y edad 55+:")
+print("\n  Comparacion con es_posicion_critica (flag fuente, solo auditoria):")
+print(pd.crosstab(act.es_posicion_critica, act.es_critico_indice, rownames=["flag_fuente"], colnames=["indice_propio"]).to_string())
+print("\n  Top areas con criticidad estimada alta y edad 55+: ")
 print(alto[alto.edad>=55].groupby(['area','puesto']).agg(n=('empleado_id','size'),
-      edad=('edad','mean'), antig=('antiguedad_anios','mean'), dot=('dotacion_puesto','first')).sort_values('n',ascending=False).round(1).to_string())
+      edad=('edad','mean'), antig=('antiguedad_anios','mean'), dot=('dotacion_puesto_crit','first')).sort_values('n',ascending=False).round(1).to_string())

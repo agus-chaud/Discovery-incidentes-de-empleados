@@ -110,8 +110,12 @@ ax.set(xlabel="Horas de capacitación en seguridad por empleado", ylabel="Incide
 ax.text(.01, .01, "Comparacion descriptiva: no prueba causalidad.", transform=ax.transAxes, fontsize=8, color=GRIS)
 save(fig, "G12_capacitacion_seguridad_vs_incidentes.png")
 
-# G13: Riesgo de sucesion por puesto.
-activos = ult[~ult.salio].copy(); criticos = activos[activos.es_posicion_critica & (activos.meses_hasta_jubilacion <= 24)]
+# G13: Riesgo de sucesion por puesto. DEC-006: usa el indice propio; el flag
+# es_posicion_critica se conserva en los datos solo para comparacion y auditoria.
+activos = ult[~ult.salio].copy()
+if not {"score_crit", "es_critico_indice"}.issubset(activos.columns):
+    raise ValueError("Faltan columnas del indice de criticidad; ejecutar 13_limpieza_v2.py antes de generar G13.")
+criticos = activos[activos.es_critico_indice & (activos.meses_hasta_jubilacion <= 24)]
 dotacion_puesto = activos.groupby(["area", "puesto"]).empleado_id.size().rename("dotacion")
 sucesion = criticos.groupby(["area", "puesto"]).agg(en_riesgo=("empleado_id", "size"), antiguedad=("antiguedad_anios", "mean")).join(dotacion_puesto).reset_index()
 sucesion["pct_riesgo"] = sucesion.en_riesgo / sucesion.dotacion * 100
@@ -119,8 +123,8 @@ sucesion = sucesion.sort_values(["pct_riesgo", "en_riesgo"], ascending=False).he
 fig, ax = plt.subplots(figsize=(10, 6.5))
 scatter = ax.scatter(sucesion.dotacion, sucesion.pct_riesgo, s=150 + sucesion.antiguedad.fillna(0) * 70, c=sucesion.en_riesgo, cmap="Reds", alpha=.75, edgecolors="#7f1d1d")
 for _, row in sucesion.iterrows(): ax.annotate(f"{row['puesto']}\n({row['area']})", (row.dotacion, row.pct_riesgo), xytext=(6, 5), textcoords="offset points", fontsize=7)
-ax.set(xlabel="Dotación del puesto", ylabel="Personal crítico en riesgo a 24 meses (%)", title="Supervisor de Logística: único en el puesto\n(100% en riesgo, se jubila en 6 meses)")
-fig.colorbar(scatter, ax=ax, label="Personas criticas en riesgo"); save(fig, "G13_riesgo_sucesion_por_puesto.png")
+ax.set(xlabel="Dotacion del puesto", ylabel="Personal con criticidad estimada en riesgo a 24 meses (%)", title="Riesgo de sucesion por puesto\n(indice propio de criticidad: score >= 2)")
+fig.colorbar(scatter, ax=ax, label="Personas con criticidad estimada en riesgo"); save(fig, "G13_riesgo_sucesion_por_puesto.png")
 
 # G14: Business case por escenario.
 bc = pd.read_csv(T / "BC_rango_retencion.csv")

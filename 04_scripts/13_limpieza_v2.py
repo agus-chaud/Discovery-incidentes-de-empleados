@@ -176,7 +176,27 @@ scrap_ok = (emp[emp.scrap_valido].groupby("empleado_id").tasa_scrap_porcentaje.m
             .rename("scrap_prom_produccion"))
 ult = ult.merge(hist, on="empleado_id", how="left").merge(scrap_ok, on="empleado_id", how="left")
 
+# DEC-006: el flag fuente se conserva para auditoria, pero el criterio analitico
+# vigente es el indice propio. Se calcula sobre la dotacion activa porque P1 trata
+# riesgo de sucesion actual, no puestos de personas que ya salieron.
+activos = ult.loc[~ult["salio"]].copy()
+dotacion_puesto = activos.groupby("puesto").empleado_id.size().rename("dotacion_puesto_crit")
+ult = ult.join(dotacion_puesto, on="puesto")
+ult["crit_escaso"] = (~ult["salio"]) & ult["dotacion_puesto_crit"].le(3)
+ult["crit_manda"] = (~ult["salio"]) & ((ult["span_of_control"] >= 3) | (ult["nivel_jerarquico"] >= 3))
+ult["crit_knowhow"] = (~ult["salio"]) & ult["antiguedad_anios"].ge(10)
+ult["crit_top_performer"] = (~ult["salio"]) & ult["es_top_performer"]
+componentes_crit = ["crit_escaso", "crit_manda", "crit_knowhow", "crit_top_performer"]
+ult["score_crit"] = ult[componentes_crit].sum(axis=1).astype("int8")
+ult["es_critico_indice"] = ult["score_crit"].ge(2)
+P("indice_criticidad_propio", tabla="empleados_nivel_persona", score="0_a_4",
+  criterio_activo="es_critico_indice = score_crit >= 2", universo="empleados_activos",
+  columnas_componentes=componentes_crit,
+  criticos_indice=int(ult["es_critico_indice"].sum()),
+  flag_fuente_preservado="es_posicion_critica")
+
 print(f"\nNivel persona: {len(ult)} empleados | salidas {int(ult.salio.sum())} | activos {int((~ult.salio).sum())}")
+print(f"  Criticidad activa por indice propio (score >= 2): {int(ult.es_critico_indice.sum())} empleados")
 print(f"  scrap_prom_produccion disponible para {int(ult.scrap_prom_produccion.notna().sum())} empleados de produccion")
 
 # ══════════════════════════════════════════════════════════════════
