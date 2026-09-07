@@ -869,18 +869,20 @@ mejorar la captura de datos.
 
 ## I9 — La sucesión real es un punto de falla unipersonal
 
-> **Insight.** El único output persistido de riesgo de sucesión tiene una fila: Supervisor de
-> Logística, dotación 1, sucesores 0.
+> **Insight.** Se jubilan cuatro personas en los próximos 12 meses, repartidas en tres puestos, y
+> **solo una deja el puesto descubierto**: Supervisor de Logística, dotación 1, sucesores 0.
 
-**1. Tipo de proyecto posible.** `ninguno`. Con un caso no hay patrón, y sin patrón no hay nada que
-aprender. Lo que corresponde es un plan de continuidad para un puesto, que es gestión.
+**1. Tipo de proyecto posible.** `ninguno`. Cuatro personas y tres puestos no son un patrón, y sin
+patrón no hay nada que aprender. Lo que corresponde es un plan de continuidad para el puesto
+descubierto, que es gestión.
 
 **2. Datos faltantes.** El mantenimiento del flag `es_posicion_critica` en el sistema origen —marca
 10 de 694 (1,4%) y nunca cambia en 17 meses—, o la adopción formal del índice propio de criticidad
 (47 activos, 8,4%) como reemplazo. Es una decisión de negocio pendiente, no un dato a recolectar.
 
-**3. Veredicto: `ninguno — un solo caso`.** Ni frecuencia, ni escala, ni cuello de botella
-analítico.
+**3. Veredicto: `ninguno — cuatro casos, y uno solo accionable`.** Ni frecuencia, ni escala, ni
+cuello de botella analítico. La jubilación se ve venir con años de anticipación en una tabla de
+edades: es la decisión menos necesitada de un modelo de todo el proyecto.
 
 **Umbral.** Aunque el índice propio se adoptara y devolviera decenas de puestos en riesgo, seguiría
 siendo una lista revisable a mano por RR.HH. La planificación de sucesión de una empresa de 694

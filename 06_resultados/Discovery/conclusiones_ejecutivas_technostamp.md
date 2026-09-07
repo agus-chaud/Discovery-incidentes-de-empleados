@@ -60,7 +60,7 @@ La empresa financia parte de su capacidad operativa con un mecanismo más caro y
 
 ### Acción correctiva concreta
 - Separar en cada área prioritaria las horas extra asociadas a demanda real de las asociadas a vacantes, ausencias o mala programación.
-- Revisar la asignación de turnos y cobertura de los **61 casos crónicos** para eliminar dependencias individuales antes de normalizar nuevas horas extra.
+- Revisar la asignación de turnos y cobertura de los **61 casos crónicos** —empleados con horas extra altas en al menos el 70% de sus meses, sobre el universo completo del período; **49 de ellos siguen activos**, que es el número de `tablas_soporte/P3_sobrecargados_cronicos.csv`— para eliminar dependencias individuales antes de normalizar nuevas horas extra.
 
 ---
 
@@ -84,6 +84,10 @@ Cada incidente grave interrumpe la disponibilidad de personal, aumenta costos y 
 
 **Visual de soporte:** `visualizaciones/G11_incidentes_por_turno.png`. Muestra la tasa por 1.000 empleado-mes de cada turno, no el conteo bruto; no usar el conteo del panel mensual porque discrepa de la fuente de eventos.
 
+> **Dos límites a declarar en la slide, no en el apéndice (business case, entrega 7).**
+> **1.** `turno_evento` coincide con el turno **asignado** a la persona en 45 de 45 casos, y `hora_evento` de los incidentes de noche va de 06:53 a 22:00. El hallazgo describe a la población del turno; **no** dice que los accidentes ocurran de madrugada.
+> **2.** Cinco de los seis casos graves son del turno noche, y eso es un **conteo real**. Pero afirmar que *la gravedad se concentra en la noche* no se sostiene con seis casos: Fisher exacto bilateral da **p = 0,205** (y p = 0,352 para los incidentes con días perdidos). Los incidentes leves se reparten **15 y 15**. El hallazgo que aguanta es la **tasa**; los días perdidos son su impacto observado, no un segundo hallazgo.
+
 ### Acción correctiva concreta
 - Realizar observaciones de tarea y chequeos de inicio de turno específicamente en noche, priorizando prevención de caídas y sobreesfuerzos.
 - Analizar individualmente los seis incidentes graves para identificar controles ausentes o fallidos, en lugar de responder con capacitación genérica para toda la compañía.
@@ -93,20 +97,28 @@ Cada incidente grave interrumpe la disponibilidad de personal, aumenta costos y 
 ## 4. La sucesión es un riesgo inmediato, no una planificación de largo plazo
 
 ### Gran conclusión
-**Cuatro de las cinco posiciones críticas activas** llegan a jubilación en un plazo de 12 meses o menos. El caso más expuesto es Supervisor de Logística: una sola persona ocupa el puesto y se jubila en seis meses.
+**Se jubilan cuatro personas en los próximos 12 meses, y solo una deja un puesto sin cobertura:** el **Supervisor de Logística**, que es un puesto unipersonal sin ningún sucesor potencial. Los otros dos puestos afectados tienen cobertura natural.
+
+> **Corrección (sincronización de informes).** Una versión previa de esta sección afirmaba que *cuatro de las cinco **posiciones críticas** activas* se jubilan en 12 meses o menos. **La tabla está bien; el rótulo no.** Las cuatro personas que se jubilan a 12 meses y los tres puestos que ocupan están verificados sobre `meses_hasta_jubilacion` en la dotación activa (562 personas). Lo que no corresponde es llamarlas "posiciones críticas": ese rótulo importa el campo `es_posicion_critica`, que el propio proyecto descartó como insumo analítico (DEC-006) porque marca 10 empleados de 694 (**1,4%**) y nunca cambia en 17 meses.
+>
+> La criticidad que sí se puede sostener es la **observable**: cuánta gente ocupa el puesto y cuántos quedan si esa persona se va. Con ese criterio, de los tres puestos solo uno queda descubierto.
+>
+> *(Nota metodológica: el índice propio de criticidad —47 activos, 8,4%— cruzado con jubilación a **24** meses devuelve un único puesto, y eso es lo que persiste `tablas_soporte/P1_riesgo_sucesion_por_puesto.csv`. Es una pregunta distinta de la que hizo Martina, que era a 12 meses y sin filtro de criticidad. Las dos son correctas; no hay que mezclarlas.)*
 
 ### Cómo afecta al negocio
 La pérdida simultánea de conocimiento técnico y liderazgo operativo puede interrumpir decisiones, coordinación y capacidad de respuesta. La vulnerabilidad es especialmente alta cuando no existe una segunda persona con experiencia en el mismo puesto.
 
 ### Evidencia
 
-| Puesto crítico en riesgo | Personas en riesgo | Dotación del puesto | Cobertura potencial | Plazo |
+| Puesto | Se jubilan a 12 meses | Dotación del puesto | Sucesores potenciales | Plazo |
 |---|---:|---:|---:|---:|
-| Supervisor de Logística | **1** | **1** | **0** | 6 meses |
+| **Supervisor de Logística** | **1** | **1** | **0** | 6 meses |
 | Team Leader Logística | 2 | 5 | 3 | 9–12 meses |
-| Técnico Setup, Estampado | 1 | 25 | 24 | 6 meses |
+| Técnico Setup (Estampado) | 1 | 25 | 24 | 6 meses |
 
-**Visual de soporte:** `visualizaciones/G13_riesgo_sucesion_por_puesto.png`. Mostrar los puestos y su cobertura, no solo las edades.
+*Fuente: `meses_hasta_jubilacion ≤ 12` sobre los 562 activos. Cuatro personas, tres puestos.*
+
+**Visual de soporte:** `visualizaciones/G13_alerta_sucesion.png`. Son **tarjetas de alerta**, no un gráfico de dispersión: con tres puestos, un scatter obliga a la audiencia a inferir la conclusión, mientras que las tarjetas muestran la cobertura de cada uno y hacen saltar el único que queda descubierto.
 
 ### Acción correctiva concreta
 - Documentar las decisiones, contactos, rutinas y excepciones operativas que hoy dependen del Supervisor de Logística.

@@ -152,16 +152,21 @@ save(fig, "G12_cobertura_capacitacion_seguridad.png")
 # devuelve un unico puesto: un grafico de dispersion con un punto sugiere una
 # distribucion que no existe y obliga a la audiencia a buscar un patron donde hay
 # un hecho puntual. Con un caso no hay patron; hay una alerta.
+# Base: jubilacion a 12 meses sobre la dotacion activa, que es literalmente la
+# pregunta de Martina ("cuantos puestos criticos en riesgo en los proximos 12
+# meses"). NO se usa es_posicion_critica: marca 10 de 694 y no cambia en 17
+# meses (DEC-006). La criticidad la da el dato observable de cobertura del
+# puesto, no un flag sin mantener.
 activos = ult[~ult.salio].copy()
 if not {"score_crit", "es_critico_indice"}.issubset(activos.columns):
     raise ValueError("Faltan columnas del indice de criticidad; ejecutar 13_limpieza_v2.py antes de generar G13.")
-criticos = activos[activos.es_critico_indice & (activos.meses_hasta_jubilacion <= 24)]
+jubilan = activos[activos.meses_hasta_jubilacion <= 12]
 dotacion_puesto = activos.groupby(["area", "puesto"]).empleado_id.size().rename("dotacion")
-sucesion = (criticos.groupby(["area", "puesto"])
-            .agg(en_riesgo=("empleado_id", "size"))
+sucesion = (jubilan.groupby(["area", "puesto"])
+            .agg(en_riesgo=("empleado_id", "size"), meses=("meses_hasta_jubilacion", "min"))
             .join(dotacion_puesto).reset_index())
 sucesion["sucesores"] = sucesion.dotacion - sucesion.en_riesgo
-sucesion = sucesion.sort_values(["sucesores", "dotacion"]).head(4)
+sucesion = sucesion.sort_values(["sucesores", "dotacion"])
 
 n = len(sucesion)
 fig, axes = plt.subplots(n, 1, figsize=(9, 2.5 * n + .6), squeeze=False)
@@ -172,9 +177,10 @@ for ax, (_, row) in zip(axes.ravel(), sucesion.iterrows()):
                                edgecolor=ROJO if critico else GRIS, linewidth=2.5))
     ax.text(.035, .78, f"{'⚠  ' if critico else ''}{row.puesto}", transform=ax.transAxes,
             fontsize=15, fontweight="bold", color=ROJO if critico else "#2c3e50")
-    ax.text(.035, .60, f"Área: {row.area}", transform=ax.transAxes, fontsize=10.5, color="#2c3e50")
+    ax.text(.035, .60, f"Área: {row.area}   ·   jubilación en {int(row.meses)} meses",
+            transform=ax.transAxes, fontsize=10.5, color="#2c3e50")
     for i, (etiqueta, valor) in enumerate([("Dotación del puesto", row.dotacion),
-                                           ("En riesgo a 24 meses", row.en_riesgo),
+                                           ("Se jubilan a 12 meses", row.en_riesgo),
                                            ("Sucesores potenciales", row.sucesores)]):
         x = .06 + i * .31
         ax.text(x, .30, str(int(valor)), transform=ax.transAxes, fontsize=26, fontweight="bold",
@@ -186,9 +192,10 @@ for ax, (_, row) in zip(axes.ravel(), sucesion.iterrows()):
         ax.text(.035, .045, "Si esa persona sale, no hay nadie en el puesto y nadie preparándose para ocuparlo.",
                 transform=ax.transAxes, fontsize=9.5, color=ROJO, va="bottom", style="italic")
 
-fig.suptitle("Riesgo de sucesión: punto de falla unipersonal\n"
-             "(índice propio de criticidad, score ≥ 2 — DEC-006; el flag es_posicion_critica no se usa)",
-             fontsize=12.5, y=.99)
+fig.suptitle(f"Se jubilan {int(jubilan.shape[0])} personas en los próximos 12 meses. "
+             "Solo una deja un puesto sin cobertura\n"
+             "(sobre dotación activa; el flag es_posicion_critica no se usa — DEC-006)",
+             fontsize=12.5, y=.995)
 save(fig, "G13_alerta_sucesion.png")
 
 # G14: Business case por escenario.

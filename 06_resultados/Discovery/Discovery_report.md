@@ -192,9 +192,11 @@ Se testeó. Los sobrecargados crónicos:
 
 *Tabla persistida en `tablas_soporte/P4_incidentes_por_turno.csv` y graficada en `visualizaciones/G11_incidentes_por_turno.png` (DEC-021).*
 
-**El turno noche concentra el 56% de los incidentes y el 74% de los días perdidos, con 5,4x la tasa de mañana o tarde.** Este hallazgo es robusto: aparece en ambas fuentes de datos. Si la noche igualara la tasa diurna, se evitarían **~14 incidentes por año** (45% del total).
+**El turno noche concentra el 56% de los incidentes y el 74% de los días perdidos, con 5,4x la tasa de mañana o tarde**, sobre exposiciones comparables (2.124 empleado-mes contra 2.254 y 2.256).
 
-### Hallazgo contra-intuitivo: el riesgo sube con la experiencia
+> **Límite del dato, a declarar junto con el hallazgo (business case, entrega 7).** El campo `turno_evento` coincide con el turno asignado a esa persona en el panel en **45 de 45 casos**: es el turno de la persona, no un dato levantado del accidente. Y `hora_evento` de los 25 casos rotulados "Noche" va de las **06:53 a las 22:00** — en todo el dataset no hay un solo incidente entre las 23:00 y las 06:00. **Sigue siendo cierto** que la población asignada al turno noche se accidenta 5,4 veces más; **no puede decirse** que los accidentes ocurran de madrugada, ni atribuirlos a la oscuridad, el horario o el sueño. Si la noche igualara la tasa de mañana o tarde, la brecha sería de **~14 incidentes por año**; contra el promedio de compañía (4,7 ×1.000), de **~10,6 por año**. Son **aritmética de brecha** —la distancia entre lo observado y una referencia elegida—, no un resultado esperado de ninguna intervención.
+
+### Los ingresantes no son el problema — pero tampoco hay gradiente por antigüedad
 
 | Antigüedad | Empleado-mes | Incidentes | Tasa ×1.000 |
 |---|---|---|---|
@@ -205,7 +207,11 @@ Se testeó. Los sobrecargados crónicos:
 | 5-10 años | 3.921 | 20 | 5,1 |
 | **10+ años** | 1.713 | 12 | **7,0** |
 
-**Cero accidentes en los primeros 12 meses.** La antigüedad mínima de un accidentado es 13 meses; la mediana, 6,6 años. El onboarding de seguridad funciona. El problema es la **complacencia del personal experimentado** — exactamente lo contrario de donde se suele poner la plata.
+**Cero accidentes en los primeros 12 meses.** La antigüedad mínima de un accidentado es de 14 meses según `antiguedad_meses_evento` de la ficha del evento; la mediana, 6,6 años.
+
+> **Corrección (business case, entrega 9).** Una versión previa de esta sección leía en esta tabla que *el riesgo sube con la experiencia* y lo atribuía a la **complacencia del personal experimentado**. **Eso no se sostiene.** Un chi-cuadrado de homogeneidad sobre las seis bandas da **5,68 con 5 grados de libertad, p = 0,339**: las tasas no se distinguen entre sí. Y la serie ni siquiera es monótona — cae de 5,2 a 3,7 antes de volver a subir. Los ceros de las dos primeras bandas tampoco prueban nada: con 449 y 188 empleado-mes de exposición, lo esperable bajo tasa pareja son ~2 y ~1 incidentes, así que observar cero es compatible con el azar.
+>
+> **Lo que sí vale de este hallazgo es negativo, y sigue siendo valioso:** refuta que los ingresantes sean el problema. No alcanza para afirmar un gradiente, ni para atribuirle una causa. Si existe un efecto de antigüedad, la hipótesis razonable es que a los veteranos se les asignan las tareas de riesgo — y esa es una variable del evento que no está registrada.
 
 > Este es el hallazgo que más cambió durante el análisis. La columna del panel sugería 78 incidentes ×1.000 en los primeros 6 meses (10x el promedio). La fuente auditable dice cero. De haber usado la primera, la recomendación habría sido reforzar el onboarding — plata dirigida a un problema inexistente.
 
@@ -235,9 +241,25 @@ El proceso distingue bien por gravedad — todo lo grave y moderado se documenta
 
 Ningún programa de prevención puede funcionar así: no se puede prevenir lo que no se investiga, y no se corrige lo que siempre se responde de la misma forma.
 
-### La capacitación en seguridad es reactiva, no preventiva
+### La capacitación en seguridad no llega a quien se accidenta
 
-Las áreas con **más** horas de training en seguridad por empleado tienen **más** incidentes (Logística 35,2 h/empleado y tasa 8,6; Mantenimiento Mecánico 19,7 h y 9,6). Esto no significa que la capacitación cause accidentes: significa que **se capacita después del accidente**, no antes. La inversión de $34M anuales en training llega tarde.
+Con la fuente auditable, cruzando fechas de capacitación contra fechas de incidente:
+
+| De los 45 incidentes | n | % |
+|---|---:|---:|
+| Con capacitación de seguridad **previa** al hecho | 5 | 11% |
+| Con capacitación de seguridad **posterior** al hecho | 4 | 9% |
+| **Sin ninguna capacitación de seguridad** | **36** | **80%** |
+
+Y a nivel persona: los accidentados tienen capacitación de seguridad en el **22,0%** de los casos (9 de 41) contra el **19,1%** de los no accidentados (121 de 634) — Fisher exacto bilateral, **p = 0,683**. Es la proporción de toda la empresa (**19,3%**, 130 de 675).
+
+**La capacitación de seguridad cubre al 19,3% de la gente y se asigna sin ninguna relación con quién se lastima**, ni antes ni después del hecho.
+
+> **Corrección (business case, entrega 8).** Una versión previa de esta sección afirmaba que las áreas con más horas de training tienen más incidentes, y concluía que **se capacita después del accidente**. Las dos partes caen. La correlación área a área es **r = 0,394 con p = 0,260** sobre 10 áreas: no se distingue de cero. Y la temporalidad nunca se había calculado — el código agregaba totales del período. Corrido el cruce, *se entrena después del accidente* describe **4 casos de 45**, y esos cuatro recibieron el curso a una mediana de **108 días** del hecho (máximo 344): es el calendario normal, no una reacción.
+>
+> La cifra de **$34M anuales** que citaba esa versión es el costo de **todo** el training de la compañía ($48,2M en 17 meses). El training de seguridad son **$3,8M** en el período, unos $2,7M anualizados.
+>
+> **Lo que no puede afirmarse en ninguna dirección** es si la capacitación previene: la asignación no fue aleatoria ni está documentada, así que capacitados y no capacitados no son comparables. Lo que corresponde es registrar el criterio de asignación y hacer una **evaluación de impacto**, no inferir un efecto de estos datos.
 
 **Nivel de evidencia:** el efecto turno noche es *impacto estimado* (consistente en dos fuentes, magnitud grande). La curva de antigüedad y el resto son *exploratorios* (n=45 total).
 

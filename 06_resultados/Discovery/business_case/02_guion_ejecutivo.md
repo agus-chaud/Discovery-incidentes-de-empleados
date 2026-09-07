@@ -102,7 +102,7 @@ Decirlo primero es lo que vuelve creíble el resto. Y además refuerza el pedido
 
 ## A.5 — Recomendación: auditoría operativa nocturna focalizada, 90 días
 
- mirar seis cosas concretas en el turno donde está el daño, con un entregable con fecha.
+No es un plan de capacitación. No es una campaña de seguridad. Es ir a mirar seis cosas concretas en el turno donde está el daño, con un entregable con fecha.
 
 | Eje | Qué se va a mirar | Por qué está en la lista |
 |---|---|---|
@@ -381,12 +381,16 @@ de esa persona. Asignar formación cruzada con acompañamiento en el puesto. Es 
 no requiere ningún dato nuevo para empezar.
 
 ### Límite de la evidencia — y una corrección al informe anterior
-**No debe repetirse la afirmación "cuatro de las cinco posiciones críticas se jubilan en 12
-meses".** Esa frase, publicada en la versión previa del informe ejecutivo, está construida sobre el
-campo `es_posicion_critica` del sistema del cliente, que el propio proyecto descartó como insumo
-analítico (DEC-006): marca 10 empleados de 694 (**1,4%**) y **nunca cambia** a lo largo de los 17
-meses, lo que indica que se cargó una vez y no se mantuvo. Con cinco posiciones críticas activas,
-la respuesta literal a "cuántos puestos críticos están en riesgo" sería "cuatro" — cierto e inútil.
+**El rótulo estaba mal, no la tabla.** La versión previa del informe ejecutivo decía "cuatro de las
+cinco **posiciones críticas** se jubilan en 12 meses". Las cuatro personas y los tres puestos son
+correctos y están verificados sobre `meses_hasta_jubilacion` en la dotación activa. Lo que no
+corresponde es el rótulo "posiciones críticas": importa el campo `es_posicion_critica`, que el propio
+proyecto descartó como insumo analítico (DEC-006) porque marca 10 empleados de 694 (**1,4%**) y
+**nunca cambia** en 17 meses.
+
+La criticidad que sí se sostiene es la **observable**: cuánta gente ocupa el puesto y cuántos quedan
+si esa persona se va. Con ese criterio, de los tres puestos **solo uno queda descubierto**, y ese es
+el titular.
 
 El índice propio de criticidad construido por el proyecto —dotación del puesto ≤ 3, span de control
 o nivel jerárquico alto, antigüedad ≥ 10 años, top performer— identifica **47 activos (8,4%)** con
@@ -592,7 +596,7 @@ sugerir una relación que los datos no muestran.
 descrita en B.4. Ya está generada por `04_scripts/18_visualizaciones_decision.py`.
 
 El scatter dibuja una distribución que no existe: el único output persistido de riesgo de sucesión
-tiene **una sola fila**. Un gráfico de dispersión con un punto obliga a la audiencia a buscar un
+tiene **una sola fila** —y la vista por jubilación a 12 meses, tres—. Un scatter obliga a buscar un
 patrón donde hay un hecho puntual, y lo peor es que invita a llenar el vacío con la tabla de "4 de
 5 posiciones críticas" — que está construida sobre `es_posicion_critica`, el flag que DEC-006
 descartó por marcar solo el 1,4% del universo y no actualizarse en 17 meses.
