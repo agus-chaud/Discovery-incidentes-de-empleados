@@ -32,7 +32,7 @@ Lo que está en juego no es un indicador de RR.HH.: son **días de planta**.
 | Casos graves en turno noche | **5 de 6** — 84 días | Es un conteo observado, no un patrón demostrado: con seis casos graves en total la diferencia **no se distingue del azar** (Fisher, p = 0,205). Ver A.4 |
 | Personas expuestas | ~125 por mes, **151 distintas** en el período | Concentradas en Estampado (51), Ensamble (40) y Pintura (24) |
 
-**Sobre el costo registrado.** El sistema imputa $975.000 en total a los 45 incidentes. Esa cifra **no debe usarse como impacto**: cubre la atención del hecho, no los 138 días de producción perdidos, ni el reemplazo, ni la cobertura del puesto. El costo real no está medido. Por eso el
+El sistema imputa $975.000 en total a los 45 incidentes. Esa cifra **no debe usarse como impacto**: cubre la atención del hecho, no los 138 días de producción perdidos, ni el reemplazo, ni la cobertura del puesto. El costo real no está medido. Por eso el
 caso se presenta en días de operación, que sí están medidos.
 
 ---
@@ -93,16 +93,18 @@ Pero afirmar que *la gravedad se concentra en la noche* es otra cosa, y con seis
 
 De hecho, los incidentes leves se reparten **15 y 15**, exactamente iguales. Todo el exceso nocturno del conteo está en los casos con días perdidos — que son pocos.
 
-**Cómo decirlo en la slide.** El hallazgo que aguanta es la **tasa de incidentes**: 5,4x sobre 45 casos y con exposición comparable. Los días perdidos y los casos graves se presentan como el
-**impacto observado** de ese hallazgo, no como un segundo hallazgo con entidad propia. La distinción parece fina y no lo es: es la diferencia entre un dato y una generalización que un directorio puede desarmar con una pregunta.
+En la slide, el hallazgo que aguanta es la **tasa de incidentes**: 5,4x sobre 45 casos y con exposición comparable. Los días perdidos y los casos graves se presentan como el
+**impacto observado** de ese hallazgo, no como un segundo hallazgo con entidad propia. Un conteo se
+defiende con que el número esté bien; un patrón necesita sobrevivir a un test.
 
-Decirlo primero es lo que vuelve creíble el resto. Y además refuerza el pedido: hay una diferencia grande, real y medida, y ningún dato disponible que la explique. Eso es exactamente lo que se va a buscar al piso.
+Hay una diferencia grande y medida, y ningún dato disponible que la explique. Eso es lo que la
+auditoría va a buscar al piso.
 
 ---
 
 ## A.5 — Recomendación: auditoría operativa nocturna focalizada, 90 días
 
-No es un plan de capacitación. No es una campaña de seguridad. Es ir a mirar seis cosas concretas en el turno donde está el daño, con un entregable con fecha.
+Seis cosas concretas para mirar en el turno donde está el daño, con un entregable con fecha.
 
 | Eje | Qué se va a mirar | Por qué está en la lista |
 |---|---|---|
@@ -136,8 +138,8 @@ Ninguna de las cinco está probada. Se listan porque son lo que la auditoría ti
 | H4 | **Tareas de mayor riesgo asignadas al turno** (limpieza, cambio de formato, correctivo) | Que el parte de turno muestre estas tareas concentradas de noche, coincidiendo con quemaduras y caídas | Distribución de tareas equivalente |
 | H5 | **Pérdida de información en el relevo** | Incidentes ligados a equipos intervenidos o condiciones no comunicadas en el cambio de turno | Relevo documentado y sin correlación con los hechos |
 
-**H3 merece cuidado en la sala.** Es la hipótesis que todo el mundo va a proponer sola, y es la
-única para la que el proyecto ya tiene evidencia que no la acompaña. Presentarla como probable
+H3 es la hipótesis que todo el mundo va a proponer sola, y la única para la que el proyecto ya
+tiene evidencia que no la acompaña. Presentarla como probable
 sería el error más caro de esta presentación.
 
 ---
@@ -258,7 +260,8 @@ queda por encima del promedio. Estampado también parecía problemático con su 
 va de 14,9% a 26,3% y **contiene al 16,7%**: con estos datos no se distingue de lo normal. Mismo
 test, respuestas distintas, porque los tamaños de grupo lo son: 46 personas contra 185.
 
-**Y aguanta la corrección estadística.** Testear diez áreas al umbral habitual del 5% hace que la
+El hallazgo además aguanta la corrección por comparaciones múltiples. Testear diez áreas al umbral
+habitual del 5% hace que la
 probabilidad de que *alguna* parezca significativa por puro azar ronde el 40%. Corrigiendo por eso
 (Bonferroni: umbral 0,05 ÷ 10 = 0,005), Mantenimiento Eléctrico tiene **p = 0,00105**. Sobrevive
 con margen. No es un hallazgo con asterisco.
@@ -269,7 +272,7 @@ Cuarenta y seis personas, dieciséis salidas: es un problema del tamaño de un e
 abordable.
 
 ### Límite de la evidencia
-**Sabemos que se van; no sabemos por qué.** No hay entrevistas de salida ni encuesta de clima.
+Sabemos que se van; no sabemos por qué. No hay entrevistas de salida ni encuesta de clima.
 Competencia salarial externa, carga de guardias o liderazgo local son hipótesis sin testear.
 Diseñar el programa de retención antes de instrumentar la entrevista de salida es apostar.
 
@@ -292,7 +295,8 @@ Línea de base: 0%.**
 ¿Las horas extra son un exceso generalizado que conviene recortar?
 
 ### Titular
-> **La empresa se parte en dos: seis áreas viven sobre once horas extra al mes y cinco no llegan a  seis. No es un exceso repartido, es capacidad faltante en un lado.**
+> **La empresa se parte en dos: seis áreas viven sobre once horas extra al mes y cinco no llegan
+> a seis. En esas cinco no hay nada que recortar.**
 
 ### Evidencia
 `visualizaciones/G10_distribucion_horas_extra_area.png` — distribución de horas extra por empleado-mes, por área.
@@ -319,7 +323,7 @@ mismo, todo este apartado cita **mediana de horas extra por empleado-mes**. La m
 **El corte es limpio: 11,2 h de un lado, 6,1 del otro.** No hay zona gris. Costo anual total de
 horas extra: **$987,6M**.
 
-**Un detalle que vale mirar.** Mantenimiento Eléctrico tiene la mayor brecha entre media (12,06) y
+Mantenimiento Eléctrico tiene la mayor brecha entre media (12,06) y
 mediana (11,30) de las once áreas: **+0,76 h**. Eso indica una cola larga — algunas personas del
 área acumulan bastante más que sus propios compañeros. Es la única del grupo de seis áreas cargadas
 en esa situación; Calidad (+0,53) e Ingeniería (+0,06) también tienen media por encima de la
@@ -431,8 +435,9 @@ directorio descarte un informe entero.
 | B — Anualizada sobre dotación activa promedio | 113 ÷ 16 meses × 12 ÷ 563 activos | 15,0% |
 | C — Del período, anualizada | — | 12,6% |
 
-**Se adopta la A** (DEC-019). No porque sea la más alta, sino porque es la que **ya sostiene todo el trabajo fino del proyecto**: las diez áreas, los intervalos de confianza de Wilson, el 34,8% de
-Mantenimiento Eléctrico y el gráfico G9. La anualizada se calculaba una sola vez, aparte, solo para el titular.
+**Se adopta la A** (DEC-019), porque es la que ya sostiene todo el trabajo fino del proyecto: las
+diez áreas, los intervalos de confianza de Wilson, el 34,8% de Mantenimiento Eléctrico y el
+gráfico G9. La anualizada se calculaba una sola vez, aparte, solo para el titular.
 
 Esto importa en la sala: comparar el 34,8% de Mantenimiento Eléctrico —calculado con la fórmula
 acumulada— contra un titular de 15,0% inflaba la brecha de **2,08x a 2,32x**. Misma empresa, mismos
@@ -582,10 +587,10 @@ accidente, no antes)"*.
 | Campo de causa raíz en el sistema | **No existe** |
 | Acciones correctivas específicas del hecho | **0 de 45** |
 
-Eso no es un programa de capacitación evaluado: es un campo de formulario que se completa siempre
-igual. La brecha es de **medición preventiva**, y esa sí es una conclusión defendible.
+Eso es un campo de formulario que se completa siempre igual. Lo que hay es una brecha de
+**medición preventiva**, y eso sí se puede afirmar.
 
-**Cómo mostrarlo.** Si se conserva el scatter, va con el título nuevo y con una etiqueta visible:
+Si se conserva el scatter, va con el título nuevo y con una etiqueta visible:
 *"comparación descriptiva de totales del período; no mide temporalidad ni causalidad"*.
 La alternativa más honesta es reemplazarlo por la tabla de arriba, que comunica la brecha sin
 sugerir una relación que los datos no muestran.
