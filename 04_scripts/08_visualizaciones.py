@@ -187,7 +187,7 @@ a6.text(.02, .37, "Fuente: eventos_rrhh (45 incidentes auditables).\nLas tasas s
 save(fig, "G5_seguridad.png")
 
 # ---------- G6: Rotacion ----------
-fig, ((a1, a2), (a3, a4)) = plt.subplots(2, 2, figsize=(11.5, 7))
+fig, (a1, a2, a4) = plt.subplots(1, 3, figsize=(15, 4.8))
 # periodo limpio: excluye las 19 salidas de arrastre de enero 2024 (DEC-017)
 _s = ult[ult.salio].copy()
 _s["mes_salida"] = _s.fecha_salida.values.astype("datetime64[M]")
@@ -228,12 +228,30 @@ a2.legend(w, [f"{i} — {v} ({v/mv.sum()*100:.0f}%)" for i, v in mv.items()],
 a2.set_title("67% son renuncias VOLUNTARIAS\n= la porción sobre la que se puede actuar", fontweight="bold")
 
 sal = ultc[ultc.salio]
-a3.hist(sal.antiguedad_anios, bins=np.arange(0, 14, 1), color=AZUL, edgecolor="w")
-a3.axvline(sal.antiguedad_anios.median(), color=ROJO, ls="--", lw=2,
-           label=f"Mediana {sal.antiguedad_anios.median():.1f} años")
-a3.set_xlabel("Años de antigüedad al salir"); a3.set_ylabel("Salidas")
-a3.set_title("No se van los nuevos: se van a los 5 años,\ncuando ya están formados", fontweight="bold")
-a3.legend(frameon=False, fontsize=8)
+# No alcanza con contar salidas: si un tramo tiene mas personas, tendra
+# naturalmente mas salidas aunque el riesgo individual sea igual. La barra
+# muestra la tasa de salida dentro de cada tramo (salidas / personas).
+bins_ant = [-1, 1, 2, 5, 8, 10, 999]
+labs_ant = ["<1 ano", "1-2 anos", "2-5 anos", "5-8 anos", "8-10 anos", "10+ anos"]
+ultc["tramo_antiguedad"] = pd.cut(ultc.antiguedad_anios, bins_ant, labels=labs_ant)
+ant = ultc.groupby("tramo_antiguedad", observed=True).agg(
+    personas=("empleado_id", "size"), salidas=("salio", "sum")
+)
+ant["pct"] = ant.salidas / ant.personas * 100
+fig_ant, ant_ax = plt.subplots(figsize=(8.8, 4.8))
+x_ant = np.arange(len(ant))
+ant_ax.bar(x_ant, ant.pct, color=[ROJO if v == ant.pct.max() else AZUL for v in ant.pct], width=.62)
+for i, (v, k, n) in enumerate(zip(ant.pct, ant.salidas, ant.personas)):
+    ant_ax.text(i, v + 1.2, f"{v:.0f}%\n({int(k)}/{int(n)})",
+            ha="center", va="bottom", fontsize=7.5)
+ant_ax.axhline(BASE, color=GRIS, ls="--", lw=1.2, label=f"Promedio periodo {BASE:.1f}%")
+ant_ax.text(.02, .97, f"Mediana de salidas: {sal.antiguedad_anios.median():.1f} anos",
+         transform=ant_ax.transAxes, va="top", fontsize=8, color=ROJO)
+ant_ax.set_xticks(x_ant); ant_ax.set_xticklabels(ant.index, rotation=25)
+ant_ax.set_xlabel("Antiguedad al salir"); ant_ax.set_ylabel("Tasa de salida en el tramo (%)")
+ant_ax.set_title("1-2 tiene la tasa puntual mas alta\n(pero con n=14; barras normalizadas por dotacion)", fontweight="bold")
+ant_ax.legend(frameon=False, fontsize=7.5, loc="upper right")
+save(fig_ant, "G6_antiguedad_rotacion.png")
 
 grupos = [("Top performers", ultc[ultc.es_top_performer]), ("Resto", ultc[~ultc.es_top_performer])]
 vals = [g.salio.mean() * 100 for _, g in grupos]
@@ -260,5 +278,131 @@ for i, v in enumerate(vals): ax.text(i, v + 1.8, str(v), ha="center", fontweight
 ax.set_ylabel("Incidentes registrados (17 meses)"); ax.set_ylim(0, 118)
 ax.set_title("BRECHA DE TRAZABILIDAD: 55% de los incidentes no tienen\ncausa, parte del cuerpo ni acción correctiva registrada", fontweight="bold")
 save(fig, "G7_brecha_trazabilidad.png")
+
+# ---------- G8: la hora extra no se mueve ----------
+AREAS_PROD = ["Estampado", "Ensamble", "Pintura"]
+mprod = pa[pa.area.isin(AREAS_PROD)]
+he_prod = mprod.groupby("mes_snapshot").horas_extra.mean()
+u_prod = mprod.groupby("mes_snapshot").unidades_producidas.sum()
+idx_prod = u_prod / u_prod.iloc[0] * 100
+he_me = pa[pa.area == "Mantenimiento Eléctrico"].groupby("mes_snapshot").horas_extra.mean()
+
+fig, ax = plt.subplots(figsize=(9.6, 4.4))
+ax.plot(he_prod.index, he_prod.values, "o-", color=ROJO, lw=2.4, ms=4,
+        label="Hora extra / persona — producción")
+ax.plot(he_me.index, he_me.values, "-", color=GRIS, lw=1.4,
+        label="Hora extra / persona — Mant. Eléctrico")
+ax.set_ylabel("Horas extra por persona / mes"); ax.set_ylim(0, 21)
+ax.tick_params(axis="x", rotation=45)
+
+ax2 = ax.twinx(); ax2.grid(False)
+ax2.plot(idx_prod.index, idx_prod.values, "--", color=AZUL, lw=1.8,
+         label="Producción de planta (índice, ene-24 = 100)")
+ax2.set_ylabel("Producción de planta (índice)"); ax2.set_ylim(80, 108)
+
+pk = he_me.idxmax()
+ax.annotate("Mant. Eléctrico:\npico de 3 meses\n(feb–abr 2025)", (pk, he_me.max()),
+            textcoords="offset points", xytext=(-78, -4), fontsize=7.5, color="#555555",
+            arrowprops=dict(arrowstyle="->", color="#999999", lw=1))
+ax.text(.015, .06, "Calidad es la única área con hora extra creciente (4,0 → 6,3 h)",
+        transform=ax.transAxes, fontsize=7.5, color="#555555")
+
+lns = ax.get_lines() + ax2.get_lines()
+ax.legend(lns, [l.get_label() for l in lns], frameon=False, fontsize=7.5, loc="lower right")
+ax.set_title("Las horas extras no suben ni bajan con la producción", fontweight="bold")
+save(fig, "G8_hora_extra_no_se_mueve.png")
+
+# ---------- G9: cuanta gente es esa hora extra ----------
+MESES_HE = pa.mes_snapshot.nunique()
+gm = (pa.groupby(["area", "mes_snapshot"])
+        .agg(hc=("empleado_id", "nunique"), he_tot=("horas_extra", "sum"),
+             std_tot=("horas_trabajadas", "sum"), cohe=("costo_horas_extra", "sum"))
+        .reset_index())
+_rows = []
+for area, s in gm.groupby("area"):
+    if s.hc.mean() < 8:
+        continue
+    piso = s.he_tot.mean() / (s.std_tot / s.hc).mean()   # FTE a rendimiento pleno
+    _rows.append((area, piso, piso / 0.70, s.cohe.sum() / MESES_HE * 12 / 1e6))
+fte = pd.DataFrame(_rows, columns=["area", "piso", "techo", "costo_MM"]).sort_values("costo_MM")
+prod_mask = fte.area.isin(AREAS_PROD).values
+
+fig, ax = plt.subplots(figsize=(9.6, 4.6))
+y = np.arange(len(fte))
+cols = [ROJO if p else GRIS for p in prod_mask]
+ax.barh(y, fte.piso, color=cols, label="a rendimiento pleno")
+ax.barh(y, fte.techo - fte.piso, left=fte.piso, color=cols, alpha=.35,
+        label="margen por curva de aprendizaje del ingresante")
+for i, (pi, te, c) in enumerate(zip(fte.piso, fte.techo, fte.costo_MM)):
+    ax.text(te + .3, i, f"{pi:.0f}–{te:.0f}  ·  ${c:.0f} MM/año", va="center", fontsize=7.5)
+ax.set_yticks(y); ax.set_yticklabels(fte.area)
+ax.set_xlabel("Personas-equivalente cubiertas con hora extra (por mes)")
+ax.set_xlim(0, fte.techo.max() * 1.4)
+p_lo, p_hi = fte.loc[prod_mask, "piso"].sum(), fte.loc[prod_mask, "techo"].sum()
+p_cost = fte.loc[prod_mask, "costo_MM"].sum()
+ax.text(.98, .05, f"Producción (Estampado + Ensamble + Pintura):\n{p_lo:.0f}–{p_hi:.0f} operarios  ·  ${p_cost:.0f} MM/año",
+        transform=ax.transAxes, ha="right", fontsize=8.5, fontweight="bold", color=ROJO)
+ax.legend(frameon=False, fontsize=7.5, loc="lower right", bbox_to_anchor=(1, .16))
+ax.set_title("Las horas extras equivalen a entre 24 y 34 operarios de producción faltantes", fontweight="bold")
+save(fig, "G9_hora_extra_en_personas.png")
+
+# ---------- G15: Q1 - el costo por pieza sube porque bajan las piezas por hora ----------
+_q = panel[(panel.activo) & (panel.area.isin(AREAS_PROD))]
+_qp = _q[_q.unidades_producidas.notna() & _q.tasa_scrap_porcentaje.notna()].copy()
+_qp["buenas"] = _qp.unidades_producidas * (1 - _qp.tasa_scrap_porcentaje / 100)
+_ga = _q.groupby(["area", "mes_snapshot"]).agg(costo=("costo_total_mes", "sum"),
+                                               hs=("horas_trabajadas", "sum")).reset_index()
+_gp = _qp.groupby(["area", "mes_snapshot"]).agg(unid=("unidades_producidas", "sum"),
+                                                buenas=("buenas", "sum")).reset_index()
+q1 = _ga.merge(_gp, on=["area", "mes_snapshot"]).sort_values(["area", "mes_snapshot"])
+q1["cpp"] = q1.costo / q1.buenas
+q1["pph"] = q1.unid / q1.hs
+_m = sorted(q1.mes_snapshot.unique())
+
+fig, ax = plt.subplots(figsize=(9.6, 4.4))
+for area, sub in q1.groupby("area"):
+    ax.plot(sub.mes_snapshot, sub.cpp, "o-", lw=2, ms=3, label=area)
+ax.set_ylabel("Costo laboral por pieza buena ($)")
+_d0 = q1[q1.mes_snapshot == _m[0]].cpp.mean(); _d1 = q1[q1.mes_snapshot == _m[-1]].cpp.mean()
+ax.annotate(f"+{_d1/_d0-1:.0%} de punta a punta", (_m[-1], _d1),
+            textcoords="offset points", xytext=(-130, 6), fontsize=9, fontweight="bold", color=ROJO)
+ax.tick_params(axis="x", rotation=45)
+ax2 = ax.twinx(); ax2.grid(False)
+_pph = q1.groupby("mes_snapshot").pph.mean()
+ax2.plot(_pph.index, _pph.values, "--", color=GRIS, lw=1.8, label="Piezas por persona-hora (prom.)")
+ax2.set_ylabel("Piezas por persona-hora")
+_lns = ax.get_lines() + ax2.get_lines()
+ax.legend(_lns, [l.get_label() for l in _lns], frameon=False, fontsize=7.5, loc="upper left")
+ax.set_title(f"El costo por pieza subió ~{_d1/_d0-1:.0%}: se hacen menos piezas por hora trabajada", fontweight="bold")
+save(fig, "G15_costo_pieza_sube.png")
+
+# ---------- G16: Q1 - la rotacion no encarece la pieza (era la tendencia del tiempo) ----------
+_s = ult[ult.salio].copy(); _s["ms"] = _s.fecha_salida.values.astype("datetime64[M]")
+_arr = set(_s[_s.ms == panel.mes_snapshot.min()].empleado_id)
+_sal = _s[~_s.empleado_id.isin(_arr)].groupby(["area", "ms"]).size().rename("sal")
+_hc = _q.groupby(["area", "mes_snapshot"]).empleado_id.nunique().rename("hc")
+q1 = (q1.merge(_sal, left_on=["area", "mes_snapshot"], right_on=["area", "ms"], how="left")
+        .merge(_hc, on=["area", "mes_snapshot"]))
+q1["sal"] = q1.sal.fillna(0); q1["rot"] = q1.sal / q1.hc * 100
+q1["midx"] = q1.groupby("area").cumcount()
+_res = pd.Series(index=q1.index, dtype=float)
+for _a, _ix in q1.groupby("area").groups.items():
+    _sub = q1.loc[_ix]; _b1, _b0 = np.polyfit(_sub.midx, _sub.cpp, 1)
+    _res.loc[_ix] = _sub.cpp - (_b0 + _b1 * _sub.midx)
+q1["cpp_res"] = _res
+_qhi, _qlo = q1.rot.quantile(.75), q1.rot.quantile(.25)
+_hi, _lo = q1[q1.rot >= _qhi], q1[q1.rot <= _qlo]
+_crudo = (_hi.cpp.mean() / _lo.cpp.mean() - 1) * 100
+_detr = (_hi.cpp_res.mean() - _lo.cpp_res.mean()) / _lo.cpp.mean() * 100
+
+fig, ax = plt.subplots(figsize=(7.4, 4))
+_b = ax.bar(["Comparación cruda\n(meses de rotación alta vs baja)", "Descontada la\ntendencia del tiempo"],
+            [_crudo, _detr], color=[ROJO, GRIS], width=.5)
+for _bar, _v in zip(_b, [_crudo, _detr]):
+    ax.text(_bar.get_x() + _bar.get_width() / 2, _v + .12, f"{_v:+.1f}%", ha="center", fontweight="bold")
+ax.axhline(0, color="k", lw=.8); ax.set_ylim(-1, _crudo + 2)
+ax.set_ylabel("Sobrecosto por pieza en meses de rotación alta")
+ax.set_title('El "+5 % por rotación" era la tendencia del tiempo, no la rotación', fontweight="bold")
+save(fig, "G16_rotacion_no_encarece.png")
 
 print("\nListo. Visualizaciones en:", V)
