@@ -34,3 +34,13 @@ Decision Science Assignment TechnoStamp.pdf
 # no se versionan para no ensuciar el historial con diffs binarios
 # de cada re-ejecucion.
 06_resultados/Discovery/visualizaciones/*.png
+.codex-pptx-build/
+.atl/.skill-registry.cache.json
+*.bak-*
+06_resultados/Discovery/business_case/TechnoStamp_guion_20min.md
+06_resultados/Discovery/business_case/TechnoStamp_mejora_procesos_20min.pptx
+06_resultados/Discovery/auditoria_mejoras_technostamp/01_contexto_y_mapa.md
+06_resultados/Discovery/auditoria_mejoras_technostamp/04_visualizaciones_y_narrativa.md
+.atl/skill-registry.md
+# Archivos de bloqueo de Office
+~$*
