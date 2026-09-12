@@ -1,0 +1,9 @@
+# TechnoStamp Discovery - dependencias del pipeline y del notebook.
+# Probado con Python 3.13.7 en Windows; deberia funcionar en Python 3.11+.
+# Instalar con:  pip install -r requirements.txt
+
+pandas>=2.2,<3
+numpy>=1.26,<3
+pyarrow>=14          # motor de lectura/escritura de archivos .parquet
+matplotlib>=3.8,<4
+jupyterlab>=4        # para abrir 03_notebooks/Technostamp_Completo.ipynb (trae jupyter + ipython)

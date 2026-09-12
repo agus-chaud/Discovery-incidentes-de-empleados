@@ -26,7 +26,7 @@ Analizamos tres fuentes (panel mensual de empleados, eventos de RRHH y capacitac
 
 ## 2. Calidad de los datos — leer antes que cualquier número
 
-Se aplicó el principio de raw inmutable: los CSV originales no fueron modificados. Todas las transformaciones están en `04_scripts/` y las copias derivadas en `datos_transformados/` con linaje en `_linaje.json`.
+Se aplicó el principio de raw inmutable: los CSV originales no fueron modificados. Todas las transformaciones están en `04_scripts/` y las copias derivadas en `datos_transformados/` con la receta y la procedencia en `transformaciones.json`.
 
 ### Hallazgos de calidad que condicionan las conclusiones
 
@@ -482,10 +482,9 @@ Tres afirmaciones de versiones anteriores no sobrevivieron a un control más est
 | Registro de decisiones | `decisions.md` (DEC-001 a DEC-021) |
 | Entorno | conda `nivii_ai` (Python 3.12) |
 
-**Orden de ejecución real.** Dos scripts quedaron superados y no se ejecutan: `03_limpieza.py` (reemplazado por `13_limpieza_v2.py`) y `09_business_case.py` (reemplazado por `17_business_case_v2.py`). El orden vigente, tal como corre el notebook orquestador:
+**Orden de ejecución real.** `03_limpieza.py` y `09_business_case.py` fueron reemplazados por `13_limpieza_v2.py` y `17_business_case_v2.py` y removidos del repositorio. El orden vigente, tal como corre el notebook orquestador:
 
-`01_perfilado` → `02_calidad` → **`13_limpieza_v2`** → `04_p1_p2` → `05_verif_critica` → `06_p3_p4_p5` → `07_verif_incidentes_p5` → `08_visualizaciones` → `10_sensibilidad_he` → `11_verif_cronicos_seguridad` → `12_diagnostico_gaps` → `14_eda_sistematico` → `15_diagnostico_fragilidad` → `16_rotacion_temporal` → **`17_business_case_v2`** → `18_visualizaciones_decision`
+`01_perfilado` → `02_calidad` → **`13_limpieza_v2`** → `04_p1_p2` → `05_verif_critica` → `06_p3_p4_p5` → `07_verif_incidentes_p5` → `08_visualizaciones` → `10_sensibilidad_he` → `11_verif_cronicos_seguridad` → `19_hora_extra_estructural` → `20_costo_pieza_buena` → `12_diagnostico_gaps` → `14_eda_sistematico` → `15_diagnostico_fragilidad` → `16_rotacion_temporal` → **`17_business_case_v2`** → `18_visualizaciones_decision`
 
-> **Nota de trazabilidad (2026-09-06).** `tablas_soporte/BC_resumen_oportunidades.csv`, salida del script superado `09_business_case.py`, sigue en la carpeta y contradice el rango vigente de `BC_rango_retencion.csv` (`17_business_case_v2.py`). Su retiro está pendiente como decisión abierta en `decisions.md`.
 
 **Cómo reprocesar datos nuevos.** Cuando TechnoStamp envíe los próximos meses, `transformaciones.json` contiene los 31 pasos de limpieza con sus parámetros ya calculados — renombres, conversiones de tipo, unificación de categorías, política de vacíos y reglas de coherencia. Se reaplican en orden para obtener exactamente el mismo tratamiento, sin depender de que alguien recuerde qué se hizo.
