@@ -6,8 +6,10 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-D = Path(r"C:\Users\Dell\Agus\Nivii AI\06_resultados\Discovery\datos_transformados")
-V = Path(r"C:\Users\Dell\Agus\Nivii AI\06_resultados\Discovery\visualizaciones")
+ROOT = Path(__file__).resolve().parents[1]
+D = ROOT / "06_resultados" / "Discovery" / "datos_transformados"
+V = ROOT / "06_resultados" / "Discovery" / "visualizaciones"
+V.mkdir(parents=True, exist_ok=True)
 
 AZUL, ROJO, GRIS, VERDE, NARANJA = "#1f4e79", "#c0392b", "#95a5a6", "#27ae60", "#e67e22"
 plt.rcParams.update({"figure.dpi": 130, "font.size": 9, "axes.grid": True,

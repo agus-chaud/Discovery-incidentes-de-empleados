@@ -7,7 +7,8 @@ from pathlib import Path
 pd.set_option("display.width", 200)
 pd.set_option("display.max_columns", 100)
 
-RAW = Path(r"C:\Users\Dell\Agus\Nivii AI\02_datos\01_Originales")
+ROOT = Path(__file__).resolve().parents[1]
+RAW = ROOT / "02_datos" / "01_Originales"
 
 def load(name):
     return pd.read_csv(RAW / name, low_memory=False)

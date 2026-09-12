@@ -7,8 +7,10 @@ Salida: 06_resultados/EDA/EDA_report.md
 import pandas as pd, numpy as np
 from pathlib import Path
 
-D = Path(r"C:\Users\Dell\Agus\Nivii AI\06_resultados\Discovery\datos_transformados")
-E = Path(r"C:\Users\Dell\Agus\Nivii AI\06_resultados\EDA")
+ROOT = Path(__file__).resolve().parents[1]
+D = ROOT / "06_resultados" / "Discovery" / "datos_transformados"
+E = ROOT / "06_resultados" / "EDA"
+E.mkdir(parents=True, exist_ok=True)
 E.mkdir(parents=True, exist_ok=True)
 
 # Umbrales (declarados, no escondidos en el codigo)

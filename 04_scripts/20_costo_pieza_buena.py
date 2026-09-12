@@ -22,8 +22,10 @@ LIMITES: es solo la porcion de mano de obra (no materia prima, energia ni maquin
 import pandas as pd, numpy as np
 from pathlib import Path
 
-D = Path(r"C:\Users\Dell\Agus\Nivii AI\06_resultados\Discovery\datos_transformados")
-T = Path(r"C:\Users\Dell\Agus\Nivii AI\06_resultados\Discovery\tablas_soporte")
+ROOT = Path(__file__).resolve().parents[1]
+D = ROOT / "06_resultados" / "Discovery" / "datos_transformados"
+T = ROOT / "06_resultados" / "Discovery" / "tablas_soporte"
+T.mkdir(parents=True, exist_ok=True)
 panel = pd.read_parquet(D / "panel_mensual_limpio.parquet")
 ult = pd.read_parquet(D / "empleados_nivel_persona.parquet")
 

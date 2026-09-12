@@ -2,7 +2,8 @@
 """Donde esta fragil el Discovery: el numero que sostiene el business case."""
 import pandas as pd, numpy as np
 from pathlib import Path
-D = Path(r"C:\Users\Dell\Agus\Nivii AI\06_resultados\Discovery\datos_transformados")
+ROOT = Path(__file__).resolve().parents[1]
+D = ROOT / "06_resultados" / "Discovery" / "datos_transformados"
 panel = pd.read_parquet(D / "panel_mensual_limpio.parquet")
 ult = pd.read_parquet(D / "empleados_nivel_persona.parquet")
 evt = pd.read_parquet(D / "eventos_limpio.parquet")

@@ -8,8 +8,10 @@ import pandas as pd, numpy as np
 from pathlib import Path
 import json, datetime as dt, unicodedata
 
-RAW = Path(r"C:\Users\Dell\Agus\Nivii AI\02_datos\01_Originales")
-OUT = Path(r"C:\Users\Dell\Agus\Nivii AI\06_resultados\Discovery\datos_transformados")
+ROOT = Path(__file__).resolve().parents[1]
+RAW = ROOT / "02_datos" / "01_Originales"
+OUT = ROOT / "06_resultados" / "Discovery" / "datos_transformados"
+OUT.mkdir(parents=True, exist_ok=True)
 ENC = "utf-8"
 pasos = []          # <- mejora 6: receta reejecutable
 def P(op, **kw):

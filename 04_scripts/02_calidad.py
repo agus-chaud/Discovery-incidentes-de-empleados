@@ -2,7 +2,8 @@
 """Calidad de datos: encoding, granularidad, consistencia interna, outliers."""
 import pandas as pd, numpy as np
 from pathlib import Path
-RAW = Path(r"C:\Users\Dell\Agus\Nivii AI\02_datos\01_Originales")
+ROOT = Path(__file__).resolve().parents[1]
+RAW = ROOT / "02_datos" / "01_Originales"
 
 # --- 1. Encoding test ---
 print("### 1. ENCODING")
