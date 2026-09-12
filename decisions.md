@@ -71,7 +71,7 @@ error, y sin corregir cuando se testean varios grupos a la vez.
 
 ## Decisiones
 
-**DEC-001 — Raw inmutable en `01_Originales/`.** Copiar los CSV del cliente a solo lectura; toda transformación se persiste aparte con `_linaje.json`. **Por qué:** al corregir el encoding de `latin-1` a `utf-8`, sobrescribir el original hubiera hecho el error irreversible. **Regla:** nunca escribir sobre un archivo del cliente, ni para "arreglarlo".
+**DEC-001 — Raw inmutable en `01_Originales/`.** Copiar los CSV del cliente a solo lectura; toda transformación se persiste aparte con `transformaciones.json` (receta y procedencia). **Por qué:** al corregir el encoding de `latin-1` a `utf-8`, sobrescribir el original hubiera hecho el error irreversible. **Regla:** nunca escribir sobre un archivo del cliente, ni para "arreglarlo".
 
 **DEC-003 — Marcar inconsistencias con flags, no borrar filas.** 605 filas (6,2%) con antigüedad, fecha o edad inconsistente se conservan con flags booleanos. **Por qué:** no están distribuidas al azar — se concentran en reingresos y cambios de contrato, justo el perfil relevante para rotación; borrarlas sesga la tasa hacia abajo. **Regla:** nunca borrar filas por inconsistencia interna en un Discovery; marcar y reportar el conteo.
 

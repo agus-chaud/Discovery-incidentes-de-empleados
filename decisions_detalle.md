@@ -12,7 +12,7 @@ Las decisiones superadas NO se borran.
 
 **Área:** setup | **Fase:** Discovery — preparación | **Fecha:** 2026-09-03 | **Estado:** Vigente
 
-**Decisión:** Copiar los tres CSV entregados por el cliente a `02_datos/01_Originales/` y tratarlos como de solo lectura. Toda transformación se persiste aparte, en `06_resultados/Discovery/datos_transformados/`, con un `_linaje.json` que registra origen, encoding, lista de transformaciones y propósito.
+**Decisión:** Copiar los tres CSV entregados por el cliente a `02_datos/01_Originales/` y tratarlos como de solo lectura. Toda transformación se persiste aparte, en `06_resultados/Discovery/datos_transformados/`, con un `transformaciones.json` que registra origen, encoding, lista de transformaciones con sus parámetros y propósito.
 
 **Alternativa descartada:** Limpiar los CSV en el lugar (sobrescribirlos con la versión corregida) y trabajar directamente sobre la carpeta raíz del proyecto.
 
@@ -138,7 +138,7 @@ Con la fuente del panel, la recomendación al directorio habría sido reforzar e
 
 **Lección aprendida:** La recomendación instintiva ("contratá gente en vez de pagar horas extra") era la que el cliente esperaba escuchar. El valor del análisis estuvo en poder demostrar que estaba mal, no en confirmarla.
 
-**Código afectado:** `04_scripts/09_business_case.py`, `04_scripts/10_sensibilidad_he.py`.
+**Código afectado:** `04_scripts/17_business_case_v2.py` (sucesor del removido `09_business_case.py`), `04_scripts/10_sensibilidad_he.py`.
 
 ---
 
